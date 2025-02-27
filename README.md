@@ -1,54 +1,49 @@
-# React + TypeScript + Vite
+# State-to-Function
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Little applet that allows to compose a method and set state, both using URL bit packing :)
 
-Currently, two official plugins are available:
+## Usage
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+first: compose - Navigate to the root and compose a method and define localisation for each of the strings
+second: when done - Navigate to the input view and store the state
 
-## Expanding the ESLint configuration
+## Logic
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+this app has two states that need to be stored
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+1. the algorithm and its localisation
+2. the exact value of the state for a specific calculation
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+# storing the algorithm
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Conceptually one needs to consider 2 distict parent types
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+1. Methods - we'll consider 'if', >, <, =, !=, \*, /, +, -, ^
+2. Numeric Inputs - which is either a hardcoded value or a reference to an input
+
+## Methods
+
+Typically inputs of a method can be either a method or a float input (all except for the 'if' method for now)
+Every method resolves to one single value (bool or float), but can have a variable amount of inputs.
+Most methods will have two inputs, though some will have only one or a variable amount
+
+### input types
+
+1. Numeric Input - Reference to shared value - shortened to I
+2. Float Resolving Method - shortened to Mf
+3. Boolean Resolving Method - shortened to Mb
+
+### Method types
+
+| Method | Resolves | I#    | Inputs      |        |        | Description                                                  |
+| ------ | -------- | ----- | ----------- | ------ | ------ | ------------------------------------------------------------ |
+| if     | float    | 3     | Mb          | I / Mf | I / Mf | if input 1 is true, return input 2, else return input 3      |
+| >      | bool     | 2     | I / Mf      | I / Mf |        | if input 1 is larger than input 2, return true, else false   |
+| <      | bool     | 2     | I / Mf      | I / Mf |        | if input 1 is smaller than input 2, return true, else false  |
+| =      | bool     | 2     | I / Mf      | I / Mf |        | if input 1 is equal, return input 2, else return input 3     |
+| !=     | bool     | 2     | I / Mf      | I / Mf |        | if input 1 is not equal, return input 2, else return input 3 |
+| \*     | float    | 2...8 | (I / Mf) [] |        |        | multiply all values with one another                         |
+| /      | float    | 2     | I / Mf      | I / Mf |        | divide input 1 by input 2                                    |
+| +      | float    | 2...8 | (I / Mf) [] |        |        | add all values with one another                              |
+| -      | float    | 2     | I / Mf      | I / Mf |        | subtract input 2 from input 1                                |
+| ^      | float    | 2     | I / Mf      | I / Mf |        | raise input 1 to power input 2                               |
