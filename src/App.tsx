@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Drawer, message } from 'antd';
 import { version0EnumSemantics } from './modelDefinition/types/version0.enumsemantics';
 import { SaveOutlined } from '@ant-design/icons';
+import { Renderer } from './Components/Renderer';
 
 const defaultState = 'BMQARQAwAAA0AAAAYA';
 
@@ -51,13 +52,16 @@ export const App: React.FC = () => {
   };
 
   return (
-    <Drawer open mask={false}>
-      <ParametricInput versionEnumSemantics={version0EnumSemantics} />
-      {localStorage.getItem('iAmJonas') === 'true' ? (
-        <Button style={{ position: 'fixed', top: '15px', right: '15px' }} onClick={downloadPNG}>
-          <SaveOutlined style={{ position: 'absolute', width: 20, height: 20 }} size={16} />
-        </Button>
-      ) : null}
-    </Drawer>
+    <>
+      <Renderer />
+      <Drawer open mask={false}>
+        <ParametricInput versionEnumSemantics={version0EnumSemantics} />
+        {localStorage.getItem('iAmJonas') === 'true' ? (
+          <Button style={{ position: 'fixed', top: '15px', right: '15px' }} onClick={downloadPNG}>
+            <SaveOutlined style={{ position: 'absolute', width: 20, height: 20 }} size={16} />
+          </Button>
+        ) : null}
+      </Drawer>
+    </>
   );
 };
