@@ -4,12 +4,10 @@ import { DataEntry, DataType, EnumSemantics, StateDataType } from 'url-safe-bitp
 import { DataEntryRenderer } from './dataentryrenderers/DataEntryRenderer';
 import { DerivativeStateDataRenderer } from './DerivativeStateDataRenderer';
 import { DerivativeStateDataType } from 'url-safe-bitpacking/dist/types';
-import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
 
 export enum DisplayType {
   NESTED,
   POPOVER,
-  DRAWER,
   HIDDEN,
 }
 

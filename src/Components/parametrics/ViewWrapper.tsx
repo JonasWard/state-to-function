@@ -30,17 +30,6 @@ export const ViewWrapper: React.FC<IViewWrapperProps> = ({ children, displayType
           disabled={disabled.includes(name)}
         />
       );
-    case DisplayType.DRAWER:
-      return (
-        <DrawerWrapper
-          open={activeName === name}
-          toggleOpen={(v: boolean) => setActiveName(v ? name : '')}
-          children={children}
-          title={<IconRenderer name={name} type={type} />}
-          buttonIcon={<IconRenderer name={name} type={type} />}
-          disabled={disabled.includes(name)}
-        />
-      );
     case DisplayType.HIDDEN:
       return <></>;
   }

@@ -1,14 +1,8 @@
 import React from 'react';
-import { DisplayType, StateDataRenderer } from './StateDataRenderer';
-import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
-import { shouldUseDrawer } from '../utils/windowMethods';
+import { StateDataRenderer } from './StateDataRenderer';
 import { EnumSemantics } from 'url-safe-bitpacking/dist/types';
 import { useData } from '../../state/state';
 import { DataType } from 'url-safe-bitpacking';
-
-const displayTypeMap = {
-  [AttributeNames.Version]: import.meta.env.DEV ? (shouldUseDrawer() ? DisplayType.DRAWER : DisplayType.POPOVER) : DisplayType.HIDDEN,
-};
 
 type IParametricInputProps = {
   versionEnumSemantics?: EnumSemantics;
@@ -28,7 +22,6 @@ export const ParametricInput: React.FC<IParametricInputProps> = ({ versionEnumSe
       versionEnumSemantics={versionEnumSemantics}
       activeName={activeName}
       setActiveName={setActiveName}
-      displayTypeMap={displayTypeMap}
       type={DataType.VERSION}
     />
   );
