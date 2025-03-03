@@ -30,7 +30,23 @@ floatMethod[1] = floatMethodContent;
 const numericFieldContent: EnumEntryDataType = [0, [inputVariableCount], [floatMethod]];
 numericField[1] = numericFieldContent;
 
+const genericText = DataEntryFactory.createEnum(63, 63, AttributeNames.Character);
+const numericInputNameContent: ArrayEntryDataType = [[0, 63], [genericText]];
+const numericScientificSubscript: ArrayEntryDataType = [[0, 63], [genericText]];
+const numericInputName: SingleLevelContentType = [AttributeNames.NumericInputName, numericInputNameContent];
+const numericInputAttributeName: SingleLevelContentType = [AttributeNames.NumericScientificSubscript, numericScientificSubscript];
+
+const numericInputsContent: ArrayEntryDataType = [
+  [2, 9],
+  [
+    DataEntryFactory.createEnum(63, 63, AttributeNames.NumericScientificSymbol),
+    DataEntryFactory.createEnum(63, 63, AttributeNames.NumericScientificSubscript),
+    numericInputName,
+    numericInputAttributeName,
+  ],
+];
+
 export const verionArrayDefinition0: SingleLevelContentType[] = [
   [AttributeNames.Function, [numericField]],
-  // [AttributeNames.InputReference, []],
+  [AttributeNames.NumericInputs, numericInputsContent],
 ];
