@@ -3,12 +3,12 @@ import { DataType } from 'url-safe-bitpacking';
 
 export interface IconRendererProps {
   name: string;
-  type: DataType;
+  type?: DataType;
   size?: number;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const getIconForKey = (name: string, type: DataType) => {
+export const getIconForKey = (name: string, type?: DataType) => {
   switch (type) {
     case DataType.INT:
       return { mainIcon: 'i', subscript: name };
@@ -21,7 +21,7 @@ export const getIconForKey = (name: string, type: DataType) => {
     case DataType.ENUM:
       return { mainIcon: 'e', subscript: name };
     default:
-      return { mainIcon: name, subscript: ' ' };
+      return { mainIcon: name };
   }
 };
 
