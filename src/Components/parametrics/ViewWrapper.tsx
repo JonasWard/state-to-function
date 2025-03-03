@@ -2,7 +2,6 @@ import React, { ReactNode } from 'react';
 import { PopoverWrapper } from './PopoverWrapper';
 import { IconRenderer } from './IconRenderer';
 import { DisplayType } from './StateDataRenderer';
-import { DrawerWrapper } from './DrawerWrapper';
 import { DataType } from 'url-safe-bitpacking';
 
 interface IViewWrapperProps {
