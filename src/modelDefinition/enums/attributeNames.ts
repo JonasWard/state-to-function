@@ -20,4 +20,11 @@ export enum AttributeNames {
   NumericArray = 'Numeric Array',
   Function = 'Function',
   Version = 'Version',
+  NumericInputs = 'Numeric Inputs',
+  NumericInputVariable = 'Variable',
+  NumericInputValue = 'Value',
+  NumericInputName = 'Name',
+  NumericScientificSymbol = 'Symbol',
+  NumericScientificSubscript = 'Subscript',
+  Character = 'c',
 }
