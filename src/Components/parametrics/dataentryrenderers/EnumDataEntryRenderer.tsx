@@ -23,7 +23,7 @@ const getVersionEnumSemanticsMap = (enumValue: EnumDataEntry, versionEnumSemanti
 export const EnumDataEntryRenderer: React.FC<IEnumDataEntryRendererProps> = ({ enumValue, onChange, versionEnumSemantics }) => {
   const options = getVersionEnumSemanticsMap(enumValue, versionEnumSemantics).map((v) => ({
     ...v,
-    label: <IconRenderer name={v.label} />,
+    label: <IconRenderer name={v.label} type={enumValue.type} />,
   }));
 
   return <Select style={{ width: '100%' }} options={options} value={enumValue.value} onSelect={(value) => onChange({ ...enumValue, value })} />;

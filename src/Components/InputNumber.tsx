@@ -1,6 +1,6 @@
 import React from 'react';
 import './input-number.css';
-import { GrUpdate } from 'react-icons/gr';
+import { SyncOutlined } from '@ant-design/icons';
 
 interface IInputNumberProps {
   value: number;
@@ -16,7 +16,7 @@ export const InputNumber: React.FC<IInputNumberProps> = (props) => {
   return (
     <div style={props.style} className='input-number-wrapper'>
       <button className='input-number-button' disabled={localValue === props.value} onClick={updateGlobalValue}>
-        {props.icon ?? <GrUpdate />}
+        {props.icon ?? <SyncOutlined />}
       </button>
       <input
         className='input-number'

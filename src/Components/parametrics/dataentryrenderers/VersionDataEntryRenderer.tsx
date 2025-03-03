@@ -14,7 +14,7 @@ const defaultSelectorValues = (max: number, key: string) => [...Array(max).keys(
 export const VersionDataEntryRenderer: React.FC<IVersionDataEntryRendererProps> = ({ version, onChange, versionEnumSemantics }) => {
   const options = ((versionEnumSemantics && versionEnumSemantics[version.name]) ?? defaultSelectorValues(2 ** version.bits, version.name)).map((v) => ({
     ...v,
-    label: <IconRenderer name={v.label} />,
+    label: <IconRenderer name={v.label} type={version.type} />,
   }));
 
   return <Select style={{ width: '100%' }} options={options} value={version.value} onSelect={(value) => onChange({ ...version, value })} />;
