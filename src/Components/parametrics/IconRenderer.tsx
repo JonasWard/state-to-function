@@ -21,7 +21,7 @@ export const getIconForKey = (name: string, type: DataType) => {
     case DataType.ENUM:
       return { mainIcon: 'e', subscript: name };
     default:
-      return { mainIcon: 'bug', subscript: name };
+      return { mainIcon: name, subscript: ' ' };
   }
 };
 

@@ -83,20 +83,22 @@ export const StateDataRenderer: React.FC<ISemtanticsRenderObjectProps> = ({
           );
         if (value.hasOwnProperty('s') && value.hasOwnProperty('v'))
           return (
-            <DerivativeStateDataRenderer
-              asSlider={asSlider}
-              key={`${semantic}-subdata`}
-              name={semantic}
-              s={(value as DerivativeStateDataType).s}
-              v={(value as DerivativeStateDataType).v}
-              versionEnumSemantics={versionEnumSemantics}
-              updateEntry={updateEntry}
-              displayType={getDisplayType(semantic, displayTypeMap)}
-              displayTypeMap={displayTypeMap}
-              activeName={activeName}
-              setActiveName={setActiveName}
-              disabled={disabled}
-            />
+            <div style={{ paddingLeft: 10, borderLeft: '1px solid black' }}>
+              <DerivativeStateDataRenderer
+                asSlider={asSlider}
+                key={`${semantic}-subdata`}
+                name={semantic}
+                s={(value as DerivativeStateDataType).s}
+                v={(value as DerivativeStateDataType).v}
+                versionEnumSemantics={versionEnumSemantics}
+                updateEntry={updateEntry}
+                displayType={getDisplayType(semantic, displayTypeMap)}
+                displayTypeMap={displayTypeMap}
+                activeName={activeName}
+                setActiveName={setActiveName}
+                disabled={disabled}
+              />
+            </div>
           );
 
         return (

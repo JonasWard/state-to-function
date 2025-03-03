@@ -4,11 +4,11 @@ import { parserObjects } from './modelDefinition/model';
 import { ParametricInput } from './Components/parametrics/ParametricInput';
 import { useData } from './state/state';
 import { useParams } from 'react-router-dom';
-import { Button, message } from 'antd';
+import { Button, Drawer, message } from 'antd';
 import { version0EnumSemantics } from './modelDefinition/types/version0.enumsemantics';
 import { SaveOutlined } from '@ant-design/icons';
 
-const defaultState = 'BZq-Wb8ZZObBTWJrhCcab6GPiJkyBWaM0Rh4oAAZQADKAAA-eu3Ro';
+const defaultState = 'BMQARQAwAAA0AAAAYA';
 
 export const App: React.FC = () => {
   const { stateString } = useParams();
@@ -51,13 +51,13 @@ export const App: React.FC = () => {
   };
 
   return (
-    <>
+    <Drawer open mask={false}>
       <ParametricInput versionEnumSemantics={version0EnumSemantics} />
       {localStorage.getItem('iAmJonas') === 'true' ? (
         <Button style={{ position: 'fixed', top: '15px', right: '15px' }} onClick={downloadPNG}>
           <SaveOutlined style={{ position: 'absolute', width: 20, height: 20 }} size={16} />
         </Button>
       ) : null}
-    </>
+    </Drawer>
   );
 };
