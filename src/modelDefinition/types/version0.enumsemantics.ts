@@ -1,4 +1,5 @@
 import { AttributeNames } from '../enums/attributeNames';
+import { validScientificSymbols } from '../enums/chars';
 import { Versions } from './versions';
 
 const floatMethodLabels = [
@@ -19,4 +20,5 @@ export const version0EnumSemantics = {
   [AttributeNames.FloatMethod]: floatMethodLabels.map((label, value) => ({ label, value })),
   [AttributeNames.BooleanMethod]: booleanMethodLabels.map((label, value) => ({ label, value })),
   [AttributeNames.InputValue]: inputValueLabels.map((label, value) => ({ label, value })),
+  [AttributeNames.NumericScientificSymbol]: Object.values(validScientificSymbols).map((label, value) => ({ label, value })),
 };
