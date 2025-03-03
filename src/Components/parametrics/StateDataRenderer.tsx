@@ -5,7 +5,6 @@ import { DataEntryRenderer } from './dataentryrenderers/DataEntryRenderer';
 import { DerivativeStateDataRenderer } from './DerivativeStateDataRenderer';
 import { DerivativeStateDataType } from 'url-safe-bitpacking/dist/types';
 import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
-import { ColorPicker } from './ColorPicker';
 
 export enum DisplayType {
   NESTED,
@@ -45,10 +44,6 @@ export const StateDataRenderer: React.FC<ISemtanticsRenderObjectProps> = ({
   asSlider,
   disabled = [],
 }) => {
-  // color state data renderer
-  if (data.hasOwnProperty(AttributeNames.R) && data.hasOwnProperty(AttributeNames.G) && data.hasOwnProperty(AttributeNames.B) && Object.keys(data).length === 3)
-    return <ColorPicker v={data as any} updateEntry={updateEntry} />;
-
   return (
     <ViewWrapper
       key={name}

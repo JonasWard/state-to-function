@@ -4,19 +4,10 @@ import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
 import { shouldUseDrawer } from '../utils/windowMethods';
 import { EnumSemantics } from 'url-safe-bitpacking/dist/types';
 import { useData } from '../../state/state';
+import { DataType } from 'url-safe-bitpacking';
 
 const displayTypeMap = {
   [AttributeNames.Version]: import.meta.env.DEV ? (shouldUseDrawer() ? DisplayType.DRAWER : DisplayType.POPOVER) : DisplayType.HIDDEN,
-  [AttributeNames.Viewport]: import.meta.env.DEV ? (shouldUseDrawer() ? DisplayType.DRAWER : DisplayType.POPOVER) : DisplayType.HIDDEN,
-  [AttributeNames.LampShades]: shouldUseDrawer() ? DisplayType.DRAWER : DisplayType.POPOVER,
-  [AttributeNames.MainMethods]: shouldUseDrawer() ? DisplayType.DRAWER : DisplayType.POPOVER,
-  [AttributeNames.Footprint]: shouldUseDrawer() ? DisplayType.DRAWER : DisplayType.POPOVER,
-  [AttributeNames.Heights]: shouldUseDrawer() ? DisplayType.DRAWER : DisplayType.POPOVER,
-  [AttributeNames.Base]: shouldUseDrawer() ? DisplayType.DRAWER : DisplayType.POPOVER,
-  [AttributeNames.Material]: shouldUseDrawer() ? DisplayType.DRAWER : DisplayType.POPOVER,
-  [AttributeNames.VerticalProfile]: shouldUseDrawer() ? DisplayType.DRAWER : DisplayType.POPOVER,
-  [AttributeNames.Visualization]: shouldUseDrawer() ? DisplayType.DRAWER : DisplayType.POPOVER,
-  [AttributeNames.GlobalGeometry]: shouldUseDrawer() ? DisplayType.DRAWER : DisplayType.POPOVER,
 };
 
 type IParametricInputProps = {
@@ -38,6 +29,7 @@ export const ParametricInput: React.FC<IParametricInputProps> = ({ versionEnumSe
       activeName={activeName}
       setActiveName={setActiveName}
       displayTypeMap={displayTypeMap}
+      type={DataType.VERSION}
     />
   );
 };
