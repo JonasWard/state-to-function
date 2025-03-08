@@ -5,7 +5,7 @@ import { ArrayEntryDataType, EnumEntryDataType, SingleLevelContentType } from 'u
 const floatMethod: SingleLevelContentType = [AttributeNames.FloatMethod, []];
 const numericField: SingleLevelContentType = [AttributeNames.InputValue, []];
 
-const inputVariableCount = DataEntryFactory.createEnum(0, 36, AttributeNames.InputReference);
+const inputVariableCount = DataEntryFactory.createInt(0, 0, 36, AttributeNames.InputReference);
 const numericFieldArrayContent: ArrayEntryDataType = [[2, 8], [numericField]];
 const numericFieldArray: SingleLevelContentType = [AttributeNames.NumericArray, numericFieldArrayContent];
 

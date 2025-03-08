@@ -1,4 +1,4 @@
-import { EnumEntryDataType, IntDataEntry } from 'url-safe-bitpacking/dist/types';
+import { EnumDataEntry, EnumEntryDataType, IntDataEntry } from 'url-safe-bitpacking/dist/types';
 import { AttributeNames } from '../enums/attributeNames';
 
 export type NumericReferenceType = number;
@@ -93,17 +93,17 @@ export type FloatMethod = {
   };
 };
 
-export type InputReference = { s: EnumEntryDataType & { value: 0 }; v: { [AttributeNames.InputReference]: number } };
+export type InputReference = { s: EnumEntryDataType & { value: 0 }; v: { [AttributeNames.InputReference]: EnumEntryDataType } };
 
 export type InputValue = { [AttributeNames.InputValue]: FloatMethod | InputReference };
 
 export type TextArray = {
-  s: IntDataEntry;
-  v: { [AttributeNames.Character]: IntDataEntry }[];
+  s: EnumDataEntry;
+  v: { [AttributeNames.Character]: EnumDataEntry }[];
 };
 
 export type NumericInput = {
-  [AttributeNames.NumericScientificSymbol]: IntDataEntry;
+  [AttributeNames.NumericScientificSymbol]: EnumDataEntry;
   [AttributeNames.NumericScientificSubscript]: TextArray;
   [AttributeNames.NumericInputName]: TextArray;
 };
@@ -113,7 +113,7 @@ export type NumericInputs = {
   v: NumericInput[];
 };
 
-export type VersionOValueType = {
+export type VersionODataType = {
   [AttributeNames.Function]: InputValue;
   [AttributeNames.NumericInputs]: NumericInputs;
 };
