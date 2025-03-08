@@ -1,23 +1,23 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import { parserObjects } from './modelDefinition/model';
-import { ParametricInput } from './Components/parametrics/ParametricInput';
 import { useData } from './state/state';
 import { useParams } from 'react-router-dom';
-import { Button, Drawer, message } from 'antd';
-import { version0EnumSemantics } from './modelDefinition/types/version0.enumsemantics';
-import { SaveOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 import { StateDataRenderer } from './Components/renderers/StateDataRenderer';
+import { InputComponent } from './Components/inputs/InputComponent';
+import { UnspecialisedInput } from './Components/inputs/UnspecialisedInput';
 
 const defaultState = 'BMQARQAwAAA0AAAAYA';
 
 export const App: React.FC = () => {
   const { stateString } = useParams();
+
   const data = useData((s) => s.data);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    window.history.replaceState(null, 'Same Page Title', `/state-to-function/#${parserObjects.stringify(data)}`);
+    const parsedString = parserObjects.stringify(data);
+    if (parsedString !== stateString) window.history.replaceState(null, 'Same Page Title', `/state-to-function/#${parserObjects.stringify(data)}`);
   }, [data]);
 
   useEffect(() => {
@@ -27,9 +27,13 @@ export const App: React.FC = () => {
       } catch (e) {
         try {
           useData.getState().setData(parserObjects.parser(defaultState));
+          console.warn('the state string you tried to use was not valid, using the default state instead');
+          console.warn(e);
           message.warning('the state string you tried to use was not valid, using the default state instead');
         } catch (e) {
           useData.getState().setData(parserObjects.parser());
+          console.warn('the default!! state string was not valid, using the default object state instead');
+          console.warn(e);
           message.error('the default!! state string was not valid, using the default object state instead');
         }
       }
@@ -38,30 +42,18 @@ export const App: React.FC = () => {
         useData.getState().setData(parserObjects.parser(defaultState));
       } catch (e) {
         useData.getState().setData(parserObjects.parser());
+        console.warn('the default!! state string was not valid, using the default object state instead');
+        console.warn(e);
         message.error('the default!! state string was not valid, using the default object state instead');
       }
     }
   }, []);
 
-  const downloadPNG = () => {
-    if (!canvasRef.current) return;
-    const link = document.createElement('a');
-    link.download = `state-to-function.${parserObjects.stringify(data)}.png`;
-    link.href = canvasRef.current.toDataURL();
-    link.click();
-  };
-
   return (
     <>
+      <InputComponent />
       <StateDataRenderer />
-      <Drawer open mask={false}>
-        <ParametricInput versionEnumSemantics={version0EnumSemantics} />
-        {localStorage.getItem('iAmJonas') === 'true' ? (
-          <Button style={{ position: 'fixed', top: '15px', right: '15px' }} onClick={downloadPNG}>
-            <SaveOutlined style={{ position: 'absolute', width: 20, height: 20 }} size={16} />
-          </Button>
-        ) : null}
-      </Drawer>
+      <UnspecialisedInput />
     </>
   );
 };
