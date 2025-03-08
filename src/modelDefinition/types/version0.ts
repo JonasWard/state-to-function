@@ -9,20 +9,24 @@ const inputVariableCount = DataEntryFactory.createEnum(0, 36, AttributeNames.Inp
 const numericFieldArrayContent: ArrayEntryDataType = [[2, 8], [numericField]];
 const numericFieldArray: SingleLevelContentType = [AttributeNames.NumericArray, numericFieldArrayContent];
 
-const largetThanMethod: SingleLevelContentType = [AttributeNames.LargerThan, [numericField, numericField]];
-const smallerThanMethod: SingleLevelContentType = [AttributeNames.SmallerThan, [numericField, numericField]];
-const equalMethod: SingleLevelContentType = [AttributeNames.Equal, [numericField, numericField]];
-const notEqualMethod: SingleLevelContentType = [AttributeNames.NotEqual, [numericField, numericField]];
+const valueA: SingleLevelContentType = [AttributeNames.ValueA, [numericField]];
+const valueB: SingleLevelContentType = [AttributeNames.ValueB, [numericField]];
+const valuePair: SingleLevelContentType[] = [valueA, valueB];
+
+const largetThanMethod: SingleLevelContentType = [AttributeNames.LargerThan, valuePair];
+const smallerThanMethod: SingleLevelContentType = [AttributeNames.SmallerThan, valuePair];
+const equalMethod: SingleLevelContentType = [AttributeNames.Equal, valuePair];
+const notEqualMethod: SingleLevelContentType = [AttributeNames.NotEqual, valuePair];
 
 const booleanMethodContent: EnumEntryDataType = [0, [largetThanMethod], [smallerThanMethod], [equalMethod], [notEqualMethod]];
 const booleanMethod: SingleLevelContentType = [AttributeNames.BooleanMethod, booleanMethodContent];
 
-const ifMethod: SingleLevelContentType = [AttributeNames.If, [booleanMethod, numericField, numericField]];
+const ifMethod: SingleLevelContentType = [AttributeNames.If, [booleanMethod, valueA, valueB]];
 const multiplyMethod: SingleLevelContentType = [AttributeNames.Multiply, [numericFieldArray]];
 const addMethod: SingleLevelContentType = [AttributeNames.Addition, [numericFieldArray]];
-const divisionMethod: SingleLevelContentType = [AttributeNames.Division, [numericField, numericField]];
-const subtractionMethod: SingleLevelContentType = [AttributeNames.Subtraction, [numericField, numericField]];
-const powerMethod: SingleLevelContentType = [AttributeNames.Power, [numericField, numericField]];
+const divisionMethod: SingleLevelContentType = [AttributeNames.Division, valuePair];
+const subtractionMethod: SingleLevelContentType = [AttributeNames.Subtraction, valuePair];
+const powerMethod: SingleLevelContentType = [AttributeNames.Power, valuePair];
 
 const floatMethodContent: EnumEntryDataType = [0, [ifMethod], [multiplyMethod], [addMethod], [divisionMethod], [subtractionMethod], [powerMethod]];
 floatMethod[1] = floatMethodContent;
