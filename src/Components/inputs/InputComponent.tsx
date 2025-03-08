@@ -16,9 +16,10 @@ import {
 } from '../../modelDefinition/types/version0.data.type';
 import { Button, Drawer, Select, Switch, Tag } from 'antd';
 import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
-import { validScientificSymbols, validScientificSubscriptDescriptors } from '../../modelDefinition/enums/chars';
+import { validScientificSymbols, validScientificSubscriptDescriptors, validDescriptors } from '../../modelDefinition/enums/chars';
 import { EnumDataEntry } from 'url-safe-bitpacking/dist/types';
 import { floatMethodLabels } from '../../modelDefinition/types/version0.enumsemantics';
+import { TextInput } from '../TextInput';
 
 const SymbolRenderer: React.FC<{ symbol: number }> = ({ symbol }) => validScientificSymbols[symbol] ?? '🚽';
 
@@ -202,8 +203,44 @@ const InputValueRenderer: React.FC<{ inputValue: InputValue; numericInputs: Nume
     </div>
   );
 
+const NumericInputEditor: React.FC<{ numericInput: NumericInput }> = ({ numericInput }) => (
+  <div>
+    <Select
+      value={numericInput[AttributeNames.NumericScientificSymbol].value}
+      onChange={(value) => useData.getState().updateDataEntry({ ...numericInput[AttributeNames.NumericScientificSymbol], value })}
+    >
+      {validScientificSymbols.split('').map((s, i) => (
+        <Select.Option key={s} value={i}>
+          {s}
+        </Select.Option>
+      ))}
+    </Select>
+    <div>
+      <TextInput
+        sourceString={validScientificSubscriptDescriptors}
+        text={numericInput[AttributeNames.NumericScientificSubscript]}
+        updateEntry={useData.getState().updateDataEntry}
+      />
+      <TextInput sourceString={validDescriptors} text={numericInput[AttributeNames.NumericInputName]} updateEntry={useData.getState().updateDataEntry} />
+    </div>
+  </div>
+);
+
+const NumericInputsEditor: React.FC<{ numericInputs: NumericInputs }> = ({ numericInputs }) => (
+  <>
+    {numericInputs.v.map((input) => (
+      <NumericInputEditor numericInput={input} />
+    ))}
+  </>
+);
+
 const Version0Renderer: React.FC<{ data: VersionODataType }> = ({ data }) => {
-  return <InputValueRenderer inputValue={data[AttributeNames.Function]} numericInputs={data[AttributeNames.NumericInputs]} />;
+  return (
+    <>
+      <InputValueRenderer inputValue={data[AttributeNames.Function]} numericInputs={data[AttributeNames.NumericInputs]} />
+      <NumericInputsEditor numericInputs={data[AttributeNames.NumericInputs]} />
+    </>
+  );
 };
 
 export const InputComponent: React.FC = () => {
