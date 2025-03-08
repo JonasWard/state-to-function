@@ -98,7 +98,7 @@ export type InputReference = { s: EnumEntryDataType & { value: 0 }; v: { [Attrib
 export type InputValue = { [AttributeNames.InputValue]: FloatMethod | InputReference };
 
 export type TextArray = {
-  s: EnumDataEntry;
+  s: IntDataEntry;
   v: { [AttributeNames.Character]: EnumDataEntry }[];
 };
 

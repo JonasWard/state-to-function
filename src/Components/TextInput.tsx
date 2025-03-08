@@ -1,4 +1,4 @@
-import { EnumDataEntry, IntDataEntry } from 'url-safe-bitpacking/dist/types';
+import { DataEntry, DataEntryArray, EnumDataEntry, IntDataEntry } from 'url-safe-bitpacking/dist/types';
 import { Button, Input } from 'antd';
 import React, { ReactNode } from 'react';
 import { DataEntryFactory, DataType } from 'url-safe-bitpacking';
@@ -33,23 +33,20 @@ const getDisplayString = (s: string, sourceString: string): null | ReactNode => 
 export const TextInput: React.FC<{
   sourceString: string;
   text: { s: IntDataEntry; v: { [AttributeNames.Character]: EnumDataEntry }[] };
-  updateEntry: (dataEntry: EnumDataEntry | EnumDataEntry[]) => void;
+  updateEntry: (dataEntry: DataEntry | DataEntryArray) => void;
 }> = ({ text, updateEntry, sourceString }) => {
   const [textArea, setTextArea] = React.useState(getText(text.v, sourceString));
 
   const handleChange = (e: { target: { value: string } }) => setTextArea(e.target.value);
 
   const updateValues = (s: string) => {
-    const internalNameTemplateA = `_${text.s.name}_${text.s.name}_${text.s.name}_`;
-    const internalNameTemplateB = `_${text.s.name}`;
-
     // first entry to update
-    const updateEntries: EnumDataEntry[] = [{ ...text.s, type: DataType.ENUM, value: s.length }];
+    const updateEntries: DataEntryArray = [{ ...text.s, type: DataType.INT, value: s.length }];
 
     for (let i = 0; i < s.length; i++) {
       const index = sourceString.indexOf(s[i]);
       const dataEntry = DataEntryFactory.createEnum(index > -1 ? index : 63, 63, AttributeNames.Character); // 0 = 63
-      dataEntry.internalName = `${internalNameTemplateA}${i}${internalNameTemplateB}`;
+      dataEntry.internalName = `${text.s.internalName!}_${i}_${AttributeNames.Character}`;
       updateEntries.push(dataEntry);
     }
 
