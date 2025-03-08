@@ -13,7 +13,7 @@ import {
   NumericPair,
   TextArray,
   VersionOValueType,
-} from '../../modelDefinition/types/version0.type';
+} from '../../modelDefinition/types/version0.value.type';
 import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
 import { validScientificSubscriptDescriptors, validScientificSymbols } from '../../modelDefinition/enums/chars';
 import { Tag } from 'antd';
