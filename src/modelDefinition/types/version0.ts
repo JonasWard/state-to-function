@@ -28,7 +28,7 @@ const divisionMethod: SingleLevelContentType = [AttributeNames.Division, valuePa
 const subtractionMethod: SingleLevelContentType = [AttributeNames.Subtraction, valuePair];
 const powerMethod: SingleLevelContentType = [AttributeNames.Power, valuePair];
 
-const floatMethodContent: EnumEntryDataType = [0, [ifMethod], [multiplyMethod], [addMethod], [divisionMethod], [subtractionMethod], [powerMethod]];
+const floatMethodContent: EnumEntryDataType = [2, [ifMethod], [multiplyMethod], [addMethod], [divisionMethod], [subtractionMethod], [powerMethod]];
 floatMethod[1] = floatMethodContent;
 
 const numericFieldContent: EnumEntryDataType = [0, [inputVariableCount], [floatMethod]];
@@ -50,7 +50,9 @@ const numericInputsContent: ArrayEntryDataType = [
   ],
 ];
 
+const defaultNumericField: SingleLevelContentType = [AttributeNames.InputValue, [1, [inputVariableCount], [floatMethod]]];
+
 export const verionArrayDefinition0: SingleLevelContentType[] = [
-  [AttributeNames.Function, [numericField]],
+  [AttributeNames.Function, [defaultNumericField]],
   [AttributeNames.NumericInputs, numericInputsContent],
 ];
