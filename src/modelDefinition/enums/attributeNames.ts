@@ -1,10 +1,12 @@
 export enum AttributeNames {
   If = 'if',
+  ValueA = 'a',
+  ValueB = 'b',
   LargerThan = '>',
   SmallerThan = '<',
   Equal = '=',
   NotEqual = '!=',
-  Multiply = '*',
+  Multiply = '×',
   Division = '/',
   Addition = '+',
   Subtraction = '-',
