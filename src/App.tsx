@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Drawer, message } from 'antd';
 import { version0EnumSemantics } from './modelDefinition/types/version0.enumsemantics';
 import { SaveOutlined } from '@ant-design/icons';
-import { Renderer } from './Components/Renderer';
+import { StateDataRenderer } from './Components/renderers/StateDataRenderer';
 
 const defaultState = 'BMQARQAwAAA0AAAAYA';
 
@@ -53,7 +53,7 @@ export const App: React.FC = () => {
 
   return (
     <>
-      <Renderer />
+      <StateDataRenderer />
       <Drawer open mask={false}>
         <ParametricInput versionEnumSemantics={version0EnumSemantics} />
         {localStorage.getItem('iAmJonas') === 'true' ? (
