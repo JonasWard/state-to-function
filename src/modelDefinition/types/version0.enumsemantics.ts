@@ -2,7 +2,7 @@ import { AttributeNames } from '../enums/attributeNames';
 import { validScientificSymbols } from '../enums/chars';
 import { Versions } from './versions';
 
-const floatMethodLabels = [
+export const floatMethodLabels = [
   AttributeNames.If,
   AttributeNames.Multiply,
   AttributeNames.Addition,
@@ -11,7 +11,7 @@ const floatMethodLabels = [
   AttributeNames.Power,
 ];
 
-const booleanMethodLabels = [AttributeNames.LargerThan, AttributeNames.SmallerThan, AttributeNames.Equal, AttributeNames.NotEqual];
+export const booleanMethodLabels = [AttributeNames.LargerThan, AttributeNames.SmallerThan, AttributeNames.Equal, AttributeNames.NotEqual];
 
 const inputValueLabels = [AttributeNames.InputReference, AttributeNames.FloatMethod];
 
