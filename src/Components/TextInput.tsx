@@ -24,6 +24,8 @@ const getDisplayString = (s: string, sourceString: string): null | ReactNode => 
     <div style={{ marginTop: 4, display: 'flex', flexDirection: 'column' }}>
       <span style={{ color: 'white', backgroundColor: 'green' }}>{difCount} characters are not supported</span>
       <span>{chars}</span>
+      <span>please stick to using these characters:</span>
+      <span>{sourceString}</span>
     </div>
   ) : null;
 };
