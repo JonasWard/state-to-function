@@ -288,9 +288,25 @@ const NumericInputEditor: React.FC<{ numericInput: NumericInput }> = ({ numericI
 
 const NumericInputsEditor: React.FC<{ numericInputs: NumericInputs }> = ({ numericInputs }) => (
   <>
-    {numericInputs.v.map((input) => (
-      <NumericInputEditor numericInput={input} />
+    {numericInputs.v.map((input, index) => (
+      <>
+        <NumericInputEditor numericInput={input} />
+        {numericInputs.s.value > numericInputs.s.min && index + 1 === numericInputs.s.value ? (
+          <DeleteFilled
+            style={{ cursor: 'pointer', position: 'relative', transform: 'translate(-14px, -45px)', color: 'lightgray' }}
+            onClick={() => useData.getState().updateDataEntry({ ...numericInputs.s, value: numericInputs.s.value - 1 })}
+          />
+        ) : null}
+      </>
     ))}
+    {numericInputs.s.value < numericInputs.s.max ? (
+      <div style={{ width: 25, height: 35, justifyContent: 'center', display: 'flex', flexDirection: 'row' }}>
+        <PlusCircleFilled
+          style={{ cursor: 'pointer' }}
+          onClick={() => useData.getState().updateDataEntry({ ...numericInputs.s, value: numericInputs.s.value + 1 })}
+        />
+      </div>
+    ) : null}
   </>
 );
 
