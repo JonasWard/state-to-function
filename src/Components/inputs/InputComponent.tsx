@@ -20,6 +20,7 @@ import { validScientificSymbols, validScientificSubscriptDescriptors, validDescr
 import { EnumDataEntry } from 'url-safe-bitpacking/dist/types';
 import { floatMethodLabels } from '../../modelDefinition/types/version0.enumsemantics';
 import { TextInput } from '../TextInput';
+import { DeleteFilled, PlusCircleFilled } from '@ant-design/icons';
 
 const SymbolRenderer: React.FC<{ symbol: number }> = ({ symbol }) => validScientificSymbols[symbol] ?? '🚽';
 
@@ -114,9 +115,35 @@ const NumericArrayRenderer: React.FC<{ arrayMethod: AddMethod | MultiplyMethod; 
       {numericArray[AttributeNames.NumericArray].v.map((v, i, arr) => (
         <>
           {i !== arr.length - 1 ? <span style={operatorStyling}>{operator}</span> : <div />}
-          <InputValueRenderer inputValue={v} numericInputs={numericInputs} />
+          <span style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
+            <InputValueRenderer inputValue={v} numericInputs={numericInputs} />
+            {numericArray[AttributeNames.NumericArray].s.value > numericArray[AttributeNames.NumericArray].s.min &&
+            i + 1 === numericArray[AttributeNames.NumericArray].s.value ? (
+              <DeleteFilled
+                style={{ cursor: 'pointer' }}
+                onClick={() =>
+                  useData
+                    .getState()
+                    .updateDataEntry({ ...numericArray[AttributeNames.NumericArray].s, value: numericArray[AttributeNames.NumericArray].s.value - 1 })
+                }
+              />
+            ) : null}
+          </span>
         </>
       ))}
+      {numericArray[AttributeNames.NumericArray].s.value < numericArray[AttributeNames.NumericArray].s.max ? (
+        <>
+          <span />
+          <PlusCircleFilled
+            style={{ cursor: 'pointer' }}
+            onClick={() =>
+              useData
+                .getState()
+                .updateDataEntry({ ...numericArray[AttributeNames.NumericArray].s, value: numericArray[AttributeNames.NumericArray].s.value + 1 })
+            }
+          />
+        </>
+      ) : null}
     </span>
   );
 };
