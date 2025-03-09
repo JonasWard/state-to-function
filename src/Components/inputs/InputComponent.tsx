@@ -175,6 +175,7 @@ const NumericInputRenderer: React.FC<{ numericInput: NumericInput }> = ({ numeri
 
 const NumericInputsSelector: React.FC<{ numericInputs: NumericInputs; inputReference: InputReference }> = ({ numericInputs, inputReference }) => (
   <Select
+    variant='filled'
     style={{ paddingLeft: 8 }}
     value={inputReference.v[AttributeNames.InputReference].value}
     onChange={(value) => useData.getState().updateDataEntry({ ...inputReference.v[AttributeNames.InputReference], value } as EnumDataEntry)}
@@ -194,6 +195,7 @@ const NumericInputsSelector: React.FC<{ numericInputs: NumericInputs; inputRefer
 
 const FloatMethodSelector: React.FC<{ floatMethod: FloatMethod }> = ({ floatMethod }) => (
   <Select
+    variant='filled'
     style={{ paddingLeft: 8 }}
     onChange={(value) => useData.getState().updateDataEntry({ ...floatMethod.v[AttributeNames.FloatMethod].s, value } as EnumDataEntry)}
     value={(floatMethod.v[AttributeNames.FloatMethod].s as EnumDataEntry).value}
