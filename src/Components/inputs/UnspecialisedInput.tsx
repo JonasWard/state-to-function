@@ -9,7 +9,7 @@ export const UnspecialisedInput: React.FC = () => {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} style={{ position: 'absolute', right: 10, bottom: 10 }}>
+      <Button onClick={() => setOpen(true)} style={{ position: 'absolute', right: 10, bottom: 50 }}>
         edit UnspecialisedInput
       </Button>
       <Drawer open={open} mask={false} onClose={() => setOpen(false)}>

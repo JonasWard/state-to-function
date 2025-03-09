@@ -77,13 +77,12 @@ const BooleanMethodRender: React.FC<{ booleanMethod: BooleanMethod; numericInput
 
 const IfRenderer: React.FC<{ ifMethod: IfMethod; numericInputs: NumericInputs }> = ({ ifMethod, numericInputs }) => (
   <span style={sharedRowStyle}>
-    <span>if (</span>
+    <span>if:</span>
     <BooleanMethodRender booleanMethod={ifMethod.v.if.Mb} numericInputs={numericInputs} />
     <span>then:</span>
     <InputValueRenderer inputValue={ifMethod.v.if.a} numericInputs={numericInputs} />
     <span>else:</span>
     <InputValueRenderer inputValue={ifMethod.v.if.b} numericInputs={numericInputs} />
-    <span>)</span>
   </span>
 );
 
