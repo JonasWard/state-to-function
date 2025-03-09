@@ -14,7 +14,7 @@ import {
   VersionODataType,
   InputReference,
 } from '../../modelDefinition/types/version0.data.type';
-import { Button, Drawer, Select, Switch, Tag } from 'antd';
+import { Button, Drawer, Popover, Select, Switch, Tag } from 'antd';
 import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
 import { validScientificSymbols, validScientificSubscriptDescriptors, validDescriptors } from '../../modelDefinition/enums/chars';
 import { EnumDataEntry } from 'url-safe-bitpacking/dist/types';
@@ -96,11 +96,11 @@ const BooleanMethodRender: React.FC<{ booleanMethod: BooleanMethod; numericInput
 
 const IfRenderer: React.FC<{ ifMethod: IfMethod; numericInputs: NumericInputs }> = ({ ifMethod, numericInputs }) => (
   <span style={inputsOnGrid}>
-    <span>if:</span>
+    <span style={{ transform: 'translateY(8px)' }}>if:</span>
     <BooleanMethodRender booleanMethod={ifMethod.v.if.Mb} numericInputs={numericInputs} />
-    <span>then:</span>
+    <span style={{ transform: 'translateY(8px)' }}>then:</span>
     <InputValueRenderer inputValue={ifMethod.v.if.a} numericInputs={numericInputs} />
-    <span>else:</span>
+    <span style={{ transform: 'translateY(8px)' }}>else:</span>
     <InputValueRenderer inputValue={ifMethod.v.if.b} numericInputs={numericInputs} />
   </span>
 );
@@ -203,28 +203,59 @@ const InputValueRenderer: React.FC<{ inputValue: InputValue; numericInputs: Nume
     </div>
   );
 
-const NumericInputEditor: React.FC<{ numericInput: NumericInput }> = ({ numericInput }) => (
-  <div>
-    <Select
-      value={numericInput[AttributeNames.NumericScientificSymbol].value}
-      onChange={(value) => useData.getState().updateDataEntry({ ...numericInput[AttributeNames.NumericScientificSymbol], value })}
-    >
+const NumericInputEditor: React.FC<{ numericInput: NumericInput }> = ({ numericInput }) => {
+  const [open, setOpen] = useState(false);
+
+  const editSymbolContent = (
+    <div style={{ display: 'grid', gridTemplateColumns: '30px 30px 30px 30px 30px 30px 30px 30px' }}>
       {validScientificSymbols.split('').map((s, i) => (
-        <Select.Option key={s} value={i}>
+        <span
+          style={{
+            backgroundColor: i === numericInput[AttributeNames.NumericScientificSymbol].value ? '#ccccff' : '#eeeeff',
+            margin: 2,
+            padding: 'auto',
+            textAlign: 'center',
+            cursor: 'pointer',
+            color: i === numericInput[AttributeNames.NumericScientificSymbol].value ? 'black' : 'gray',
+            fontWeight: i === numericInput[AttributeNames.NumericScientificSymbol].value ? 'bold' : 400,
+          }}
+          onClick={() => {
+            useData.getState().updateDataEntry({ ...numericInput[AttributeNames.NumericScientificSymbol], value: i });
+            setOpen(false);
+          }}
+        >
           {s}
-        </Select.Option>
+        </span>
       ))}
-    </Select>
-    <div>
-      <TextInput
-        sourceString={validScientificSubscriptDescriptors}
-        text={numericInput[AttributeNames.NumericScientificSubscript]}
-        updateEntry={useData.getState().updateDataEntry}
-      />
-      <TextInput sourceString={validDescriptors} text={numericInput[AttributeNames.NumericInputName]} updateEntry={useData.getState().updateDataEntry} />
     </div>
-  </div>
-);
+  );
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '25px 1fr', gap: 6 }}>
+      <div style={{ margin: 'auto', cursor: 'pointer' }}>
+        <Popover open={open} content={editSymbolContent}>
+          <var style={{ fontSize: 30, fontWeight: 'bold' }} onClick={() => setOpen(!open)}>
+            {validScientificSymbols[numericInput[AttributeNames.NumericScientificSymbol].value]}
+          </var>
+        </Popover>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <TextInput
+          placeholder='Description of what I am'
+          sourceString={validDescriptors}
+          text={numericInput[AttributeNames.NumericInputName]}
+          updateEntry={useData.getState().updateDataEntry}
+        />
+        <TextInput
+          placeholder='subscript'
+          sourceString={validScientificSubscriptDescriptors}
+          text={numericInput[AttributeNames.NumericScientificSubscript]}
+          updateEntry={useData.getState().updateDataEntry}
+        />
+      </div>
+    </div>
+  );
+};
 
 const NumericInputsEditor: React.FC<{ numericInputs: NumericInputs }> = ({ numericInputs }) => (
   <>
@@ -249,10 +280,10 @@ export const InputComponent: React.FC = () => {
 
   return (
     <>
-      <Button style={{ position: 'absolute', bottom: 10, left: 10 }} onClick={() => setOpen(true)}>
+      <Button style={{ position: 'absolute', bottom: 10, right: 10 }} onClick={() => setOpen(true)}>
         view wip editor
       </Button>
-      <Drawer mask={false} open={open} placement='left' onClose={() => setOpen(false)}>
+      <Drawer mask={false} open={open} placement='right' onClose={() => setOpen(false)}>
         <Version0Renderer data={data as unknown as VersionODataType} />
       </Drawer>
     </>
