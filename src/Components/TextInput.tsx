@@ -1,5 +1,5 @@
 import { DataEntry, DataEntryArray, EnumDataEntry, IntDataEntry } from 'url-safe-bitpacking/dist/types';
-import { Button, Input, Popover } from 'antd';
+import { Input, Popover } from 'antd';
 import React, { ReactNode } from 'react';
 import { DataEntryFactory, DataType } from 'url-safe-bitpacking';
 import { getText } from '../lib/helpers';
@@ -23,7 +23,9 @@ const getDisplayString = (s: string, sourceString: string): null | ReactNode => 
 
   return difCount > 0 ? (
     <div style={{ marginTop: 4, display: 'flex', flexDirection: 'column' }}>
-      <span style={{ color: 'white', backgroundColor: 'green' }}>{difCount} characters are not supported</span>
+      <span style={{ color: 'white', backgroundColor: 'green' }}>
+        {difCount === 1 ? 'one unsupported character' : difCount + ' characters are not supported'}
+      </span>
       <span>{chars}</span>
     </div>
   ) : null;
@@ -73,16 +75,18 @@ export const TextInput: React.FC<{
       >
         <span style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
           <Input placeholder={placeholder} key='text' value={textArea} onChange={handleChange} status={text.s.max === text.s.value ? 'warning' : undefined} />
-          {hasChanges ? (
-            <>
-              <CheckCircleFilled
-                disabled={Boolean(displayString)}
-                style={displayString ? { cursor: 'not-allowed', color: 'lightgray' } : { cursor: 'pointer', color: 'black' }}
-                onClick={() => updateValues(textArea)}
-              />
-              <UndoOutlined style={{ cursor: 'pointer' }} onClick={() => setTextArea(getText(text.v, sourceString))} />
-            </>
-          ) : null}
+          <span style={{ display: 'flex', flexDirection: 'row', transition: 'all .5s', width: hasChanges ? 40 : 0, marginLeft: hasChanges ? 0 : -8, gap: 8 }}>
+            {hasChanges ? (
+              <>
+                <CheckCircleFilled
+                  disabled={Boolean(displayString)}
+                  style={displayString ? { cursor: 'not-allowed', color: 'lightgray' } : { cursor: 'pointer', color: 'black' }}
+                  onClick={() => updateValues(textArea)}
+                />
+                <UndoOutlined style={{ cursor: 'pointer' }} onClick={() => setTextArea(getText(text.v, sourceString))} />
+              </>
+            ) : null}
+          </span>
         </span>
       </Popover>
     </div>
