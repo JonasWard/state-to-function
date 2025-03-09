@@ -8,7 +8,7 @@ import { StateDataRenderer } from './Components/renderers/StateDataRenderer';
 import { InputComponent } from './Components/inputs/InputComponent';
 import { UnspecialisedInput } from './Components/inputs/UnspecialisedInput';
 
-const defaultState = 'BMQARQAwAAA0AAAAYA';
+const defaultState = 'BQUFAAAFABAQAQqpwxWaRWaNaBvWOVxU2xUTipDBpDOFyRSy6TPaT0YEJJgGhgIhg';
 
 export const App: React.FC = () => {
   const { stateString } = useParams();
