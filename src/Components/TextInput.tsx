@@ -1,9 +1,10 @@
 import { DataEntry, DataEntryArray, EnumDataEntry, IntDataEntry } from 'url-safe-bitpacking/dist/types';
-import { Button, Input } from 'antd';
+import { Button, Input, Popover } from 'antd';
 import React, { ReactNode } from 'react';
 import { DataEntryFactory, DataType } from 'url-safe-bitpacking';
 import { getText } from '../lib/helpers';
 import { AttributeNames } from '../modelDefinition/enums/attributeNames';
+import { CheckCircleFilled, UndoOutlined } from '@ant-design/icons';
 
 const getDisplayString = (s: string, sourceString: string): null | ReactNode => {
   const chars: ReactNode[] = [];
@@ -24,17 +25,16 @@ const getDisplayString = (s: string, sourceString: string): null | ReactNode => 
     <div style={{ marginTop: 4, display: 'flex', flexDirection: 'column' }}>
       <span style={{ color: 'white', backgroundColor: 'green' }}>{difCount} characters are not supported</span>
       <span>{chars}</span>
-      <span>please stick to using these characters:</span>
-      <span>{sourceString}</span>
     </div>
   ) : null;
 };
 
 export const TextInput: React.FC<{
+  placeholder?: string;
   sourceString: string;
   text: { s: IntDataEntry; v: { [AttributeNames.Character]: EnumDataEntry }[] };
   updateEntry: (dataEntry: DataEntry | DataEntryArray) => void;
-}> = ({ text, updateEntry, sourceString }) => {
+}> = ({ text, updateEntry, sourceString, placeholder }) => {
   const [textArea, setTextArea] = React.useState(getText(text.v, sourceString));
 
   const handleChange = (e: { target: { value: string } }) => setTextArea(e.target.value);
@@ -53,18 +53,38 @@ export const TextInput: React.FC<{
     updateEntry(updateEntries);
   };
 
+  const displayString = getDisplayString(textArea, sourceString);
+  const hasChanges = textArea !== getText(text.v, sourceString);
+
   return (
-    <>
-      <Input key='text' value={textArea} onChange={handleChange} status={text.s.max === text.s.value ? 'warning' : undefined} />
-      {getDisplayString(textArea, sourceString)}
-      <div style={{ marginTop: 4 }}>
-        <Button type='primary' onClick={() => updateValues(textArea)}>
-          Apply
-        </Button>
-        <Button style={{ marginLeft: 4 }} onClick={() => setTextArea(getText(text.v, sourceString))}>
-          Reset
-        </Button>
-      </div>
-    </>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: '4px 0' }}>
+      <Popover
+        open={Boolean(displayString)}
+        placement='bottom'
+        style={{ background: '#ffcccc' }}
+        content={
+          <div style={{ width: 265, display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <span>{displayString}</span>
+            <span>please stick to using these characters:</span>
+            <span style={{ fontFamily: 'monospace, monospace' }}>{sourceString.slice(0, 32)}</span>
+            <span style={{ fontFamily: 'monospace, monospace' }}>{sourceString.slice(32)}</span>
+          </div>
+        }
+      >
+        <span style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
+          <Input placeholder={placeholder} key='text' value={textArea} onChange={handleChange} status={text.s.max === text.s.value ? 'warning' : undefined} />
+          {hasChanges ? (
+            <>
+              <CheckCircleFilled
+                disabled={Boolean(displayString)}
+                style={displayString ? { cursor: 'not-allowed', color: 'lightgray' } : { cursor: 'pointer', color: 'black' }}
+                onClick={() => updateValues(textArea)}
+              />
+              <UndoOutlined style={{ cursor: 'pointer' }} onClick={() => setTextArea(getText(text.v, sourceString))} />
+            </>
+          ) : null}
+        </span>
+      </Popover>
+    </div>
   );
 };
