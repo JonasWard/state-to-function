@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { message } from 'antd';
 import { StateDataRenderer } from './Components/renderers/StateDataRenderer';
 
-const defaultState = 'BQaALWAgSkBggMBqCgCAqgDANTABbPShGYALh6jwdACbaPQkDIAL56EgtABhPQkFgATbZ6EgXACcfPQkA';
+const defaultState = 'A1ABAABAK3mgSGgACUACksAASwASGAIA4AAIxyNGptD4hnZm3m3z0JAoYxRdo1W9oa9NQIaIYcehIA';
 
 export const App: React.FC = () => {
   const { stateString } = useParams();
