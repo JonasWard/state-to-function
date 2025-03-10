@@ -71,8 +71,6 @@ const operatorStyling: React.CSSProperties = {
   transform: 'translateY(9px)',
 };
 
-const interMethodRow: React.CSSProperties = { display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8, width: '100%' };
-
 const SubscriptRenderer: React.FC<{ subscriptIndexes: TextArray }> = ({ subscriptIndexes }) => (
   <sub>
     {Object.values(subscriptIndexes.v)
