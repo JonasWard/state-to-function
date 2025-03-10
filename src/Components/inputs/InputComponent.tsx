@@ -15,7 +15,7 @@ import {
 } from '../../modelDefinition/types/version0.data.type';
 import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
 import { EnumDataEntry } from 'url-safe-bitpacking/dist/types';
-import { floatMethodLabels } from '../../modelDefinition/types/version0.enumsemantics';
+import { booleanMethodLabels, floatMethodLabels } from '../../modelDefinition/types/version0.enumsemantics';
 import { DeleteFilled, PlusCircleFilled } from '@ant-design/icons';
 import { MethodOutputEditor } from './ReferenceInputEditor';
 import { Select, Tag, Switch } from 'antd';
@@ -67,6 +67,36 @@ const operatorStyling: React.CSSProperties = {
   transform: 'translateY(9px)',
 };
 
+const FloatMethodSelector: React.FC<{ floatMethod: FloatMethod }> = ({ floatMethod }) => (
+  <Select
+    variant='filled'
+    style={{ paddingLeft: 8 }}
+    onChange={(value) => useMethodData.getState().updateDataEntry({ ...floatMethod.v[AttributeNames.FloatMethod].s, value })}
+    value={floatMethod.v[AttributeNames.FloatMethod].s.value}
+  >
+    {floatMethodLabels.map((label, value) => (
+      <Select.Option key={label} value={value}>
+        {label}
+      </Select.Option>
+    ))}
+  </Select>
+);
+
+const BooleanMethodSelect: React.FC<{ booleanMethod: BooleanMethod }> = ({ booleanMethod }) => (
+  <Select
+    variant='filled'
+    style={{ paddingLeft: 8 }}
+    onChange={(value) => useMethodData.getState().updateDataEntry({ ...booleanMethod.s, value })}
+    value={booleanMethod.s.value}
+  >
+    {booleanMethodLabels.map((label, value) => (
+      <Select.Option key={label} value={value}>
+        {label}
+      </Select.Option>
+    ))}
+  </Select>
+);
+
 const pairRenderer = (numericPair: NumericPair, operator: string, numericInputs: NumericInputs, withBox: boolean = false) => (
   <span style={withBox ? { ...methodOnGrid, ...boundaryBoxStyle } : methodOnGrid}>
     <span style={operatorStyling}>{operator}</span>
@@ -78,9 +108,17 @@ const pairRenderer = (numericPair: NumericPair, operator: string, numericInputs:
 
 const BooleanMethodRender: React.FC<{ booleanMethod: BooleanMethod; numericInputs: NumericInputs }> = ({ booleanMethod, numericInputs }) => {
   const numericPair = Object.values(booleanMethod.v)[0];
-  const comparator = Object.keys(booleanMethod.v)[0];
 
-  return pairRenderer(numericPair, comparator, numericInputs, true);
+  return (
+    <span style={{ ...methodOnGrid, ...boundaryBoxStyle, gridTemplateColumns: '35px 1fr' }}>
+      <span style={{ transform: 'translate(-8px, 16px)' }}>
+        <BooleanMethodSelect booleanMethod={booleanMethod} />
+      </span>
+      <InputValueRenderer inputValue={numericPair.a} numericInputs={numericInputs} />
+      <div />
+      <InputValueRenderer inputValue={numericPair.b} numericInputs={numericInputs} />
+    </span>
+  );
 };
 
 const IfRenderer: React.FC<{ ifMethod: IfMethod; numericInputs: NumericInputs }> = ({ ifMethod, numericInputs }) => (
@@ -185,21 +223,6 @@ const NumericInputsSelector: React.FC<{ numericInputs: NumericInputs; inputRefer
         <Tag color='red'>missing</Tag>
       </Select.Option>
     ) : null}
-  </Select>
-);
-
-const FloatMethodSelector: React.FC<{ floatMethod: FloatMethod }> = ({ floatMethod }) => (
-  <Select
-    variant='filled'
-    style={{ paddingLeft: 8 }}
-    onChange={(value) => useMethodData.getState().updateDataEntry({ ...floatMethod.v[AttributeNames.FloatMethod].s, value })}
-    value={floatMethod.v[AttributeNames.FloatMethod].s.value}
-  >
-    {floatMethodLabels.map((label, value) => (
-      <Select.Option key={label} value={value}>
-        {label}
-      </Select.Option>
-    ))}
   </Select>
 );
 
