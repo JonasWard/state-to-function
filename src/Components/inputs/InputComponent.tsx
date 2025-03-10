@@ -114,8 +114,14 @@ const NumericArrayRenderer: React.FC<{ arrayMethod: AddMethod | MultiplyMethod; 
     <span style={methodOnGrid}>
       {numericArray[AttributeNames.NumericArray].v.map((v, i, arr) => (
         <>
-          {i !== arr.length - 1 ? <span style={operatorStyling}>{operator}</span> : <div />}
-          <span style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
+          {i !== arr.length - 1 ? (
+            <span key={'operator-' + i} style={operatorStyling}>
+              {operator}
+            </span>
+          ) : (
+            <div key={'placeholder-' + i} />
+          )}
+          <span key={i} style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
             <InputValueRenderer inputValue={v} numericInputs={numericInputs} />
             {numericArray[AttributeNames.NumericArray].s.value > numericArray[AttributeNames.NumericArray].s.min &&
             i + 1 === numericArray[AttributeNames.NumericArray].s.value ? (
@@ -151,10 +157,10 @@ const NumericArrayRenderer: React.FC<{ arrayMethod: AddMethod | MultiplyMethod; 
 const InternalMethodRenderer: React.FC<{ floatMethod: FloatMethod; numericInputs: NumericInputs }> = ({ floatMethod, numericInputs }) => {
   switch (floatMethod.v.Mf.s.value) {
     case 0: // if method
-      return <IfRenderer ifMethod={floatMethod.v.Mf} numericInputs={numericInputs} />;
+      return <IfRenderer ifMethod={floatMethod.v.Mf as IfMethod} numericInputs={numericInputs} />;
     case 1: // multiply method
     case 2: // add method
-      return <NumericArrayRenderer arrayMethod={floatMethod.v.Mf} numericInputs={numericInputs} />;
+      return <NumericArrayRenderer arrayMethod={floatMethod.v.Mf as AddMethod | MultiplyMethod} numericInputs={numericInputs} />;
     case 3: // division method
       return pairRenderer(floatMethod.v.Mf.v[AttributeNames.Division], AttributeNames.Division, numericInputs);
     case 4: // subtraction method
@@ -197,11 +203,13 @@ const FloatMethodSelector: React.FC<{ floatMethod: FloatMethod }> = ({ floatMeth
   <Select
     variant='filled'
     style={{ paddingLeft: 8 }}
-    onChange={(value) => useData.getState().updateDataEntry({ ...floatMethod.v[AttributeNames.FloatMethod].s, value } as EnumDataEntry)}
-    value={(floatMethod.v[AttributeNames.FloatMethod].s as EnumDataEntry).value}
+    onChange={(value) => useData.getState().updateDataEntry({ ...floatMethod.v[AttributeNames.FloatMethod].s, value })}
+    value={floatMethod.v[AttributeNames.FloatMethod].s.value}
   >
     {floatMethodLabels.map((label, value) => (
-      <Select.Option value={value}>{label}</Select.Option>
+      <Select.Option key={label} value={value}>
+        {label}
+      </Select.Option>
     ))}
   </Select>
 );
