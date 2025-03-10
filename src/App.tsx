@@ -8,7 +8,7 @@ import { StateDataRenderer } from './Components/renderers/StateDataRenderer';
 import { InputComponent } from './Components/inputs/InputComponent';
 import { UnspecialisedInput } from './Components/inputs/UnspecialisedInput';
 
-const defaultState = 'BQUFAAAFABAQAQqpwxWaRWaNaBvWOVxU2xUTipDBpDOFyRSy6TPaT0YEJJgGhgIhg';
+const defaultState = 'BQAAEVAAqQgAkA';
 
 export const App: React.FC = () => {
   const { stateString } = useParams();
@@ -23,10 +23,10 @@ export const App: React.FC = () => {
   useEffect(() => {
     if (stateString) {
       try {
-        useData.getState().setData(parserObjects.parser(stateString));
+        useData.getState().setData(parserObjects.parser(stateString + 'A'));
       } catch (e) {
         try {
-          useData.getState().setData(parserObjects.parser(defaultState));
+          useData.getState().setData(parserObjects.parser(defaultState + 'A'));
           console.warn('the state string you tried to use was not valid, using the default state instead');
           console.warn(e);
           message.warning('the state string you tried to use was not valid, using the default state instead');
