@@ -21,6 +21,8 @@ import { EnumDataEntry } from 'url-safe-bitpacking/dist/types';
 import { floatMethodLabels } from '../../modelDefinition/types/version0.enumsemantics';
 import { TextInput } from '../TextInput';
 import { DeleteFilled, PlusCircleFilled } from '@ant-design/icons';
+import { FloatDataEntryRenderer } from '../parametrics/dataentryrenderers/FloatDataEntryRenderer';
+import { BooleanDataEntryRenderer } from '../parametrics/dataentryrenderers/BooleanDataEntryRenderer';
 
 const SymbolRenderer: React.FC<{ symbol: number }> = ({ symbol }) => validScientificSymbols[symbol] ?? '🚽';
 
@@ -191,7 +193,7 @@ const NumericInputsSelector: React.FC<{ numericInputs: NumericInputs; inputRefer
         <NumericInputRenderer numericInput={n} />
       </Select.Option>
     ))}
-    {numericInputs.v.length - 1 < (inputReference.v[AttributeNames.InputReference] as EnumDataEntry).value ? (
+    {numericInputs.v.length - 1 < inputReference.v[AttributeNames.InputReference].value ? (
       <Select.Option value={undefined}>
         <Tag color='red'>missing</Tag>
       </Select.Option>
@@ -289,6 +291,10 @@ const NumericInputEditor: React.FC<{ numericInput: NumericInput }> = ({ numericI
           text={numericInput[AttributeNames.NumericScientificSubscript]}
           updateEntry={useData.getState().updateDataEntry}
         />
+        <span style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 8 }}>
+          <BooleanDataEntryRenderer bool={numericInput[AttributeNames.Hardcoded]} onChange={(b) => useData.getState().updateDataEntry(b)} />
+          <FloatDataEntryRenderer float={numericInput[AttributeNames.NumericInputValue]} onChange={(f) => useData.getState().updateDataEntry(f)} />
+        </span>
       </div>
     </div>
   );
