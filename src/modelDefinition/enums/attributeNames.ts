@@ -29,4 +29,5 @@ export enum AttributeNames {
   NumericScientificSymbol = 'Symbol',
   NumericScientificSubscript = 'Subscript',
   Character = 'c',
+  Hardcoded = 'Hardcoded',
 }

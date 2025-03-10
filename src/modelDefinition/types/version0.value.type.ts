@@ -105,6 +105,8 @@ export type NumericInput = {
   [AttributeNames.NumericScientificSymbol]: number;
   [AttributeNames.NumericScientificSubscript]: TextArray;
   [AttributeNames.NumericInputName]: TextArray;
+  [AttributeNames.Hardcoded]: boolean;
+  [AttributeNames.NumericInputValue]: number;
 };
 
 export type NumericInputs = {

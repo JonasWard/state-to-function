@@ -42,7 +42,13 @@ const numericInputAttributeName: SingleLevelContentType = [AttributeNames.Numeri
 
 const numericInputsContent: ArrayEntryDataType = [
   [2, 9],
-  [DataEntryFactory.createEnum(63, 63, AttributeNames.NumericScientificSymbol), numericInputName, numericInputAttributeName],
+  [
+    DataEntryFactory.createEnum(63, 63, AttributeNames.NumericScientificSymbol),
+    numericInputName,
+    numericInputAttributeName,
+    DataEntryFactory.createBoolean(false, AttributeNames.Hardcoded),
+    DataEntryFactory.createFloat(0, -500, 500, 3, AttributeNames.NumericInputValue),
+  ],
 ];
 
 const defaultNumericField: SingleLevelContentType = [AttributeNames.InputValue, [1, [inputVariableCount], [floatMethod]]];
