@@ -12,7 +12,7 @@ import {
 } from '../modelDefinition/types/version0.data.type';
 
 const simplePairRenderer = (numericPair: NumericPair, operator: string): string =>
-  `${InputValueRenderer(numericPair.a)}${operator}${InputValueRenderer(numericPair.b)}`;
+  `(${InputValueRenderer(numericPair.a)}${operator}${InputValueRenderer(numericPair.b)})`;
 
 const divisionPairRenderer = (numericPair: NumericPair): string => simplePairRenderer(numericPair, '/');
 
@@ -32,7 +32,7 @@ const NumericArrayRenderer = (arrayMethod: AddMethod | MultiplyMethod): string =
   const numericArray = Object.values(arrayMethod.v)[0];
   const operator = Object.keys(arrayMethod.v)[0];
 
-  return numericArray[AttributeNames.NumericArray].v.map((v) => InputValueRenderer(v)).join(operator === '×' ? '*' : operator);
+  return `(${numericArray[AttributeNames.NumericArray].v.map((v) => InputValueRenderer(v)).join(operator === '×' ? '*' : operator)})`;
 };
 
 const InternalMethodRenderer = (floatMethod: FloatMethod): string => {
