@@ -10,9 +10,10 @@ export type IFloatDataEntryRendererProps = {
   customMin?: number;
   customMax?: number;
   asSlider?: boolean;
+  addOnBefore?: boolean;
 };
 
-export const FloatDataEntryRenderer: React.FC<IFloatDataEntryRendererProps> = ({ asSlider, float, onChange, customMax, customMin }) =>
+export const FloatDataEntryRenderer: React.FC<IFloatDataEntryRendererProps> = ({ asSlider, float, onChange, customMax, customMin, addOnBefore = false }) =>
   asSlider ? (
     <SliderWrapper
       icon={<IconRenderer name={float.name} type={float.type} size={20} />}
@@ -26,7 +27,8 @@ export const FloatDataEntryRenderer: React.FC<IFloatDataEntryRendererProps> = ({
     />
   ) : (
     <InputNumber
-      addonBefore={<IconRenderer name={float.name} type={float.type} size={20} />}
+      addonBefore={addOnBefore ? <IconRenderer name={float.name} type={float.type} size={20} /> : undefined}
+      style={{ width: '100%' }}
       value={float.value}
       min={customMin ?? float.min}
       max={customMax ?? float.max}

@@ -91,15 +91,15 @@ const NumericArrayRenderer: React.FC<{ arrayMethod: AddMethod | MultiplyMethod; 
   const operator = Object.keys(arrayMethod.v)[0];
 
   return (
-    <span style={sharedRowStyle}>
+    <span key={arrayMethod.s} style={sharedRowStyle}>
       {numericArray[AttributeNames.NumericArray].v.map((v, i, arr) =>
         i !== arr.length - 1 ? (
-          <>
+          <span style={sharedRowStyle} key={'operator-' + i}>
             <InputValueRenderer inputValue={v} numericInputs={numericInputs} />
-            {operator}
-          </>
+            <var>{operator}</var>
+          </span>
         ) : (
-          <InputValueRenderer inputValue={v} numericInputs={numericInputs} />
+          <InputValueRenderer key={'inputValue-' + i} inputValue={v} numericInputs={numericInputs} />
         )
       )}
     </span>
@@ -123,7 +123,9 @@ const InternalMethodRenderer: React.FC<{ floatMethod: FloatMethod; numericInputs
 };
 
 const NumericInputRenderer: React.FC<{ numericInput: NumericInput }> = ({ numericInput }) => {
-  return (
+  return numericInput[AttributeNames.Hardcoded] ? (
+    <var>{numericInput[AttributeNames.NumericInputValue]}</var>
+  ) : (
     <var>
       <SymbolRenderer symbol={numericInput[AttributeNames.NumericScientificSymbol]} />
       <SubscriptRenderer subscriptIndexes={numericInput.Subscript} />
