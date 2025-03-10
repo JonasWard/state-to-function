@@ -16,13 +16,10 @@ const MethodTitle: React.FC<{ method: MethodEntry }> = ({ method }) => {
   return descriptionText != '' ? (
     descriptionText
   ) : (
-    <span style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
-      Method:
-      <var>
-        <SymbolRenderer symbol={method[AttributeNames.FunctionOutput][AttributeNames.NumericScientificSymbol].value} />
-        <SubscriptRenderer subscriptIndexes={method[AttributeNames.FunctionOutput][AttributeNames.NumericScientificSubscript]} />
-      </var>
-    </span>
+    <var>
+      <SymbolRenderer symbol={method[AttributeNames.FunctionOutput][AttributeNames.NumericScientificSymbol].value} />
+      <SubscriptRenderer subscriptIndexes={method[AttributeNames.FunctionOutput][AttributeNames.NumericScientificSubscript]} />
+    </var>
   );
 };
 
