@@ -335,7 +335,7 @@ const Version0Renderer: React.FC<{ data: VersionODataType }> = ({ data }) => {
 
 export const InputComponent: React.FC = () => {
   const data = useData((s) => s.data);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <>
