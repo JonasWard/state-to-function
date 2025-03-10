@@ -7,7 +7,7 @@ import { message } from 'antd';
 import { StateDataRenderer } from './Components/renderers/StateDataRenderer';
 import { InputComponent } from './Components/inputs/InputComponent';
 
-const defaultState = 'BQAAEVAAqQgAkA';
+const defaultState = 'BQaALWAgSkBggMBqCgCAqgDANTABbPShGYALh6jwdACbaPQkDIAL56EgtABhPQkFgATbZ6EgXACcfPQkA';
 
 export const App: React.FC = () => {
   const { stateString } = useParams();
