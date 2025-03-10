@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 import { message } from 'antd';
 import { StateDataRenderer } from './Components/renderers/StateDataRenderer';
 import { InputComponent } from './Components/inputs/InputComponent';
-import { UnspecialisedInput } from './Components/inputs/UnspecialisedInput';
 
 const defaultState = 'BQAAEVAAqQgAkA';
 
@@ -53,7 +52,7 @@ export const App: React.FC = () => {
     <>
       <InputComponent />
       <StateDataRenderer />
-      <UnspecialisedInput />
+      {/* <UnspecialisedInput /> */}
     </>
   );
 };
