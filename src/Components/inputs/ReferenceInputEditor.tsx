@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
 import { validScientificSymbols, validDescriptors, validScientificSubscriptDescriptors } from '../../modelDefinition/enums/chars';
 import { NumericInput, MethodEntry } from '../../modelDefinition/types/version0.data.type';
-import { useData } from '../../state/state';
+import { useMethodData } from '../../state/method';
 import { BooleanDataEntryRenderer } from '../parametrics/dataentryrenderers/BooleanDataEntryRenderer';
 import { FloatDataEntryRenderer } from '../parametrics/dataentryrenderers/FloatDataEntryRenderer';
 import { TextInput } from '../TextInput';
@@ -26,7 +26,7 @@ export const MethodOutputEditor: React.FC<{ methodName: MethodEntry[AttributeNam
             fontWeight: i === methodName[AttributeNames.NumericScientificSymbol].value ? 'bold' : 400,
           }}
           onClick={() => {
-            useData.getState().updateDataEntry({ ...methodName[AttributeNames.NumericScientificSymbol], value: i });
+            useMethodData.getState().updateDataEntry({ ...methodName[AttributeNames.NumericScientificSymbol], value: i });
             setOpen(false);
           }}
         >
@@ -50,13 +50,13 @@ export const MethodOutputEditor: React.FC<{ methodName: MethodEntry[AttributeNam
           placeholder='Description of what I am'
           sourceString={validDescriptors}
           text={methodName[AttributeNames.NumericInputName]}
-          updateEntry={useData.getState().updateDataEntry}
+          updateEntry={useMethodData.getState().updateDataEntry}
         />
         <TextInput
           placeholder='subscript'
           sourceString={validScientificSubscriptDescriptors}
           text={methodName[AttributeNames.NumericScientificSubscript]}
-          updateEntry={useData.getState().updateDataEntry}
+          updateEntry={useMethodData.getState().updateDataEntry}
         />
       </div>
     </div>
@@ -80,7 +80,7 @@ export const ReferenceInputEditor: React.FC<{ numericInput: NumericInput }> = ({
             fontWeight: i === numericInput[AttributeNames.NumericScientificSymbol].value ? 'bold' : 400,
           }}
           onClick={() => {
-            useData.getState().updateDataEntry({ ...numericInput[AttributeNames.NumericScientificSymbol], value: i });
+            useMethodData.getState().updateDataEntry({ ...numericInput[AttributeNames.NumericScientificSymbol], value: i });
             setOpen(false);
           }}
         >
@@ -104,17 +104,17 @@ export const ReferenceInputEditor: React.FC<{ numericInput: NumericInput }> = ({
           placeholder='Description of what I am'
           sourceString={validDescriptors}
           text={numericInput[AttributeNames.NumericInputName]}
-          updateEntry={useData.getState().updateDataEntry}
+          updateEntry={useMethodData.getState().updateDataEntry}
         />
         <TextInput
           placeholder='subscript'
           sourceString={validScientificSubscriptDescriptors}
           text={numericInput[AttributeNames.NumericScientificSubscript]}
-          updateEntry={useData.getState().updateDataEntry}
+          updateEntry={useMethodData.getState().updateDataEntry}
         />
         <span style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 8 }}>
-          <BooleanDataEntryRenderer bool={numericInput[AttributeNames.Hardcoded]} onChange={(b) => useData.getState().updateDataEntry(b)} />
-          <FloatDataEntryRenderer float={numericInput[AttributeNames.NumericInputValue]} onChange={(f) => useData.getState().updateDataEntry(f)} />
+          <BooleanDataEntryRenderer bool={numericInput[AttributeNames.Hardcoded]} onChange={(b) => useMethodData.getState().updateDataEntry(b)} />
+          <FloatDataEntryRenderer float={numericInput[AttributeNames.NumericInputValue]} onChange={(f) => useMethodData.getState().updateDataEntry(f)} />
         </span>
       </div>
     </div>

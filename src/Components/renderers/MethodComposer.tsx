@@ -1,5 +1,5 @@
 import React from 'react';
-import { useData } from '../../state/state';
+import { useMethodData } from '../../state/method';
 import {
   AddMethod,
   BooleanMethod,
@@ -156,7 +156,7 @@ const FunctionArrayRenderer: React.FC<{ functionArray: FunctionArrayEntries; num
         {functionArray.s.value > functionArray.s.min && index + 1 === functionArray.s.value ? (
           <DeleteFilled
             style={{ cursor: 'pointer', color: 'lightgray' }}
-            onClick={() => useData.getState().updateDataEntry({ ...functionArray.s, value: functionArray.s.value - 1 })}
+            onClick={() => useMethodData.getState().updateDataEntry({ ...functionArray.s, value: functionArray.s.value - 1 })}
           />
         ) : (
           <div />
@@ -167,7 +167,7 @@ const FunctionArrayRenderer: React.FC<{ functionArray: FunctionArrayEntries; num
       <div style={{ width: 25, height: 35, justifyContent: 'center', display: 'flex', flexDirection: 'row' }}>
         <PlusCircleFilled
           style={{ cursor: 'pointer' }}
-          onClick={() => useData.getState().updateDataEntry({ ...functionArray.s, value: functionArray.s.value + 1 })}
+          onClick={() => useMethodData.getState().updateDataEntry({ ...functionArray.s, value: functionArray.s.value + 1 })}
         />
       </div>
     ) : null}
@@ -183,7 +183,7 @@ const Version0Renderer: React.FC<{ data: VersionODataType }> = ({ data }) => {
   );
 };
 
-export const MethodRenderer: React.FC = () => {
-  const data = useData((s) => s.data);
+export const MethodComposer: React.FC = () => {
+  const data = useMethodData((s) => s.data);
   return <Version0Renderer data={data as VersionODataType} />;
 };

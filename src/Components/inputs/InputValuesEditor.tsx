@@ -1,6 +1,6 @@
 import { DeleteFilled, PlusCircleFilled } from '@ant-design/icons';
 import { NumericInputs } from '../../modelDefinition/types/version0.data.type';
-import { useData } from '../../state/state';
+import { useMethodData } from '../../state/method';
 import { ReferenceInputEditor } from './ReferenceInputEditor';
 import React, { useState } from 'react';
 import { Drawer, Button } from 'antd';
@@ -13,7 +13,7 @@ const NumericInputsEditor: React.FC<{ numericInputs: NumericInputs }> = ({ numer
         {numericInputs.s.value > numericInputs.s.min && index + 1 === numericInputs.s.value ? (
           <DeleteFilled
             style={{ cursor: 'pointer', position: 'relative', transform: 'translate(-14px, -45px)', color: 'lightgray' }}
-            onClick={() => useData.getState().updateDataEntry({ ...numericInputs.s, value: numericInputs.s.value - 1 })}
+            onClick={() => useMethodData.getState().updateDataEntry({ ...numericInputs.s, value: numericInputs.s.value - 1 })}
           />
         ) : null}
       </>
@@ -22,7 +22,7 @@ const NumericInputsEditor: React.FC<{ numericInputs: NumericInputs }> = ({ numer
       <div style={{ width: 25, height: 35, justifyContent: 'center', display: 'flex', flexDirection: 'row' }}>
         <PlusCircleFilled
           style={{ cursor: 'pointer' }}
-          onClick={() => useData.getState().updateDataEntry({ ...numericInputs.s, value: numericInputs.s.value + 1 })}
+          onClick={() => useMethodData.getState().updateDataEntry({ ...numericInputs.s, value: numericInputs.s.value + 1 })}
         />
       </div>
     ) : null}

@@ -1,35 +1,35 @@
 import React, { useEffect } from 'react';
 import './App.css';
 import { parserObjects } from './modelDefinition/model';
-import { useData } from './state/state';
+import { useMethodData } from './state/method';
 import { useParams } from 'react-router-dom';
 import { message } from 'antd';
-import { StateDataRenderer } from './Components/renderers/StateDataRenderer';
+import { MethodComposer } from './Components/renderers/MethodComposer';
 
 const defaultState = 'A1ABAABAK3mgSGgACUACksAASwASGAIA4AAIxyNGptD4hnZm3m3z0JAoYxRdo1W9oa9NQIaIYcehIA';
 
-export const App: React.FC = () => {
-  const { stateString } = useParams();
+export const MethodComposerApp: React.FC = () => {
+  const { methodStateString } = useParams();
 
-  const data = useData((s) => s.data);
+  const data = useMethodData((s) => s.data);
 
   useEffect(() => {
     const parsedString = parserObjects.stringify(data);
-    if (parsedString !== stateString) window.history.replaceState(null, 'Same Page Title', `/state-to-function/#${parserObjects.stringify(data)}`);
+    if (parsedString !== methodStateString) window.history.replaceState(null, 'Same Page Title', `/state-to-function/#${parserObjects.stringify(data)}`);
   }, [data]);
 
   useEffect(() => {
-    if (stateString) {
+    if (methodStateString) {
       try {
-        useData.getState().setData(parserObjects.parser(stateString + 'A'));
+        useMethodData.getState().setData(parserObjects.parser(methodStateString));
       } catch (e) {
         try {
-          useData.getState().setData(parserObjects.parser(defaultState + 'A'));
+          useMethodData.getState().setData(parserObjects.parser(defaultState));
           console.warn('the state string you tried to use was not valid, using the default state instead');
           console.warn(e);
           message.warning('the state string you tried to use was not valid, using the default state instead');
         } catch (e) {
-          useData.getState().setData(parserObjects.parser());
+          useMethodData.getState().setData(parserObjects.parser());
           console.warn('the default!! state string was not valid, using the default object state instead');
           console.warn(e);
           message.error('the default!! state string was not valid, using the default object state instead');
@@ -37,9 +37,9 @@ export const App: React.FC = () => {
       }
     } else {
       try {
-        useData.getState().setData(parserObjects.parser(defaultState));
+        useMethodData.getState().setData(parserObjects.parser(defaultState));
       } catch (e) {
-        useData.getState().setData(parserObjects.parser());
+        useMethodData.getState().setData(parserObjects.parser());
         console.warn('the default!! state string was not valid, using the default object state instead');
         console.warn(e);
         message.error('the default!! state string was not valid, using the default object state instead');
@@ -47,10 +47,5 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  return (
-    <>
-      <StateDataRenderer />
-      {/* <UnspecialisedInput /> */}
-    </>
-  );
+  return <MethodComposer />;
 };

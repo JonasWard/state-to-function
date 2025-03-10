@@ -1,4 +1,4 @@
 import React from 'react';
-import { MethodRenderer } from './MethodRenderer';
+import { MethodComposer } from './MethodComposer';
 
-export const StateDataRenderer: React.FC = () => <MethodRenderer />;
+export const StateDataRenderer: React.FC = () => <MethodComposer />;

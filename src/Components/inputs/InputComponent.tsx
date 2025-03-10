@@ -1,5 +1,5 @@
 import React from 'react';
-import { useData } from '../../state/state';
+import { useMethodData } from '../../state/method';
 import {
   AddMethod,
   BooleanMethod,
@@ -116,7 +116,7 @@ const NumericArrayRenderer: React.FC<{ arrayMethod: AddMethod | MultiplyMethod; 
               <DeleteFilled
                 style={{ cursor: 'pointer' }}
                 onClick={() =>
-                  useData
+                  useMethodData
                     .getState()
                     .updateDataEntry({ ...numericArray[AttributeNames.NumericArray].s, value: numericArray[AttributeNames.NumericArray].s.value - 1 })
                 }
@@ -132,7 +132,7 @@ const NumericArrayRenderer: React.FC<{ arrayMethod: AddMethod | MultiplyMethod; 
             style={{ cursor: 'pointer' }}
             key={'add'}
             onClick={() =>
-              useData
+              useMethodData
                 .getState()
                 .updateDataEntry({ ...numericArray[AttributeNames.NumericArray].s, value: numericArray[AttributeNames.NumericArray].s.value + 1 })
             }
@@ -173,7 +173,7 @@ const NumericInputsSelector: React.FC<{ numericInputs: NumericInputs; inputRefer
     variant='filled'
     style={{ paddingLeft: 8 }}
     value={inputReference.v[AttributeNames.InputReference].value}
-    onChange={(value) => useData.getState().updateDataEntry({ ...inputReference.v[AttributeNames.InputReference], value } as EnumDataEntry)}
+    onChange={(value) => useMethodData.getState().updateDataEntry({ ...inputReference.v[AttributeNames.InputReference], value } as EnumDataEntry)}
   >
     {numericInputs.v.map((n, i) => (
       <Select.Option key={i} value={i}>
@@ -192,7 +192,7 @@ const FloatMethodSelector: React.FC<{ floatMethod: FloatMethod }> = ({ floatMeth
   <Select
     variant='filled'
     style={{ paddingLeft: 8 }}
-    onChange={(value) => useData.getState().updateDataEntry({ ...floatMethod.v[AttributeNames.FloatMethod].s, value })}
+    onChange={(value) => useMethodData.getState().updateDataEntry({ ...floatMethod.v[AttributeNames.FloatMethod].s, value })}
     value={floatMethod.v[AttributeNames.FloatMethod].s.value}
   >
     {floatMethodLabels.map((label, value) => (
@@ -210,7 +210,7 @@ const InputValueRenderer: React.FC<{ inputValue: InputValue; numericInputs: Nume
         checked={Boolean(inputValue[AttributeNames.InputValue].s.value)}
         unCheckedChildren={'n'}
         checkedChildren={'f'}
-        onChange={(v) => useData.getState().updateDataEntry({ ...inputValue[AttributeNames.InputValue].s, value: v ? 1 : 0 } as EnumDataEntry)}
+        onChange={(v) => useMethodData.getState().updateDataEntry({ ...inputValue[AttributeNames.InputValue].s, value: v ? 1 : 0 } as EnumDataEntry)}
       />
       <NumericInputsSelector numericInputs={numericInputs} inputReference={inputValue[AttributeNames.InputValue] as InputReference} />
     </div>
@@ -221,7 +221,7 @@ const InputValueRenderer: React.FC<{ inputValue: InputValue; numericInputs: Nume
           checked={Boolean(inputValue[AttributeNames.InputValue].s.value)}
           unCheckedChildren={'n'}
           checkedChildren={'f'}
-          onChange={(v) => useData.getState().updateDataEntry({ ...inputValue[AttributeNames.InputValue].s, value: v ? 1 : 0 } as EnumDataEntry)}
+          onChange={(v) => useMethodData.getState().updateDataEntry({ ...inputValue[AttributeNames.InputValue].s, value: v ? 1 : 0 } as EnumDataEntry)}
         />
         <FloatMethodSelector floatMethod={inputValue[AttributeNames.InputValue] as FloatMethod} />
       </span>
