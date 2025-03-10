@@ -41,7 +41,7 @@ const numericInputName: SingleLevelContentType = [AttributeNames.NumericInputNam
 const numericInputAttributeName: SingleLevelContentType = [AttributeNames.NumericScientificSubscript, numericScientificSubscript];
 
 const numericInputsContent: ArrayEntryDataType = [
-  [2, 9],
+  [2, 65],
   [
     DataEntryFactory.createEnum(63, 63, AttributeNames.NumericScientificSymbol),
     numericInputName,
