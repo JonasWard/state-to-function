@@ -26,11 +26,7 @@ const BooleanMethodRender = (booleanMethod: BooleanMethod): string => {
 };
 
 const IfRenderer = (ifMethod: IfMethod): string =>
-  `if(${BooleanMethodRender(ifMethod.v.if.Mb)}{
-  ${InputValueRenderer(ifMethod.v.if.a)};
-} else {
-  ${InputValueRenderer(ifMethod.v.if.b)};
-}`;
+  `((${BooleanMethodRender(ifMethod.v.if.Mb)}) ?${InputValueRenderer(ifMethod.v.if.a)}:${InputValueRenderer(ifMethod.v.if.b)})`;
 
 const NumericArrayRenderer = (arrayMethod: AddMethod | MultiplyMethod): string => {
   const numericArray = Object.values(arrayMethod.v)[0];
