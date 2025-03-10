@@ -37,9 +37,7 @@ export const EditNumericInputsEditor: React.FC<{ numericInputs: NumericInputs }>
       <Drawer mask={false} placement='left' open={open} onClose={() => setOpen(false)} title={'Edit Inputs'}>
         <NumericInputsEditor numericInputs={numericInputs} />
       </Drawer>
-      <Button style={{ position: 'absolute', left: 10, bottom: 10 }} onClick={() => setOpen(true)}>
-        edit available inputs
-      </Button>
+      <Button onClick={() => setOpen(true)}>edit available inputs</Button>
     </>
   );
 };

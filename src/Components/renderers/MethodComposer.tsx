@@ -17,7 +17,6 @@ import {
 import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
 import { Tag } from 'antd';
 import { EditMethodRenderer } from '../inputs/EditMethodRenderer';
-import { EditNumericInputsEditor } from '../inputs/InputValuesEditor';
 import { DeleteFilled, PlusCircleFilled } from '@ant-design/icons';
 import { SymbolRenderer } from '../inputs/SymbolRenderer';
 import { SubscriptRenderer } from '../inputs/SubscriptRenderer';
@@ -174,16 +173,7 @@ const FunctionArrayRenderer: React.FC<{ functionArray: FunctionArrayEntries; num
   </div>
 );
 
-const Version0Renderer: React.FC<{ data: VersionODataType }> = ({ data }) => {
-  return (
-    <>
-      <FunctionArrayRenderer functionArray={data[AttributeNames.FunctionArray]} numericInputs={data[AttributeNames.NumericInputs]} />
-      <EditNumericInputsEditor numericInputs={data[AttributeNames.NumericInputs]} />
-    </>
-  );
-};
-
 export const MethodComposer: React.FC = () => {
-  const data = useMethodData((s) => s.data);
-  return <Version0Renderer data={data as VersionODataType} />;
+  const data = useMethodData((s) => s.data) as VersionODataType;
+  return <FunctionArrayRenderer functionArray={data[AttributeNames.FunctionArray]} numericInputs={data[AttributeNames.NumericInputs]} />;
 };

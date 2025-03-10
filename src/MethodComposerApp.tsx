@@ -1,22 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { parserObjects } from './modelDefinition/model';
 import { useMethodData } from './state/method';
-import { useParams } from 'react-router-dom';
-import { message } from 'antd';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Button, message } from 'antd';
 import { MethodComposer } from './Components/renderers/MethodComposer';
+import { EditNumericInputsEditor } from './Components/inputs/InputValuesEditor';
+import { VersionODataType } from './modelDefinition/types/version0.data.type';
+import { AttributeNames } from './modelDefinition/enums/attributeNames';
 
-const defaultState = 'A1ABAABAK3mgSGgACUACksAASwASGAIA4AAIxyNGptD4hnZm3m3z0JAoYxRdo1W9oa9NQIaIYcehIA';
+const defaultState = 'A0gCaAAIAgFbzQwRCIRYiSAgAEEUBW5oW9PBbCMEQiEWIsAASwASGAIA4AAURkWnYrrBgiEQixD0oQoYxRdo1W9oa9NQIaIYdeo8Iy1WpbntKH9D4gL1rM';
 
 export const MethodComposerApp: React.FC = () => {
   const { methodStateString } = useParams();
 
-  const data = useMethodData((s) => s.data);
+  const [localMethodStateString, setLocalMethodStateString] = useState(methodStateString);
+
+  const data = useMethodData((s) => s.data) as VersionODataType;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const parsedString = parserObjects.stringify(data);
-    if (parsedString !== methodStateString) window.history.replaceState(null, 'Same Page Title', `/state-to-function/#${parserObjects.stringify(data)}`);
-  }, [data]);
+    const newMethodStateString = parserObjects.stringify(data);
+    setLocalMethodStateString(newMethodStateString);
+    if (parsedString !== methodStateString) window.history.replaceState(null, 'Same Page Title', `/state-to-function/#${methodStateString}`);
+  }, [data, methodStateString]);
 
   useEffect(() => {
     if (methodStateString) {
@@ -47,5 +55,15 @@ export const MethodComposerApp: React.FC = () => {
     }
   }, []);
 
-  return <MethodComposer />;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', maxWidth: 1200, justifyItems: 'center' }}>
+      <span style={{ display: 'flex', flexDirection: 'row', width: 200, gap: 8 }}>
+        <EditNumericInputsEditor numericInputs={data[AttributeNames.NumericInputs]} />
+        <Button style={{ margin: 'auto' }} onClick={() => navigate(`/${localMethodStateString}/s`, { replace: true })}>
+          Try method
+        </Button>
+      </span>
+      <MethodComposer />
+    </div>
+  );
 };
