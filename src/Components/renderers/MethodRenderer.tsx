@@ -1,24 +1,26 @@
 import React from 'react';
 import { useData } from '../../state/state';
-import { getStateValue } from 'url-safe-bitpacking';
 import {
   AddMethod,
   BooleanMethod,
   FloatMethod,
+  FunctionArrayEntries,
   IfMethod,
   InputValue,
   MultiplyMethod,
   NumericInput,
   NumericInputs,
   NumericPair,
-  TextArray,
-  VersionOValueType,
-} from '../../modelDefinition/types/version0.value.type';
+  VersionODataType,
+  MethodEntry,
+} from '../../modelDefinition/types/version0.data.type';
 import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
-import { validScientificSubscriptDescriptors, validScientificSymbols } from '../../modelDefinition/enums/chars';
 import { Tag } from 'antd';
-
-const SymbolRenderer: React.FC<{ symbol: number }> = ({ symbol }) => validScientificSymbols[symbol] ?? '🚽';
+import { EditMethodRenderer } from '../inputs/EditMethodRenderer';
+import { EditNumericInputsEditor } from '../inputs/InputValuesEditor';
+import { DeleteFilled, PlusCircleFilled } from '@ant-design/icons';
+import { SymbolRenderer } from '../inputs/SymbolRenderer';
+import { SubscriptRenderer } from '../inputs/SubscriptRenderer';
 
 const sharedRowStyle: React.CSSProperties = {
   display: 'flex',
@@ -34,14 +36,6 @@ const sharedRowStyleWithBorder: React.CSSProperties = {
   border: '1px solid white',
   borderRadius: 4,
 };
-
-const SubscriptRenderer: React.FC<{ subscriptIndexes: TextArray }> = ({ subscriptIndexes }) => (
-  <sub>
-    {Object.values(subscriptIndexes.v)
-      .map((i) => validScientificSubscriptDescriptors[i.c] ?? '💩')
-      .join('')}
-  </sub>
-);
 
 const simplePairRenderer = (numericPair: NumericPair, operator: string, numericInputs: NumericInputs) => (
   <span style={sharedRowStyle}>
@@ -91,7 +85,7 @@ const NumericArrayRenderer: React.FC<{ arrayMethod: AddMethod | MultiplyMethod; 
   const operator = Object.keys(arrayMethod.v)[0];
 
   return (
-    <span key={arrayMethod.s} style={sharedRowStyle}>
+    <span key={arrayMethod.s.value} style={sharedRowStyle}>
       {numericArray[AttributeNames.NumericArray].v.map((v, i, arr) =>
         i !== arr.length - 1 ? (
           <span style={sharedRowStyle} key={'operator-' + i}>
@@ -107,12 +101,12 @@ const NumericArrayRenderer: React.FC<{ arrayMethod: AddMethod | MultiplyMethod; 
 };
 
 const InternalMethodRenderer: React.FC<{ floatMethod: FloatMethod; numericInputs: NumericInputs }> = ({ floatMethod, numericInputs }) => {
-  switch (floatMethod.v.Mf.s) {
+  switch (floatMethod.v.Mf.s.value) {
     case 0: // if method
-      return <IfRenderer ifMethod={floatMethod.v.Mf} numericInputs={numericInputs} />;
+      return <IfRenderer ifMethod={floatMethod.v.Mf as IfMethod} numericInputs={numericInputs} />;
     case 1: // multiply method
     case 2: // add method
-      return <NumericArrayRenderer arrayMethod={floatMethod.v.Mf} numericInputs={numericInputs} />;
+      return <NumericArrayRenderer arrayMethod={floatMethod.v.Mf as AddMethod | MultiplyMethod} numericInputs={numericInputs} />;
     case 3: // division method
       return divisionPairRenderer(floatMethod.v.Mf.v[AttributeNames.Division], numericInputs);
     case 4: // subtraction method
@@ -123,40 +117,73 @@ const InternalMethodRenderer: React.FC<{ floatMethod: FloatMethod; numericInputs
 };
 
 const NumericInputRenderer: React.FC<{ numericInput: NumericInput }> = ({ numericInput }) => {
-  return numericInput[AttributeNames.Hardcoded] ? (
-    <var>{numericInput[AttributeNames.NumericInputValue]}</var>
+  return numericInput[AttributeNames.Hardcoded].value ? (
+    <var>{numericInput[AttributeNames.NumericInputValue].value}</var>
   ) : (
     <var>
-      <SymbolRenderer symbol={numericInput[AttributeNames.NumericScientificSymbol]} />
+      <SymbolRenderer symbol={numericInput[AttributeNames.NumericScientificSymbol].value} />
       <SubscriptRenderer subscriptIndexes={numericInput.Subscript} />
     </var>
   );
 };
 
 const InputValueRenderer: React.FC<{ inputValue: InputValue; numericInputs: NumericInputs }> = ({ inputValue, numericInputs }) => {
-  if (inputValue[AttributeNames.InputValue].s === 0)
-    return numericInputs.v[inputValue[AttributeNames.InputValue].v[AttributeNames.InputReference]] ? (
-      <NumericInputRenderer numericInput={numericInputs.v[inputValue[AttributeNames.InputValue].v[AttributeNames.InputReference]]} />
+  if (inputValue[AttributeNames.InputValue].s.value === 0)
+    return numericInputs.v[inputValue[AttributeNames.InputValue].v[AttributeNames.InputReference].value] ? (
+      <NumericInputRenderer numericInput={numericInputs.v[inputValue[AttributeNames.InputValue].v[AttributeNames.InputReference].value]} />
     ) : (
       <Tag color='red'>missing</Tag>
     );
   else
     return (
       <span style={sharedRowStyleWithBorder}>
-        <InternalMethodRenderer floatMethod={inputValue[AttributeNames.InputValue]} numericInputs={numericInputs} />
+        <InternalMethodRenderer floatMethod={inputValue[AttributeNames.InputValue] as FloatMethod} numericInputs={numericInputs} />
       </span>
     );
 };
 
-const Version0Renderer: React.FC<{ data: VersionOValueType }> = ({ data }) => {
+const FunctionArrayRenderer: React.FC<{ functionArray: FunctionArrayEntries; numericInputs: NumericInputs }> = ({ functionArray, numericInputs }) => (
+  <div style={{ padding: 10, display: 'grid', gridTemplateColumns: 'auto auto 1fr auto auto', gap: 8, maxWidth: 1200, margin: 'auto', alignItems: 'center' }}>
+    {Object.values(functionArray.v).map((method, index) => (
+      <>
+        <var>
+          <SymbolRenderer symbol={method[AttributeNames.FunctionOutput][AttributeNames.NumericScientificSymbol].value} />
+          <SubscriptRenderer subscriptIndexes={method[AttributeNames.FunctionOutput][AttributeNames.NumericScientificSubscript]} />
+        </var>
+        =
+        <InputValueRenderer inputValue={method[AttributeNames.Function]} numericInputs={numericInputs} />
+        <EditMethodRenderer method={method as MethodEntry} numericInputs={numericInputs} />
+        {functionArray.s.value > functionArray.s.min && index + 1 === functionArray.s.value ? (
+          <DeleteFilled
+            style={{ cursor: 'pointer', color: 'lightgray' }}
+            onClick={() => useData.getState().updateDataEntry({ ...functionArray.s, value: functionArray.s.value - 1 })}
+          />
+        ) : (
+          <div />
+        )}
+      </>
+    ))}
+    {functionArray.s.value < functionArray.s.max ? (
+      <div style={{ width: 25, height: 35, justifyContent: 'center', display: 'flex', flexDirection: 'row' }}>
+        <PlusCircleFilled
+          style={{ cursor: 'pointer' }}
+          onClick={() => useData.getState().updateDataEntry({ ...functionArray.s, value: functionArray.s.value + 1 })}
+        />
+      </div>
+    ) : null}
+  </div>
+);
+
+const Version0Renderer: React.FC<{ data: VersionODataType }> = ({ data }) => {
   return (
-    <span>
-      <InputValueRenderer inputValue={data[AttributeNames.Function]} numericInputs={data[AttributeNames.NumericInputs]} />
-    </span>
+    <>
+      <FunctionArrayRenderer functionArray={data[AttributeNames.FunctionArray]} numericInputs={data[AttributeNames.NumericInputs]} />
+      <EditNumericInputsEditor numericInputs={data[AttributeNames.NumericInputs]} />
+    </>
   );
 };
 
 export const MethodRenderer: React.FC = () => {
   const data = useData((s) => s.data);
-  return <Version0Renderer data={getStateValue(data) as VersionOValueType} />;
+  return <Version0Renderer data={data as VersionODataType} />;
 };

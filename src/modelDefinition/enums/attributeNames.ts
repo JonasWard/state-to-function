@@ -21,6 +21,8 @@ export enum AttributeNames {
   InputReference = 'Input Reference',
   NumericArray = 'Numeric Array',
   Function = 'Function',
+  FunctionArray = 'Function Array',
+  FunctionOutput = 'Function Output',
   Version = 'version',
   NumericInputs = 'Numeric Inputs',
   NumericInputVariable = 'Variable',

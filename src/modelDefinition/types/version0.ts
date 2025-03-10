@@ -53,7 +53,18 @@ const numericInputsContent: ArrayEntryDataType = [
 
 const defaultNumericField: SingleLevelContentType = [AttributeNames.InputValue, [1, [inputVariableCount], [floatMethod]]];
 
+const functionDefintion: SingleLevelContentType = [AttributeNames.Function, [defaultNumericField]];
+const functionName: SingleLevelContentType = [
+  AttributeNames.FunctionOutput,
+  [DataEntryFactory.createEnum(63, 63, AttributeNames.NumericScientificSymbol), numericInputName, numericInputAttributeName],
+];
+
+const functionArrayEntries: ArrayEntryDataType = [
+  [1, 9],
+  [functionDefintion, functionName],
+];
+
 export const verionArrayDefinition0: SingleLevelContentType[] = [
-  [AttributeNames.Function, [defaultNumericField]],
+  [AttributeNames.FunctionArray, functionArrayEntries],
   [AttributeNames.NumericInputs, numericInputsContent],
 ];

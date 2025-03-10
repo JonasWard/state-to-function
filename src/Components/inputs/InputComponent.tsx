@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useData } from '../../state/state';
 import {
   AddMethod,
@@ -10,21 +10,17 @@ import {
   NumericInput,
   NumericInputs,
   NumericPair,
-  TextArray,
-  VersionODataType,
   InputReference,
+  MethodEntry,
 } from '../../modelDefinition/types/version0.data.type';
-import { Button, Drawer, Popover, Select, Switch, Tag } from 'antd';
 import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
-import { validScientificSymbols, validScientificSubscriptDescriptors, validDescriptors } from '../../modelDefinition/enums/chars';
 import { EnumDataEntry } from 'url-safe-bitpacking/dist/types';
 import { floatMethodLabels } from '../../modelDefinition/types/version0.enumsemantics';
-import { TextInput } from '../TextInput';
 import { DeleteFilled, PlusCircleFilled } from '@ant-design/icons';
-import { FloatDataEntryRenderer } from '../parametrics/dataentryrenderers/FloatDataEntryRenderer';
-import { BooleanDataEntryRenderer } from '../parametrics/dataentryrenderers/BooleanDataEntryRenderer';
-
-const SymbolRenderer: React.FC<{ symbol: number }> = ({ symbol }) => validScientificSymbols[symbol] ?? '🚽';
+import { MethodOutputEditor } from './ReferenceInputEditor';
+import { Select, Tag, Switch } from 'antd';
+import { SymbolRenderer } from './SymbolRenderer';
+import { SubscriptRenderer } from './SubscriptRenderer';
 
 const sharedRowStyle: React.CSSProperties = {
   display: 'flex',
@@ -70,14 +66,6 @@ const operatorStyling: React.CSSProperties = {
   justifyContent: 'end',
   transform: 'translateY(9px)',
 };
-
-const SubscriptRenderer: React.FC<{ subscriptIndexes: TextArray }> = ({ subscriptIndexes }) => (
-  <sub>
-    {Object.values(subscriptIndexes.v)
-      .map((i) => validScientificSubscriptDescriptors[i.c.value] ?? '💩')
-      .join('')}
-  </sub>
-);
 
 const pairRenderer = (numericPair: NumericPair, operator: string, numericInputs: NumericInputs, withBox: boolean = false) => (
   <span style={withBox ? { ...methodOnGrid, ...boundaryBoxStyle } : methodOnGrid}>
@@ -139,9 +127,10 @@ const NumericArrayRenderer: React.FC<{ arrayMethod: AddMethod | MultiplyMethod; 
       ))}
       {numericArray[AttributeNames.NumericArray].s.value < numericArray[AttributeNames.NumericArray].s.max ? (
         <>
-          <span />
+          <span key={'addFiller'} />
           <PlusCircleFilled
             style={{ cursor: 'pointer' }}
+            key={'add'}
             onClick={() =>
               useData
                 .getState()
@@ -187,7 +176,7 @@ const NumericInputsSelector: React.FC<{ numericInputs: NumericInputs; inputRefer
     onChange={(value) => useData.getState().updateDataEntry({ ...inputReference.v[AttributeNames.InputReference], value } as EnumDataEntry)}
   >
     {numericInputs.v.map((n, i) => (
-      <Select.Option value={i}>
+      <Select.Option key={i} value={i}>
         <NumericInputRenderer numericInput={n} />
       </Select.Option>
     ))}
@@ -240,109 +229,40 @@ const InputValueRenderer: React.FC<{ inputValue: InputValue; numericInputs: Nume
     </div>
   );
 
-const NumericInputEditor: React.FC<{ numericInput: NumericInput }> = ({ numericInput }) => {
-  const [open, setOpen] = useState(false);
-
-  const editSymbolContent = (
-    <div style={{ display: 'grid', gridTemplateColumns: '30px 30px 30px 30px 30px 30px 30px 30px' }}>
-      {validScientificSymbols.split('').map((s, i) => (
-        <span
-          style={{
-            backgroundColor: i === numericInput[AttributeNames.NumericScientificSymbol].value ? '#ccccff' : '#eeeeff',
-            margin: 2,
-            padding: 'auto',
-            textAlign: 'center',
-            cursor: 'pointer',
-            color: i === numericInput[AttributeNames.NumericScientificSymbol].value ? 'black' : 'gray',
-            fontWeight: i === numericInput[AttributeNames.NumericScientificSymbol].value ? 'bold' : 400,
-          }}
-          onClick={() => {
-            useData.getState().updateDataEntry({ ...numericInput[AttributeNames.NumericScientificSymbol], value: i });
-            setOpen(false);
-          }}
-        >
-          {s}
-        </span>
-      ))}
-    </div>
-  );
-
-  return (
-    <div style={{ display: 'grid', gridTemplateColumns: '25px 1fr', gap: 6 }}>
-      <div style={{ margin: 'auto', cursor: 'pointer' }}>
-        <Popover open={open} content={editSymbolContent}>
-          <var style={{ fontSize: 30, fontWeight: 'bold' }} onClick={() => setOpen(!open)}>
-            {validScientificSymbols[numericInput[AttributeNames.NumericScientificSymbol].value]}
-          </var>
-        </Popover>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <TextInput
-          placeholder='Description of what I am'
-          sourceString={validDescriptors}
-          text={numericInput[AttributeNames.NumericInputName]}
-          updateEntry={useData.getState().updateDataEntry}
-        />
-        <TextInput
-          placeholder='subscript'
-          sourceString={validScientificSubscriptDescriptors}
-          text={numericInput[AttributeNames.NumericScientificSubscript]}
-          updateEntry={useData.getState().updateDataEntry}
-        />
-        <span style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 8 }}>
-          <BooleanDataEntryRenderer bool={numericInput[AttributeNames.Hardcoded]} onChange={(b) => useData.getState().updateDataEntry(b)} />
-          <FloatDataEntryRenderer float={numericInput[AttributeNames.NumericInputValue]} onChange={(f) => useData.getState().updateDataEntry(f)} />
-        </span>
-      </div>
-    </div>
-  );
-};
-
-const NumericInputsEditor: React.FC<{ numericInputs: NumericInputs }> = ({ numericInputs }) => (
-  <>
-    {numericInputs.v.map((input, index) => (
-      <>
-        <NumericInputEditor numericInput={input} />
-        {numericInputs.s.value > numericInputs.s.min && index + 1 === numericInputs.s.value ? (
-          <DeleteFilled
-            style={{ cursor: 'pointer', position: 'relative', transform: 'translate(-14px, -45px)', color: 'lightgray' }}
-            onClick={() => useData.getState().updateDataEntry({ ...numericInputs.s, value: numericInputs.s.value - 1 })}
-          />
-        ) : null}
-      </>
-    ))}
-    {numericInputs.s.value < numericInputs.s.max ? (
-      <div style={{ width: 25, height: 35, justifyContent: 'center', display: 'flex', flexDirection: 'row' }}>
-        <PlusCircleFilled
-          style={{ cursor: 'pointer' }}
-          onClick={() => useData.getState().updateDataEntry({ ...numericInputs.s, value: numericInputs.s.value + 1 })}
-        />
-      </div>
-    ) : null}
-  </>
-);
-
-const Version0Renderer: React.FC<{ data: VersionODataType }> = ({ data }) => {
+export const EditMethodContentRenderer: React.FC<{ method: MethodEntry; numericInputs: NumericInputs }> = ({ method, numericInputs }) => {
   return (
     <>
-      <InputValueRenderer inputValue={data[AttributeNames.Function]} numericInputs={data[AttributeNames.NumericInputs]} />
-      <NumericInputsEditor numericInputs={data[AttributeNames.NumericInputs]} />
+      <MethodOutputEditor methodName={method[AttributeNames.FunctionOutput]} />
+      <InputValueRenderer inputValue={method[AttributeNames.Function]} numericInputs={numericInputs} />
     </>
   );
 };
 
-export const InputComponent: React.FC = () => {
-  const data = useData((s) => s.data);
-  const [open, setOpen] = useState(false);
+// const FunctionArrayRenderer: React.FC<{ functionArray: FunctionArrayEntries; numericInputs: NumericInputs }> = ({ functionArray, numericInputs }) => {
+//   return Object.values(functionArray.v).map((input) => );
+// };
 
-  return (
-    <>
-      <Button style={{ position: 'absolute', bottom: 10, right: 10 }} onClick={() => setOpen(true)}>
-        view wip editor
-      </Button>
-      <Drawer mask={false} open={open} placement='right' onClose={() => setOpen(false)}>
-        <Version0Renderer data={data as unknown as VersionODataType} />
-      </Drawer>
-    </>
-  );
-};
+// const Version0Renderer: React.FC<{ data: VersionODataType }> = ({ data }) => {
+//   return (
+//     <>
+//       <FunctionArrayRenderer functionArray={data[AttributeNames.FunctionArray]} numericInputs={data[AttributeNames.NumericInputs]} />
+//       <NumericInputsEditor numericInputs={data[AttributeNames.NumericInputs]} />
+//     </>
+//   );
+// };
+
+// export const InputComponent: React.FC = () => {
+//   const data = useData((s) => s.data);
+//   const [open, setOpen] = useState(false);
+
+//   return (
+//     <>
+//       <Button style={{ position: 'absolute', bottom: 10, right: 10 }} onClick={() => setOpen(true)}>
+//         view wip editor
+//       </Button>
+//       <Drawer mask={false} open={open} placement='right' onClose={() => setOpen(false)}>
+//         <Version0Renderer data={data as unknown as VersionODataType} />
+//       </Drawer>
+//     </>
+//   );
+// };

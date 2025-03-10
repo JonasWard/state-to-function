@@ -115,7 +115,21 @@ export type NumericInputs = {
   v: NumericInput[];
 };
 
-export type VersionODataType = {
+export type MethodEntry = {
   [AttributeNames.Function]: InputValue;
+  [AttributeNames.FunctionOutput]: {
+    [AttributeNames.NumericScientificSymbol]: EnumDataEntry;
+    [AttributeNames.NumericScientificSubscript]: TextArray;
+    [AttributeNames.NumericInputName]: TextArray;
+  };
+};
+
+export type FunctionArrayEntries = {
+  s: IntDataEntry;
+  v: MethodEntry[];
+};
+
+export type VersionODataType = {
+  [AttributeNames.FunctionArray]: FunctionArrayEntries;
   [AttributeNames.NumericInputs]: NumericInputs;
 };

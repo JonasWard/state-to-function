@@ -5,7 +5,6 @@ import { useData } from './state/state';
 import { useParams } from 'react-router-dom';
 import { message } from 'antd';
 import { StateDataRenderer } from './Components/renderers/StateDataRenderer';
-import { InputComponent } from './Components/inputs/InputComponent';
 
 const defaultState = 'BQaALWAgSkBggMBqCgCAqgDANTABbPShGYALh6jwdACbaPQkDIAL56EgtABhPQkFgATbZ6EgXACcfPQkA';
 
@@ -50,7 +49,6 @@ export const App: React.FC = () => {
 
   return (
     <>
-      <InputComponent />
       <StateDataRenderer />
       {/* <UnspecialisedInput /> */}
     </>
