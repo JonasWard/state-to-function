@@ -22,7 +22,19 @@ const BooleanMethodRender = (booleanMethod: BooleanMethod): string => {
   const numericPair = Object.values(booleanMethod.v)[0];
   const comparator = Object.keys(booleanMethod.v)[0];
 
-  return simplePairRenderer(numericPair, comparator);
+  let mappedComperator = comparator;
+  switch (comparator) {
+    case AttributeNames.Equal:
+      mappedComperator = '===';
+      break;
+    case AttributeNames.NotEqual:
+      mappedComperator = '!==';
+      break;
+    default:
+      break;
+  }
+
+  return simplePairRenderer(numericPair, mappedComperator);
 };
 
 const IfRenderer = (ifMethod: IfMethod): string =>
