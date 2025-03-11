@@ -9,7 +9,8 @@ import { EditNumericInputsEditor } from './Components/inputs/InputValuesEditor';
 import { VersionODataType } from './modelDefinition/types/version0.data.type';
 import { AttributeNames } from './modelDefinition/enums/attributeNames';
 
-const defaultState = 'A0gCaAAIAgFbzQwRCIRYiSAgAEEUBW5oW9PBbCMEQiEWIsAASwASGAIA4AAURkWnYrrBgiEQixD0oQoYxRdo1W9oa9NQIaIYdeo8Iy1WpbntKH9D4gL1rM';
+const defaultState =
+  'BEgCaAAYCQFbzWlD-lsL2gUVbkrwwRCIRYiQhAIIBALQADAdArea0of0Arc0segment0of0circleDARCSAADuIDiameterASAJIAwAI0KKty6Z96t6dx4YIhEIsRJA0IBBAIBAAigK3NJXp4LYQwEQg0Rq2nYrrAD0oQ0K1PBK8GAiEehIIwBXZm3nL1rNuABeo8NQAL0JA';
 
 export const MethodComposerApp: React.FC = () => {
   const { methodStateString } = useParams();
