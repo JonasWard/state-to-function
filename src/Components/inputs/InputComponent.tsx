@@ -14,7 +14,7 @@ import {
   MethodEntry,
   VersionODataType,
 } from '../../modelDefinition/types/version0.data.type';
-import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
+import { AttributeNames, BooleanAttributes, FloatAttributes } from '../../modelDefinition/enums/attributeNames';
 import { EnumDataEntry } from 'url-safe-bitpacking/dist/types';
 import { booleanMethodLabels, floatMethodLabels } from '../../modelDefinition/types/version0.enumsemantics';
 import { DeleteFilled, PlusCircleFilled } from '@ant-design/icons';
@@ -22,6 +22,7 @@ import { MethodOutputEditor } from './ReferenceInputEditor';
 import { Select, Tag, Switch } from 'antd';
 import { SymbolRenderer } from './SymbolRenderer';
 import { SubscriptRenderer } from './SubscriptRenderer';
+import { getDataEntryArray } from 'url-safe-bitpacking';
 
 const sharedRowStyle: React.CSSProperties = {
   display: 'flex',
@@ -68,11 +69,47 @@ const operatorStyling: React.CSSProperties = {
   transform: 'translateY(9px)',
 };
 
+const floatPairs = [AttributeNames.Division, AttributeNames.Subtraction, AttributeNames.Power];
+const floatArray = [AttributeNames.Multiply, AttributeNames.Addition];
+
+const changeFloatMethodType = (floatMethod: FloatMethod, newValue: 0 | 1 | 2 | 3 | 4 | 5) => {
+  const newDescriptionEntry = { ...floatMethod.v[AttributeNames.FloatMethod].s, value: newValue } as EnumDataEntry;
+  const currentOperator = floatMethodLabels[floatMethod.v[AttributeNames.FloatMethod].s.value] as FloatAttributes;
+  const newOperator = floatMethodLabels[newValue];
+
+  console.log(currentOperator, newOperator);
+
+  console.log(floatMethod);
+  console.log(floatMethod);
+
+  const descriptionStringToReplace = `${floatMethod.v[AttributeNames.FloatMethod].s.internalName!}_${currentOperator}`;
+
+  // simple case
+  if (
+    (floatPairs.includes(currentOperator) && floatPairs.includes(newOperator)) ||
+    (floatArray.includes(currentOperator) && floatArray.includes(newOperator))
+  ) {
+    const replaceStringWith = `${floatMethod.v[AttributeNames.FloatMethod].s.internalName!}_${newOperator}`;
+
+    console.log(getDataEntryArray(floatMethod.v[AttributeNames.FloatMethod]));
+
+    const otherDataEntries = getDataEntryArray(floatMethod.v[AttributeNames.FloatMethod]).slice(1);
+    useMethodData
+      .getState()
+      .updateDataEntry([
+        newDescriptionEntry,
+        ...otherDataEntries.map((d) => ({ ...d, internalName: d.internalName!.replace(descriptionStringToReplace, replaceStringWith) })),
+      ]);
+  } else {
+    useMethodData.getState().updateDataEntry(newDescriptionEntry);
+  }
+};
+
 const FloatMethodSelector: React.FC<{ floatMethod: FloatMethod }> = ({ floatMethod }) => (
   <Select
     variant='filled'
     style={{ paddingLeft: 8 }}
-    onChange={(value) => useMethodData.getState().updateDataEntry({ ...floatMethod.v[AttributeNames.FloatMethod].s, value })}
+    onChange={(value) => changeFloatMethodType(floatMethod, value)}
     value={floatMethod.v[AttributeNames.FloatMethod].s.value}
   >
     {floatMethodLabels.map((label, value) => (
