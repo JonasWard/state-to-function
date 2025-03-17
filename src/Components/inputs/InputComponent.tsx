@@ -83,13 +83,25 @@ const FloatMethodSelector: React.FC<{ floatMethod: FloatMethod }> = ({ floatMeth
   </Select>
 );
 
+const changeBooleanMethodType = (booleanMethod: BooleanMethod, newValue: 0 | 1 | 2 | 3) => {
+  const newDescriptionEntry = { ...booleanMethod.s, value: newValue } as EnumDataEntry;
+  const currentOperator = booleanMethodLabels[booleanMethod.s.value] as BooleanAttributes;
+  const newOperator = booleanMethodLabels[newValue];
+
+  const descriptionStringToReplace = `${booleanMethod.s.internalName!}_${currentOperator}`;
+  const replaceStringWith = `${booleanMethod.s.internalName!}_${newOperator}`;
+
+  const otherDataEntries = getDataEntryArray(booleanMethod).slice(1);
+  useMethodData
+    .getState()
+    .updateDataEntry([
+      newDescriptionEntry,
+      ...otherDataEntries.map((d) => ({ ...d, internalName: d.internalName!.replace(descriptionStringToReplace, replaceStringWith) })),
+    ]);
+};
+
 const BooleanMethodSelect: React.FC<{ booleanMethod: BooleanMethod }> = ({ booleanMethod }) => (
-  <Select
-    variant='filled'
-    style={{ paddingLeft: 8 }}
-    onChange={(value) => useMethodData.getState().updateDataEntry({ ...booleanMethod.s, value })}
-    value={booleanMethod.s.value}
-  >
+  <Select variant='filled' style={{ paddingLeft: 8 }} onChange={(value) => changeBooleanMethodType(booleanMethod, value)} value={booleanMethod.s.value}>
     {booleanMethodLabels.map((label, value) => (
       <Select.Option key={label} value={value}>
         {label}
