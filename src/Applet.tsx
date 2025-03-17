@@ -12,6 +12,7 @@ import { AttributeNames } from './modelDefinition/enums/attributeNames';
 import { NumericInputs } from './AppletComponents/NumericInputs';
 import { NumericOutputs } from './AppletComponents/NumericOutputs';
 import { Button } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 const getValuesFromAppletState = (data: VersionAppletDataType) =>
   Object.entries(data)
@@ -62,12 +63,16 @@ export const Applet: React.FC = () => {
   }, [data, versionHandler]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', maxWidth: 1200, alignContent: 'center' }}>
-      <Button style={{ margin: 'auto' }} onClick={() => navigate(`/${methodStateString}`, { replace: true })}>
-        Edit method
-      </Button>
-      <NumericInputs />
-      <NumericOutputs values={outputData} />
+    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', maxWidth: 800, alignItems: 'center' }}>
+        <Button style={{ margin: 16, width: 150 }} onClick={() => navigate(`/${methodStateString}`, { replace: true })}>
+          <ArrowLeftOutlined /> Edit method
+        </Button>
+        <div style={{ padding: 10, display: 'grid', gridTemplateColumns: 'auto auto 1fr auto', gap: 8, width: '100%', margin: 'auto', alignItems: 'center' }}>
+          <NumericInputs />
+          <NumericOutputs values={outputData} />
+        </div>
+      </div>
     </div>
   );
 };

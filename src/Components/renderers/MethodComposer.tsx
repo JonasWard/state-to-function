@@ -15,11 +15,11 @@ import {
   MethodEntry,
 } from '../../modelDefinition/types/version0.data.type';
 import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
-import { Tag } from 'antd';
-import { EditMethodRenderer } from '../inputs/EditMethodRenderer';
-import { DeleteFilled, PlusCircleFilled } from '@ant-design/icons';
+import { Button, Tag } from 'antd';
+import { DeleteFilled, EditOutlined, PlusCircleFilled } from '@ant-design/icons';
 import { SymbolRenderer } from '../inputs/SymbolRenderer';
 import { SubscriptRenderer } from '../inputs/SubscriptRenderer';
+import { MethodTitle } from './MethodTitle';
 
 const sharedRowStyle: React.CSSProperties = {
   display: 'flex',
@@ -117,7 +117,11 @@ const InternalMethodRenderer: React.FC<{ floatMethod: FloatMethod; numericInputs
 
 const NumericInputRenderer: React.FC<{ numericInput: NumericInput }> = ({ numericInput }) => {
   return numericInput[AttributeNames.Hardcoded].value ? (
-    <var>{numericInput[AttributeNames.NumericInputValue].value}</var>
+    <var>
+      {Number.isInteger(numericInput[AttributeNames.NumericInputValue].value)
+        ? numericInput[AttributeNames.NumericInputValue].value.toFixed(0)
+        : numericInput[AttributeNames.NumericInputValue].value.toFixed(3)}
+    </var>
   ) : (
     <var>
       <SymbolRenderer symbol={numericInput[AttributeNames.NumericScientificSymbol].value} />
@@ -141,39 +145,53 @@ const InputValueRenderer: React.FC<{ inputValue: InputValue; numericInputs: Nume
     );
 };
 
-const FunctionArrayRenderer: React.FC<{ functionArray: FunctionArrayEntries; numericInputs: NumericInputs }> = ({ functionArray, numericInputs }) => (
-  <div style={{ padding: 10, display: 'grid', gridTemplateColumns: 'auto auto 1fr auto auto', gap: 8, maxWidth: 1200, margin: 'auto', alignItems: 'center' }}>
-    {Object.values(functionArray.v).map((method, index) => (
-      <>
-        <var>
-          <SymbolRenderer symbol={method[AttributeNames.FunctionOutput][AttributeNames.NumericScientificSymbol].value} />
-          <SubscriptRenderer subscriptIndexes={method[AttributeNames.FunctionOutput][AttributeNames.NumericScientificSubscript]} />
-        </var>
-        =
-        <InputValueRenderer inputValue={method[AttributeNames.Function]} numericInputs={numericInputs} />
-        <EditMethodRenderer method={method as MethodEntry} numericInputs={numericInputs} />
-        {functionArray.s.value > functionArray.s.min && index + 1 === functionArray.s.value ? (
-          <DeleteFilled
-            style={{ cursor: 'pointer', color: 'lightgray' }}
-            onClick={() => useMethodData.getState().updateDataEntry({ ...functionArray.s, value: functionArray.s.value - 1 })}
+const FunctionArrayRenderer: React.FC<{
+  functionArray: FunctionArrayEntries;
+  numericInputs: NumericInputs;
+  setMethodToEdit: (method: MethodEntry) => void;
+}> = ({ functionArray, numericInputs, setMethodToEdit }) => {
+  return (
+    <div style={{ margin: 16, display: 'grid', gridTemplateColumns: 'auto auto 1fr auto auto', gap: 8, alignItems: 'center', maxWidth: 1000 }}>
+      {Object.values(functionArray.v).map((method, index) => (
+        <>
+          <var>
+            <SymbolRenderer symbol={method[AttributeNames.FunctionOutput][AttributeNames.NumericScientificSymbol].value} />
+            <SubscriptRenderer subscriptIndexes={method[AttributeNames.FunctionOutput][AttributeNames.NumericScientificSubscript]} />
+          </var>
+          =
+          <InputValueRenderer inputValue={method[AttributeNames.Function]} numericInputs={numericInputs} />
+          <Button style={{ width: 150 }} onClick={() => setMethodToEdit(method as MethodEntry)}>
+            <EditOutlined /> <MethodTitle method={method} />
+          </Button>
+          {functionArray.s.value > functionArray.s.min && index + 1 === functionArray.s.value ? (
+            <DeleteFilled
+              style={{ cursor: 'pointer', color: 'lightgray' }}
+              onClick={() => useMethodData.getState().updateDataEntry({ ...functionArray.s, value: functionArray.s.value - 1 })}
+            />
+          ) : (
+            <div />
+          )}
+        </>
+      ))}
+      {functionArray.s.value < functionArray.s.max ? (
+        <div style={{ width: 25, height: 35, justifyContent: 'center', display: 'flex', flexDirection: 'row' }}>
+          <PlusCircleFilled
+            style={{ cursor: 'pointer' }}
+            onClick={() => useMethodData.getState().updateDataEntry({ ...functionArray.s, value: functionArray.s.value + 1 })}
           />
-        ) : (
-          <div />
-        )}
-      </>
-    ))}
-    {functionArray.s.value < functionArray.s.max ? (
-      <div style={{ width: 25, height: 35, justifyContent: 'center', display: 'flex', flexDirection: 'row' }}>
-        <PlusCircleFilled
-          style={{ cursor: 'pointer' }}
-          onClick={() => useMethodData.getState().updateDataEntry({ ...functionArray.s, value: functionArray.s.value + 1 })}
-        />
-      </div>
-    ) : null}
-  </div>
-);
+        </div>
+      ) : null}
+    </div>
+  );
+};
 
-export const MethodComposer: React.FC = () => {
+export const MethodComposer: React.FC<{ setMethodToEdit: (method: MethodEntry) => void }> = ({ setMethodToEdit }) => {
   const data = useMethodData((s) => s.data) as VersionODataType;
-  return <FunctionArrayRenderer functionArray={data[AttributeNames.FunctionArray]} numericInputs={data[AttributeNames.NumericInputs]} />;
+  return (
+    <FunctionArrayRenderer
+      functionArray={data[AttributeNames.FunctionArray]}
+      numericInputs={data[AttributeNames.NumericInputs]}
+      setMethodToEdit={setMethodToEdit}
+    />
+  );
 };

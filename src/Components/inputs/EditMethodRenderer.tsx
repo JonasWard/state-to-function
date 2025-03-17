@@ -1,48 +1,39 @@
-import { Button, Drawer } from 'antd';
-import { NumericInputs, MethodEntry } from '../../modelDefinition/types/version0.data.type';
-import { useState } from 'react';
+import { Drawer } from 'antd';
+import { MethodEntry } from '../../modelDefinition/types/version0.data.type';
 import React from 'react';
 import { EditMethodContentRenderer } from './InputComponent';
-import { getText } from '../../lib/helpers';
-import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
-import { validDescriptors } from '../../modelDefinition/enums/chars';
-import { SymbolRenderer } from './SymbolRenderer';
-import { SubscriptRenderer } from './SubscriptRenderer';
-import { EditOutlined } from '@ant-design/icons';
+import { MethodTitle } from '../renderers/MethodTitle';
 
-const MethodTitle: React.FC<{ method: MethodEntry }> = ({ method }) => {
-  const descriptionText = getText(method[AttributeNames.FunctionOutput][AttributeNames.NumericInputName].v, validDescriptors);
-
-  return descriptionText != '' ? (
-    descriptionText
-  ) : (
-    <var>
-      <SymbolRenderer symbol={method[AttributeNames.FunctionOutput][AttributeNames.NumericScientificSymbol].value} />
-      <SubscriptRenderer subscriptIndexes={method[AttributeNames.FunctionOutput][AttributeNames.NumericScientificSubscript]} />
-    </var>
-  );
-};
-
-export const EditMethodRenderer: React.FC<{ method: MethodEntry; numericInputs: NumericInputs }> = ({ method, numericInputs }) => {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <>
-      <Drawer
-        mask={false}
-        open={open}
-        onClose={() => setOpen(false)}
-        title={
+const EditMethodRendererMobile: React.FC<{ method: MethodEntry | undefined; clearMethod: () => void }> = ({ method, clearMethod }) => (
+  <>
+    <Drawer
+      mask={false}
+      open={Boolean(method)}
+      onClose={clearMethod}
+      title={
+        method ? (
           <>
             Edit: <MethodTitle method={method} />
           </>
-        }
-      >
-        <EditMethodContentRenderer method={method} numericInputs={numericInputs} />
-      </Drawer>
-      <Button onClick={() => setOpen(true)}>
-        <EditOutlined /> <MethodTitle method={method} />
-      </Button>
-    </>
+        ) : null
+      }
+    >
+      {method ? <EditMethodContentRenderer method={method} /> : null}
+    </Drawer>
+  </>
+);
+
+const EditMethodRendererDesktop: React.FC<{ method: MethodEntry | undefined; clearMethod: () => void }> = ({ method }) =>
+  method ? (
+    <div style={{ width: 450, padding: 10 }}>
+      <span style={{ paddingBottom: 20, fontWeight: 600 }}>
+        Edit: <MethodTitle method={method} />
+      </span>
+      <EditMethodContentRenderer method={method} />
+    </div>
+  ) : (
+    <div style={{ width: 450, padding: 10 }} />
   );
-};
+
+export const EditMethodRenderer: React.FC<{ method: MethodEntry | undefined; desktop?: boolean; clearMethod: () => void }> = (props) =>
+  props.desktop ? <EditMethodRendererDesktop {...props} /> : <EditMethodRendererMobile {...props} />;

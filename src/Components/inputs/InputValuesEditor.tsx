@@ -29,7 +29,7 @@ const NumericInputsEditor: React.FC<{ numericInputs: NumericInputs }> = ({ numer
   </>
 );
 
-export const EditNumericInputsEditor: React.FC<{ numericInputs: NumericInputs }> = ({ numericInputs }) => {
+const EditNumericInputsEditorMobile: React.FC<{ numericInputs: NumericInputs }> = ({ numericInputs }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -41,3 +41,13 @@ export const EditNumericInputsEditor: React.FC<{ numericInputs: NumericInputs }>
     </>
   );
 };
+
+const EditNumericInputsEditorDesktop: React.FC<{ numericInputs: NumericInputs }> = ({ numericInputs }) => (
+  <div style={{ width: 250, padding: 12, height: '100%', overflowY: 'auto' }}>
+    <span style={{ paddingBottom: 20, fontWeight: 600 }}>Edit Input Names</span>
+    <NumericInputsEditor numericInputs={numericInputs} />
+  </div>
+);
+
+export const EditNumericInputsEditor: React.FC<{ numericInputs: NumericInputs; desktop?: boolean }> = ({ numericInputs, desktop }) =>
+  desktop ? <EditNumericInputsEditorDesktop numericInputs={numericInputs} /> : <EditNumericInputsEditorMobile numericInputs={numericInputs} />;

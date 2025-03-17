@@ -12,6 +12,7 @@ import {
   NumericPair,
   InputReference,
   MethodEntry,
+  VersionODataType,
 } from '../../modelDefinition/types/version0.data.type';
 import { AttributeNames } from '../../modelDefinition/enums/attributeNames';
 import { EnumDataEntry } from 'url-safe-bitpacking/dist/types';
@@ -252,11 +253,13 @@ const InputValueRenderer: React.FC<{ inputValue: InputValue; numericInputs: Nume
     </div>
   );
 
-export const EditMethodContentRenderer: React.FC<{ method: MethodEntry; numericInputs: NumericInputs }> = ({ method, numericInputs }) => {
+export const EditMethodContentRenderer: React.FC<{ method: MethodEntry }> = ({ method }) => {
+  const data = useMethodData((s) => s.data) as VersionODataType;
+
   return (
     <>
       <MethodOutputEditor methodName={method[AttributeNames.FunctionOutput]} />
-      <InputValueRenderer inputValue={method[AttributeNames.Function]} numericInputs={numericInputs} />
+      <InputValueRenderer inputValue={method[AttributeNames.Function]} numericInputs={data[AttributeNames.NumericInputs]} />
     </>
   );
 };

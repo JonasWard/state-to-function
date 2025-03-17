@@ -6,16 +6,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, message } from 'antd';
 import { MethodComposer } from './Components/renderers/MethodComposer';
 import { EditNumericInputsEditor } from './Components/inputs/InputValuesEditor';
-import { VersionODataType } from './modelDefinition/types/version0.data.type';
+import { MethodEntry, VersionODataType } from './modelDefinition/types/version0.data.type';
 import { AttributeNames } from './modelDefinition/enums/attributeNames';
+import { EditMethodRenderer } from './Components/inputs/EditMethodRenderer';
+import { ArrowRightOutlined } from '@ant-design/icons';
 
 const defaultState =
   'BEgCaAAYCQFbzWlD-lsL2gUVbkrwwRCIRYiQhAIIBALQADAdArea0of0Arc0segment0of0circleDARCSAADuIDiameterASAJIAwAI0KKty6Z96t6dx4YIhEIsRJA0IBBAIBAAigK3NJXp4LYQwEQg0Rq2nYrrAD0oQ0K1PBK8GAiEehIIwBXZm3nL1rNuABeo8NQAL0JA';
 
-export const MethodComposerApp: React.FC = () => {
+export const MethodComposerApp: React.FC<{ desktop?: boolean }> = ({ desktop }) => {
   const { methodStateString } = useParams();
 
   const [localMethodStateString, setLocalMethodStateString] = useState(methodStateString);
+  const [methodToEdit, setMethodToEdit] = useState<MethodEntry | undefined>(undefined);
 
   const data = useMethodData((s) => s.data) as VersionODataType;
   const navigate = useNavigate();
@@ -56,15 +59,31 @@ export const MethodComposerApp: React.FC = () => {
     }
   }, []);
 
+  const clearMethod = () => setMethodToEdit(undefined);
+  const wrapperSetMethodToEdit = (newMethod: MethodEntry) =>
+    JSON.stringify(methodToEdit) === JSON.stringify(newMethod) ? clearMethod() : setMethodToEdit(newMethod);
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', maxWidth: 1200, justifyItems: 'center' }}>
-      <span style={{ display: 'flex', flexDirection: 'row', width: 200, gap: 8 }}>
-        <EditNumericInputsEditor numericInputs={data[AttributeNames.NumericInputs]} />
-        <Button style={{ margin: 'auto' }} onClick={() => navigate(`/${localMethodStateString}/s`, { replace: true })}>
-          Try method
-        </Button>
-      </span>
-      <MethodComposer />
+    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', gap: 4, padding: 18 }}>
+        <EditNumericInputsEditor numericInputs={data[AttributeNames.NumericInputs]} desktop={desktop} />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8,
+            borderColor: 'lightgray',
+            borderStyle: desktop ? 'none solid' : 'none',
+            alignItems: 'center',
+          }}
+        >
+          <Button style={{ width: 140 }} onClick={() => navigate(`/${localMethodStateString}/s`, { replace: true })}>
+            Try method <ArrowRightOutlined />
+          </Button>
+          <MethodComposer setMethodToEdit={wrapperSetMethodToEdit} />
+        </div>
+        <EditMethodRenderer method={methodToEdit} clearMethod={clearMethod} desktop={desktop} />
+      </div>
     </div>
   );
 };
