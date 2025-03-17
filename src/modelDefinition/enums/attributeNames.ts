@@ -33,3 +33,12 @@ export enum AttributeNames {
   Character = 'c',
   Hardcoded = 'Hardcoded',
 }
+
+export type BooleanAttributes = AttributeNames.LargerThan | AttributeNames.SmallerThan | AttributeNames.Equal | AttributeNames.NotEqual;
+export type FloatAttributes =
+  | AttributeNames.If
+  | AttributeNames.Multiply
+  | AttributeNames.Division
+  | AttributeNames.Addition
+  | AttributeNames.Subtraction
+  | AttributeNames.Power;
