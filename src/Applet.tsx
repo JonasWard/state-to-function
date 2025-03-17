@@ -53,6 +53,7 @@ export const Applet: React.FC = () => {
         console.error(e);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -60,6 +61,7 @@ export const Applet: React.FC = () => {
       window.history.replaceState(null, 'Same Page Title', `/state-to-function/#${methodStateString}/${versionHandler.stringify(data)}`);
       setOutputData(createMethod(useMethodData.getState().data as VersionODataType)(getValuesFromAppletState(data)));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, versionHandler]);
 
   return (

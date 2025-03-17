@@ -57,11 +57,24 @@ export const MethodComposerApp: React.FC<{ desktop?: boolean }> = ({ desktop }) 
         message.error('the default!! state string was not valid, using the default object state instead');
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const clearMethod = () => setMethodToEdit(undefined);
   const wrapperSetMethodToEdit = (newMethod: MethodEntry) =>
     JSON.stringify(methodToEdit) === JSON.stringify(newMethod) ? clearMethod() : setMethodToEdit(newMethod);
+
+  useEffect(() => {
+    if (methodToEdit)
+      setMethodToEdit(
+        data[AttributeNames.FunctionArray].v.find(
+          (m) =>
+            m[AttributeNames.Function][AttributeNames.InputValue].s.internalName! ===
+            methodToEdit[AttributeNames.Function][AttributeNames.InputValue].s.internalName!
+        )
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, setMethodToEdit]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
