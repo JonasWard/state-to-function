@@ -47,12 +47,14 @@ export const MethodOutputEditor: React.FC<{ methodName: MethodEntry[AttributeNam
       </div>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <TextInput
+          key={methodName[AttributeNames.NumericInputName].s.internalName}
           placeholder='Description of what I am'
           sourceString={validDescriptors}
           text={methodName[AttributeNames.NumericInputName]}
           updateEntry={useMethodData.getState().updateDataEntry}
         />
         <TextInput
+          key={methodName[AttributeNames.NumericScientificSubscript].s.internalName}
           placeholder='subscript'
           sourceString={validScientificSubscriptDescriptors}
           text={methodName[AttributeNames.NumericScientificSubscript]}
