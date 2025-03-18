@@ -3,13 +3,13 @@ import './App.css';
 import { parserObjects } from './modelDefinition/model';
 import { useMethodData } from './state/method';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, message } from 'antd';
+import { Button, message, Tooltip } from 'antd';
 import { MethodComposer } from './Components/renderers/MethodComposer';
 import { EditNumericInputsEditor } from './Components/inputs/InputValuesEditor';
 import { MethodEntry, VersionODataType } from './modelDefinition/types/version0.data.type';
 import { AttributeNames } from './modelDefinition/enums/attributeNames';
 import { EditMethodRenderer } from './Components/inputs/EditMethodRenderer';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined, RedoOutlined, UndoOutlined } from '@ant-design/icons';
 
 const defaultState =
   'BEgCaAAYCQFbzWlD-lsL2gUVbkrwwRCIRYiQhAIIBALQADAdArea0of0Arc0segment0of0circleDARCSAADuIDiameterASAJIAwAI0KKty6Z96t6dx4YIhEIsRJA0IBBAIBAAigK3NJXp4LYQwEQg0Rq2nYrrAD0oQ0K1PBK8GAiEehIIwBXZm3nL1rNuABeo8NQAL0JA';
@@ -26,6 +26,11 @@ export const MethodComposerApp: React.FC = () => {
   const [smallerThan800, setIsSmallerThan800] = useState<boolean>(isSmallerThan800());
 
   const data = useMethodData((s) => s.data) as VersionODataType;
+  const canUndo = useMethodData((s) => s.canUndo);
+  const canRedo = useMethodData((s) => s.canRedo);
+  const undoStack = useMethodData((s) => s.undoStack);
+  const redoStack = useMethodData((s) => s.redoStack);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,7 +45,20 @@ export const MethodComposerApp: React.FC = () => {
       setIsSmallerThan800(isSmallerThan800());
     };
 
-    window.addEventListener('resize', checkViewMode);
+    const registerKeyboardUndoRedo = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.code === 'KeyZ') {
+        e.preventDefault();
+        if (e.metaKey && e.shiftKey) useMethodData.getState().redo();
+        else useMethodData.getState().undo();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.code === 'KeyY') {
+        e.preventDefault();
+        useMethodData.getState().redo();
+      }
+    };
+
+    addEventListener('resize', checkViewMode);
+    addEventListener('keydown', registerKeyboardUndoRedo);
 
     if (methodStateString) {
       try {
@@ -69,7 +87,10 @@ export const MethodComposerApp: React.FC = () => {
       }
     }
 
-    return () => window.removeEventListener('resize', checkViewMode);
+    return () => {
+      removeEventListener('resize', checkViewMode);
+      removeEventListener('keydown', registerKeyboardUndoRedo);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -103,9 +124,21 @@ export const MethodComposerApp: React.FC = () => {
             alignItems: 'center',
           }}
         >
-          <Button style={{ width: 140 }} onClick={() => navigate(`/${localMethodStateString}/s`, { replace: true })}>
-            Try method <ArrowRightOutlined />
-          </Button>
+          <span style={{ display: 'flex', flexDirection: 'row', gap: 6 }}>
+            <Tooltip title={`can undo ${undoStack.length} items`}>
+              <Button disabled={!canUndo} onClick={() => useMethodData.getState().undo()}>
+                Undo <UndoOutlined />
+              </Button>
+            </Tooltip>
+            <Tooltip title={`can redo ${redoStack.length} items`}>
+              <Button disabled={!canRedo} onClick={() => useMethodData.getState().redo()}>
+                <RedoOutlined /> Redo
+              </Button>
+            </Tooltip>
+            <Button style={{ width: 140 }} onClick={() => navigate(`/${localMethodStateString}/s`, { replace: true })}>
+              Try method <ArrowRightOutlined />
+            </Button>
+          </span>
           <MethodComposer setMethodToEdit={wrapperSetMethodToEdit} />
         </div>
         <EditMethodRenderer method={methodToEdit} clearMethod={clearMethod} desktop={desktop} />
@@ -126,6 +159,18 @@ export const MethodComposerApp: React.FC = () => {
       <Button style={{ width: 140 }} onClick={() => navigate(`/${localMethodStateString}/s`, { replace: true })}>
         Try method <ArrowRightOutlined />
       </Button>
+      <span style={{ display: 'flex', flexDirection: 'row', gap: 6 }}>
+        <Tooltip title={`can undo ${undoStack.length} items`}>
+          <Button disabled={!canUndo} onClick={() => useMethodData.getState().undo()}>
+            Undo <UndoOutlined />
+          </Button>
+        </Tooltip>
+        <Tooltip title={`can redo ${redoStack.length} items`}>
+          <Button disabled={!canRedo} onClick={() => useMethodData.getState().redo()}>
+            <RedoOutlined /> Redo
+          </Button>
+        </Tooltip>
+      </span>
       <EditNumericInputsEditor numericInputs={data[AttributeNames.NumericInputs]} desktop={desktop} />
 
       <MethodComposer setMethodToEdit={wrapperSetMethodToEdit} smallerThan800={smallerThan800} />

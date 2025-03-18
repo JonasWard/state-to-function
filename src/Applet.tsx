@@ -11,8 +11,8 @@ import { VersionAppletDataType } from './modelDefinition/types/versionApplet.dat
 import { AttributeNames } from './modelDefinition/enums/attributeNames';
 import { NumericInputs } from './AppletComponents/NumericInputs';
 import { NumericOutputs } from './AppletComponents/NumericOutputs';
-import { Button } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Button, Tooltip } from 'antd';
+import { ArrowLeftOutlined, RedoOutlined, UndoOutlined } from '@ant-design/icons';
 
 const getValuesFromAppletState = (data: VersionAppletDataType) =>
   Object.entries(data)
@@ -26,10 +26,28 @@ export const Applet: React.FC = () => {
 
   const data = useAppletData((s) => s.data);
   const versionHandler = useAppletData((s) => s.versionHandler);
+  const canUndo = useAppletData((s) => s.canUndo);
+  const canRedo = useAppletData((s) => s.canRedo);
+  const undoStack = useAppletData((s) => s.undoStack);
+  const redoStack = useAppletData((s) => s.redoStack);
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    const registerKeyboardUndoRedo = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.code === 'KeyZ') {
+        e.preventDefault();
+        if (e.metaKey && e.shiftKey) useAppletData.getState().redo();
+        else useAppletData.getState().undo();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.code === 'KeyY') {
+        e.preventDefault();
+        useAppletData.getState().redo();
+      }
+    };
+
+    addEventListener('keydown', registerKeyboardUndoRedo);
+
     if (methodStateString) {
       try {
         const methodStateData = parserObjects.parser(methodStateString);
@@ -53,6 +71,10 @@ export const Applet: React.FC = () => {
         console.error(e);
       }
     }
+
+    return () => {
+      removeEventListener('keydown', registerKeyboardUndoRedo);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -70,6 +92,18 @@ export const Applet: React.FC = () => {
         <Button style={{ margin: 16, width: 150 }} onClick={() => navigate(`/${methodStateString}`, { replace: true })}>
           <ArrowLeftOutlined /> Edit method
         </Button>
+        <span style={{ display: 'flex', flexDirection: 'row', gap: 6 }}>
+          <Tooltip title={`can undo ${undoStack.length} items`}>
+            <Button disabled={!canUndo} onClick={() => useAppletData.getState().undo()}>
+              Undo <UndoOutlined />
+            </Button>
+          </Tooltip>
+          <Tooltip title={`can redo ${redoStack.length} items`}>
+            <Button disabled={!canRedo} onClick={() => useAppletData.getState().redo()}>
+              <RedoOutlined /> Redo
+            </Button>
+          </Tooltip>
+        </span>
         <div style={{ padding: 10, display: 'grid', gridTemplateColumns: 'auto auto 1fr auto', gap: 8, width: '100%', margin: 'auto', alignItems: 'center' }}>
           <NumericInputs />
           <NumericOutputs values={outputData} />

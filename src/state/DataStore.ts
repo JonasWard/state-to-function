@@ -7,7 +7,10 @@ export type StateDataStore = {
   setData: (s: StateDataType) => void;
   updateDataEntry: (data: DataEntry | DataEntry[]) => void;
   updateDataEntryNonThrottled: (data: DataEntry | DataEntry[]) => void;
+  canUndo: boolean;
+  _pushUndo: (stateString: string) => void;
   undo: () => void;
+  canRedo: boolean;
   redo: () => void;
   undoStack: string[];
   redoStack: string[];
