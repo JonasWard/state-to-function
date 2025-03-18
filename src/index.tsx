@@ -11,8 +11,8 @@ root.render(
     <Router>
       <Routes>
         <Route element={<Applet />} path='/:methodStateString/:inputStateString' />
-        <Route element={<MethodComposerApp desktop />} path='/:methodStateString' />
-        <Route element={<MethodComposerApp desktop />} path='/' />
+        <Route element={<MethodComposerApp />} path='/:methodStateString' />
+        <Route element={<MethodComposerApp />} path='/' />
       </Routes>
     </Router>
   </React.StrictMode>

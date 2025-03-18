@@ -149,8 +149,55 @@ const FunctionArrayRenderer: React.FC<{
   functionArray: FunctionArrayEntries;
   numericInputs: NumericInputs;
   setMethodToEdit: (method: MethodEntry) => void;
-}> = ({ functionArray, numericInputs, setMethodToEdit }) => {
-  return (
+  smallerThan800: boolean;
+}> = ({ functionArray, numericInputs, setMethodToEdit, smallerThan800 }) => {
+  return smallerThan800 ? (
+    <div style={{ margin: 16, display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}>
+      {Object.values(functionArray.v).map((method, index) => (
+        <div key={index} style={{ borderRadius: 10, backgroundColor: '#f5f5f5', padding: 4, width: '100%', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <var style={{ margin: 8 }}>
+              <SymbolRenderer symbol={method[AttributeNames.FunctionOutput][AttributeNames.NumericScientificSymbol].value} />
+              <SubscriptRenderer subscriptIndexes={method[AttributeNames.FunctionOutput][AttributeNames.NumericScientificSubscript]} /> =
+            </var>
+            <span style={{ display: 'flex', flexDirection: 'row', gap: 4 }}>
+              <Button
+                type='text'
+                style={{
+                  width: functionArray.s.value > functionArray.s.min && index + 1 === functionArray.s.value ? 114 : 150,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  backgroundColor: '#e7e7e7',
+                }}
+                onClick={() => setMethodToEdit(method as MethodEntry)}
+              >
+                <MethodTitle method={method} />
+                <EditOutlined />
+              </Button>
+              {functionArray.s.value > functionArray.s.min && index + 1 === functionArray.s.value ? (
+                <Button type='text' style={{ width: 15, backgroundColor: '#e7e7e7' }} onClick={() => setMethodToEdit(method as MethodEntry)}>
+                  <DeleteFilled
+                    style={{ cursor: 'pointer', color: 'gray' }}
+                    onClick={() => useMethodData.getState().updateDataEntry({ ...functionArray.s, value: functionArray.s.value - 1 })}
+                  />
+                </Button>
+              ) : null}
+            </span>
+          </div>
+          <InputValueRenderer inputValue={method[AttributeNames.Function]} numericInputs={numericInputs} />
+        </div>
+      ))}
+      {functionArray.s.value < functionArray.s.max ? (
+        <div style={{ width: 25, height: 35, justifyContent: 'center', display: 'flex', flexDirection: 'row' }}>
+          <PlusCircleFilled
+            style={{ cursor: 'pointer' }}
+            onClick={() => useMethodData.getState().updateDataEntry({ ...functionArray.s, value: functionArray.s.value + 1 })}
+          />
+        </div>
+      ) : null}
+    </div>
+  ) : (
     <div style={{ margin: 16, display: 'grid', gridTemplateColumns: 'auto auto 1fr auto auto', gap: 8, alignItems: 'center', maxWidth: 1000 }}>
       {Object.values(functionArray.v).map((method, index) => (
         <>
@@ -185,13 +232,14 @@ const FunctionArrayRenderer: React.FC<{
   );
 };
 
-export const MethodComposer: React.FC<{ setMethodToEdit: (method: MethodEntry) => void }> = ({ setMethodToEdit }) => {
+export const MethodComposer: React.FC<{ setMethodToEdit: (method: MethodEntry) => void; smallerThan800?: boolean }> = ({ setMethodToEdit, smallerThan800 }) => {
   const data = useMethodData((s) => s.data) as VersionODataType;
   return (
     <FunctionArrayRenderer
       functionArray={data[AttributeNames.FunctionArray]}
       numericInputs={data[AttributeNames.NumericInputs]}
       setMethodToEdit={setMethodToEdit}
+      smallerThan800={smallerThan800 ?? false}
     />
   );
 };

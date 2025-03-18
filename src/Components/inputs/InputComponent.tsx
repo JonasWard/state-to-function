@@ -81,7 +81,7 @@ const simpleFloatUpdate = (stateData: StateDataType, currentString: string, repl
   ]);
 };
 
-const ARRAY_ENTRIES_STRING = `_${AttributeNames.NumericArray}_${AttributeNames.NumericArray}_${AttributeNames.NumericArray}`;
+const ARRAY_ENTRIES_STRING = `_${AttributeNames.NumericArray}_${AttributeNames.NumericArray}_${AttributeNames.NumericArray}`; // ToDo: this will hopefully be able to be changed in future version of url-bit-packing
 const ARRAY_ENTRIES_0 = `${ARRAY_ENTRIES_STRING}_0`;
 const ARRAY_ENTRIES_1 = `${ARRAY_ENTRIES_STRING}_1`;
 const PAIR_A = '_a';
@@ -119,6 +119,11 @@ const pairToArrayUpdate = (stateData: StateDataType, currentString: string, repl
   updateBasedOnFromToStringPairs(otherDataEntries, fromToStringPairs, newIdentifier);
 };
 
+/**
+ * Helper method that updates the internal names of the data entries that should be retained when changing the float type
+ * @param floatMethod
+ * @param newValue
+ */
 const changeFloatMethodType = (floatMethod: FloatMethod, newValue: 0 | 1 | 2 | 3 | 4 | 5) => {
   const newDescriptionEntry = { ...floatMethod.v[AttributeNames.FloatMethod].s, value: newValue } as EnumDataEntry;
   const currentOperator = floatMethodLabels[floatMethod.v[AttributeNames.FloatMethod].s.value] as FloatAttributes;
@@ -126,7 +131,7 @@ const changeFloatMethodType = (floatMethod: FloatMethod, newValue: 0 | 1 | 2 | 3
 
   const descriptionStringToReplace = `${floatMethod.v[AttributeNames.FloatMethod].s.internalName!}_${currentOperator}`;
 
-  // simple case
+  // simple case - the data structure remains the same
   if (
     (floatPairs.includes(currentOperator) && floatPairs.includes(newOperator)) ||
     (floatArray.includes(currentOperator) && floatArray.includes(newOperator)) ||
@@ -136,17 +141,19 @@ const changeFloatMethodType = (floatMethod: FloatMethod, newValue: 0 | 1 | 2 | 3
     const replaceStringWith = `${floatMethod.v[AttributeNames.FloatMethod].s.internalName!}_${newOperator}`;
     simpleFloatUpdate(floatMethod.v[AttributeNames.FloatMethod], descriptionStringToReplace, replaceStringWith, newDescriptionEntry);
   } else {
-    // if to pair
+    // the datastructer changes
     if (
       (currentOperator === AttributeNames.If && floatArray.includes(newOperator)) ||
       (floatPairs.includes(currentOperator) && floatArray.includes(newOperator))
     ) {
+      // if from pair to array
       const replaceStringWith = `${floatMethod.v[AttributeNames.FloatMethod].s.internalName!}_${newOperator}`;
       pairToArrayUpdate(floatMethod.v[AttributeNames.FloatMethod], descriptionStringToReplace, replaceStringWith, newDescriptionEntry);
     } else if (
       (floatArray.includes(currentOperator) && newOperator === AttributeNames.If) ||
       (floatArray.includes(currentOperator) && floatPairs.includes(newOperator))
     ) {
+      // if from array to pair
       const replaceStringWith = `${floatMethod.v[AttributeNames.FloatMethod].s.internalName!}_${newOperator}`;
       arrayToPairUpdate(floatMethod.v[AttributeNames.FloatMethod], descriptionStringToReplace, replaceStringWith, newDescriptionEntry);
     } else useMethodData.getState().updateDataEntry(newDescriptionEntry);

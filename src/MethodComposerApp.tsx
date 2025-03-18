@@ -14,11 +14,16 @@ import { ArrowRightOutlined } from '@ant-design/icons';
 const defaultState =
   'BEgCaAAYCQFbzWlD-lsL2gUVbkrwwRCIRYiQhAIIBALQADAdArea0of0Arc0segment0of0circleDARCSAADuIDiameterASAJIAwAI0KKty6Z96t6dx4YIhEIsRJA0IBBAIBAAigK3NJXp4LYQwEQg0Rq2nYrrAD0oQ0K1PBK8GAiEehIIwBXZm3nL1rNuABeo8NQAL0JA';
 
-export const MethodComposerApp: React.FC<{ desktop?: boolean }> = ({ desktop }) => {
+const isDesktopView = () => window.innerWidth > 1400;
+const isSmallerThan800 = () => window.innerWidth < 800;
+
+export const MethodComposerApp: React.FC = () => {
   const { methodStateString } = useParams();
 
   const [localMethodStateString, setLocalMethodStateString] = useState(methodStateString);
   const [methodToEdit, setMethodToEdit] = useState<MethodEntry | undefined>(undefined);
+  const [desktop, setDesktop] = useState<boolean>(isDesktopView());
+  const [smallerThan800, setIsSmallerThan800] = useState<boolean>(isSmallerThan800());
 
   const data = useMethodData((s) => s.data) as VersionODataType;
   const navigate = useNavigate();
@@ -31,6 +36,13 @@ export const MethodComposerApp: React.FC<{ desktop?: boolean }> = ({ desktop }) 
   }, [data, methodStateString]);
 
   useEffect(() => {
+    const checkViewMode = () => {
+      setDesktop(isDesktopView());
+      setIsSmallerThan800(isSmallerThan800());
+    };
+
+    window.addEventListener('resize', checkViewMode);
+
     if (methodStateString) {
       try {
         useMethodData.getState().setData(parserObjects.parser(methodStateString));
@@ -57,6 +69,8 @@ export const MethodComposerApp: React.FC<{ desktop?: boolean }> = ({ desktop }) 
         message.error('the default!! state string was not valid, using the default object state instead');
       }
     }
+
+    return () => window.removeEventListener('resize', checkViewMode);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -76,7 +90,7 @@ export const MethodComposerApp: React.FC<{ desktop?: boolean }> = ({ desktop }) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, setMethodToEdit]);
 
-  return (
+  return desktop ? (
     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
       <div style={{ display: 'flex', flexDirection: 'row', gap: 4, padding: 18 }}>
         <EditNumericInputsEditor numericInputs={data[AttributeNames.NumericInputs]} desktop={desktop} />
@@ -97,6 +111,25 @@ export const MethodComposerApp: React.FC<{ desktop?: boolean }> = ({ desktop }) 
         </div>
         <EditMethodRenderer method={methodToEdit} clearMethod={clearMethod} desktop={desktop} />
       </div>
+    </div>
+  ) : (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 8,
+        borderColor: 'lightgray',
+        borderStyle: desktop ? 'none solid' : 'none',
+        alignItems: 'center',
+      }}
+    >
+      <Button style={{ width: 140 }} onClick={() => navigate(`/${localMethodStateString}/s`, { replace: true })}>
+        Try method <ArrowRightOutlined />
+      </Button>
+      <EditNumericInputsEditor numericInputs={data[AttributeNames.NumericInputs]} desktop={desktop} />
+
+      <MethodComposer setMethodToEdit={wrapperSetMethodToEdit} smallerThan800={smallerThan800} />
+      <EditMethodRenderer method={methodToEdit} clearMethod={clearMethod} desktop={desktop} />
     </div>
   );
 };
