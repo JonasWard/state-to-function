@@ -15,7 +15,7 @@ import {
   VersionODataType,
 } from '../../modelDefinition/types/version0.data.type';
 import { AttributeNames, BooleanAttributes, FloatAttributes } from '../../modelDefinition/enums/attributeNames';
-import { EnumDataEntry } from 'url-safe-bitpacking/dist/types';
+import { DataEntryArray, EnumDataEntry, StateDataType } from 'url-safe-bitpacking/dist/types';
 import { booleanMethodLabels, floatMethodLabels } from '../../modelDefinition/types/version0.enumsemantics';
 import { DeleteFilled, PlusCircleFilled } from '@ant-design/icons';
 import { MethodOutputEditor } from './ReferenceInputEditor';
@@ -72,36 +72,84 @@ const operatorStyling: React.CSSProperties = {
 const floatPairs = [AttributeNames.Division, AttributeNames.Subtraction, AttributeNames.Power];
 const floatArray = [AttributeNames.Multiply, AttributeNames.Addition];
 
+const simpleFloatUpdate = (stateData: StateDataType, currentString: string, replacementString: string, newIdentifier: EnumDataEntry) => {
+  useMethodData.getState().updateDataEntry([
+    newIdentifier,
+    ...getDataEntryArray(stateData)
+      .slice(1)
+      .map((d) => ({ ...d, internalName: d.internalName!.replace(currentString, replacementString) })),
+  ]);
+};
+
+const ARRAY_ENTRIES_STRING = `_${AttributeNames.NumericArray}_${AttributeNames.NumericArray}_${AttributeNames.NumericArray}`;
+const ARRAY_ENTRIES_0 = `${ARRAY_ENTRIES_STRING}_0`;
+const ARRAY_ENTRIES_1 = `${ARRAY_ENTRIES_STRING}_1`;
+const PAIR_A = '_a';
+const PAIR_B = '_b';
+
+const updateBasedOnFromToStringPairs = (dataEntries: DataEntryArray, fromtToStringPairs: [string, string][], newIdentifier: EnumDataEntry) =>
+  useMethodData
+    .getState()
+    .updateDataEntry([
+      newIdentifier,
+      ...fromtToStringPairs
+        .map(([from, to]) => dataEntries.filter((d) => d.internalName?.includes(from)).map((d) => ({ ...d, internalName: d.internalName!.replace(from, to) })))
+        .flat(),
+    ]);
+
+const arrayToPairUpdate = (stateData: StateDataType, currentString: string, replacementString: string, newIdentifier: EnumDataEntry) => {
+  const otherDataEntries = getDataEntryArray(stateData).slice(1);
+
+  const fromToStringPairs: [string, string][] = [
+    [currentString + ARRAY_ENTRIES_0, replacementString + PAIR_A],
+    [currentString + ARRAY_ENTRIES_1, replacementString + PAIR_B],
+  ];
+
+  updateBasedOnFromToStringPairs(otherDataEntries, fromToStringPairs, newIdentifier);
+};
+
+const pairToArrayUpdate = (stateData: StateDataType, currentString: string, replacementString: string, newIdentifier: EnumDataEntry) => {
+  const otherDataEntries = getDataEntryArray(stateData).slice(1);
+
+  const fromToStringPairs: [string, string][] = [
+    [currentString + PAIR_A, replacementString + ARRAY_ENTRIES_0],
+    [currentString + PAIR_B, replacementString + ARRAY_ENTRIES_1],
+  ];
+
+  updateBasedOnFromToStringPairs(otherDataEntries, fromToStringPairs, newIdentifier);
+};
+
 const changeFloatMethodType = (floatMethod: FloatMethod, newValue: 0 | 1 | 2 | 3 | 4 | 5) => {
   const newDescriptionEntry = { ...floatMethod.v[AttributeNames.FloatMethod].s, value: newValue } as EnumDataEntry;
   const currentOperator = floatMethodLabels[floatMethod.v[AttributeNames.FloatMethod].s.value] as FloatAttributes;
   const newOperator = floatMethodLabels[newValue];
-
-  console.log(currentOperator, newOperator);
-
-  console.log(floatMethod);
-  console.log(floatMethod);
 
   const descriptionStringToReplace = `${floatMethod.v[AttributeNames.FloatMethod].s.internalName!}_${currentOperator}`;
 
   // simple case
   if (
     (floatPairs.includes(currentOperator) && floatPairs.includes(newOperator)) ||
-    (floatArray.includes(currentOperator) && floatArray.includes(newOperator))
+    (floatArray.includes(currentOperator) && floatArray.includes(newOperator)) ||
+    (currentOperator === AttributeNames.If && floatPairs.includes(newOperator)) ||
+    (floatPairs.includes(currentOperator) && newOperator === AttributeNames.If)
   ) {
     const replaceStringWith = `${floatMethod.v[AttributeNames.FloatMethod].s.internalName!}_${newOperator}`;
-
-    console.log(getDataEntryArray(floatMethod.v[AttributeNames.FloatMethod]));
-
-    const otherDataEntries = getDataEntryArray(floatMethod.v[AttributeNames.FloatMethod]).slice(1);
-    useMethodData
-      .getState()
-      .updateDataEntry([
-        newDescriptionEntry,
-        ...otherDataEntries.map((d) => ({ ...d, internalName: d.internalName!.replace(descriptionStringToReplace, replaceStringWith) })),
-      ]);
+    simpleFloatUpdate(floatMethod.v[AttributeNames.FloatMethod], descriptionStringToReplace, replaceStringWith, newDescriptionEntry);
   } else {
-    useMethodData.getState().updateDataEntry(newDescriptionEntry);
+    // if to pair
+    if (
+      (currentOperator === AttributeNames.If && floatArray.includes(newOperator)) ||
+      (floatPairs.includes(currentOperator) && floatArray.includes(newOperator))
+    ) {
+      const replaceStringWith = `${floatMethod.v[AttributeNames.FloatMethod].s.internalName!}_${newOperator}`;
+      pairToArrayUpdate(floatMethod.v[AttributeNames.FloatMethod], descriptionStringToReplace, replaceStringWith, newDescriptionEntry);
+    } else if (
+      (floatArray.includes(currentOperator) && newOperator === AttributeNames.If) ||
+      (floatArray.includes(currentOperator) && floatPairs.includes(newOperator))
+    ) {
+      const replaceStringWith = `${floatMethod.v[AttributeNames.FloatMethod].s.internalName!}_${newOperator}`;
+      arrayToPairUpdate(floatMethod.v[AttributeNames.FloatMethod], descriptionStringToReplace, replaceStringWith, newDescriptionEntry);
+    } else useMethodData.getState().updateDataEntry(newDescriptionEntry);
   }
 };
 
