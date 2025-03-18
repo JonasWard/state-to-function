@@ -30,9 +30,8 @@ export const MethodComposerApp: React.FC = () => {
 
   useEffect(() => {
     const parsedString = parserObjects.stringify(data);
-    const newMethodStateString = parserObjects.stringify(data);
-    setLocalMethodStateString(newMethodStateString);
-    if (parsedString !== methodStateString) window.history.replaceState(null, 'Same Page Title', `/state-to-function/#${methodStateString}`);
+    setLocalMethodStateString(parsedString);
+    if (parsedString !== methodStateString) window.history.replaceState(null, 'Same Page Title', `/state-to-function/#${parsedString}`);
   }, [data, methodStateString]);
 
   useEffect(() => {
