@@ -312,32 +312,3 @@ export const EditMethodContentRenderer: React.FC<{ method: MethodEntry }> = ({ m
     </>
   );
 };
-
-// const FunctionArrayRenderer: React.FC<{ functionArray: FunctionArrayEntries; numericInputs: NumericInputs }> = ({ functionArray, numericInputs }) => {
-//   return Object.values(functionArray.v).map((input) => );
-// };
-
-// const Version0Renderer: React.FC<{ data: VersionODataType }> = ({ data }) => {
-//   return (
-//     <>
-//       <FunctionArrayRenderer functionArray={data[AttributeNames.FunctionArray]} numericInputs={data[AttributeNames.NumericInputs]} />
-//       <NumericInputsEditor numericInputs={data[AttributeNames.NumericInputs]} />
-//     </>
-//   );
-// };
-
-// export const InputComponent: React.FC = () => {
-//   const data = useData((s) => s.data);
-//   const [open, setOpen] = useState(false);
-
-//   return (
-//     <>
-//       <Button style={{ position: 'absolute', bottom: 10, right: 10 }} onClick={() => setOpen(true)}>
-//         view wip editor
-//       </Button>
-//       <Drawer mask={false} open={open} placement='right' onClose={() => setOpen(false)}>
-//         <Version0Renderer data={data as unknown as VersionODataType} />
-//       </Drawer>
-//     </>
-//   );
-// };
