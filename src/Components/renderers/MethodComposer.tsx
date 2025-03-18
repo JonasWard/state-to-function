@@ -26,6 +26,8 @@ const sharedRowStyle: React.CSSProperties = {
   flexDirection: 'row',
   gap: 8,
   alignItems: 'center',
+  maxWidth: 'calc(100svw - 30px)',
+  flexWrap: 'wrap',
 };
 
 const sharedRowStyleWithBorder: React.CSSProperties = {

@@ -121,6 +121,7 @@ export const MethodComposerApp: React.FC = () => {
         borderColor: 'lightgray',
         borderStyle: desktop ? 'none solid' : 'none',
         alignItems: 'center',
+        padding: 18,
       }}
     >
       <Button style={{ width: 140 }} onClick={() => navigate(`/${localMethodStateString}/s`, { replace: true })}>
