@@ -124,7 +124,7 @@ export const MethodComposerApp: React.FC = () => {
             alignItems: 'center',
           }}
         >
-          <span style={{ display: 'flex', flexDirection: 'row', gap: 6 }}>
+          <span style={{ padding: '0 10px', display: 'flex', flexDirection: 'row', gap: 6 }}>
             <Tooltip title={`can undo ${undoStack.length} items`}>
               <Button disabled={!canUndo} onClick={() => useMethodData.getState().undo()}>
                 Undo <UndoOutlined />
