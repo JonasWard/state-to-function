@@ -1,0 +1,35 @@
+.method-value-renderer {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.method-value-renderer.multiplication {
+  flex-direction: row;
+}
+
+.method-value-renderer.addition {
+  flex-direction: row;
+}
+
+.method-value-renderer.division-divider {
+  border-top: 1px solid black;
+  height: 0;
+}
+
+.method-value-renderer.divison {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lisp-parent {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  border: 1px solid #3334;
+  padding: 1px 3px;
+  border-radius: 3px;
+  background: #99999911;
+}

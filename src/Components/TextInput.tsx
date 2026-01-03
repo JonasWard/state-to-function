@@ -1,10 +1,9 @@
-import { DataEntry, DataEntryArray, EnumDataEntry, IntDataEntry } from 'url-safe-bitpacking/dist/types';
 import { Input, Popover } from 'antd';
-import React, { ReactNode } from 'react';
-import { DataEntryFactory, DataType } from 'url-safe-bitpacking';
-import { getText } from '../lib/helpers';
-import { AttributeNames } from '../modelDefinition/enums/attributeNames';
+import React, { ReactNode, useEffect } from 'react';
+import { getIndexesFromText, getMappingString } from '../lib/textHelpers';
+import { getText } from '../lib/textHelpers';
 import { CheckCircleFilled, UndoOutlined } from '@ant-design/icons';
+import { EnumArrayNode } from 'url-safe-bitpacking';
 
 const getDisplayString = (s: string, sourceString: string): null | ReactNode => {
   const chars: ReactNode[] = [];
@@ -33,62 +32,91 @@ const getDisplayString = (s: string, sourceString: string): null | ReactNode => 
 
 export const TextInput: React.FC<{
   placeholder?: string;
-  sourceString: string;
-  text: { s: IntDataEntry; v: { [AttributeNames.Character]: EnumDataEntry }[] };
-  updateEntry: (dataEntry: DataEntry | DataEntryArray) => void;
-}> = ({ text, updateEntry, sourceString, placeholder }) => {
-  const [textArea, setTextArea] = React.useState(getText(text.v, sourceString));
+  textEntry: EnumArrayNode;
+  size?: 'small' | 'middle' | 'large';
+  styleOverwrite?: { minWidth?: number; maxWidth?: number };
+  forceRender: () => void;
+  customValidation?: (s: string) => string | null;
+}> = ({ textEntry, placeholder, forceRender, size, customValidation, styleOverwrite }) => {
+  const [textArea, setTextArea] = React.useState(getText(textEntry));
+
+  const sourceString = getMappingString(textEntry);
 
   const handleChange = (e: { target: { value: string } }) => setTextArea(e.target.value);
 
   const updateValues = (s: string) => {
-    // first entry to update
-    const updateEntries: DataEntryArray = [{ ...text.s, type: DataType.INT, value: s.length }];
-
-    for (let i = 0; i < s.length; i++) {
-      const index = sourceString.indexOf(s[i]);
-      const dataEntry = DataEntryFactory.createEnum(index > -1 ? index : 63, 63, AttributeNames.Character); // 0 = 63
-      dataEntry.internalName = `${text.s.internalName!}_${i}_${AttributeNames.Character}`;
-      updateEntries.push(dataEntry);
-    }
-
-    updateEntry(updateEntries);
+    const indexes = getIndexesFromText(s, textEntry);
+    textEntry.updateValue(indexes);
+    forceRender();
   };
 
+  useEffect(() => {
+    setTextArea(getText(textEntry));
+  }, [textEntry]);
+
   const displayString = getDisplayString(textArea, sourceString);
-  const hasChanges = textArea !== getText(text.v, sourceString);
+  const customValidationString = customValidation ? customValidation(textArea) : null;
+  const hasChanges = textArea !== getText(textEntry);
+  const isValid = !(Boolean(displayString) || Boolean(customValidationString));
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: '4px 0' }}>
-      <Popover
-        open={Boolean(displayString)}
-        placement='bottom'
-        style={{ background: '#ffcccc' }}
-        content={
+    <Popover
+      open={!isValid}
+      placement="bottom"
+      style={{ background: '#ffcccc' }}
+      content={
+        customValidationString ? (
+          <div style={{ width: 265, display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <span>{customValidationString}</span>
+          </div>
+        ) : (
           <div style={{ width: 265, display: 'flex', flexDirection: 'column', gap: 3 }}>
             <span>{displayString}</span>
             <span>please stick to using these characters:</span>
             <span style={{ fontFamily: 'monospace, monospace' }}>{sourceString.slice(0, 32)}</span>
             <span style={{ fontFamily: 'monospace, monospace' }}>{sourceString.slice(32)}</span>
           </div>
-        }
-      >
-        <span style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
-          <Input placeholder={placeholder} key='text' value={textArea} onChange={handleChange} status={text.s.max === text.s.value ? 'warning' : undefined} />
-          <span style={{ display: 'flex', flexDirection: 'row', transition: 'all .5s', width: hasChanges ? 40 : 0, marginLeft: hasChanges ? 0 : -8, gap: 8 }}>
-            {hasChanges ? (
-              <>
-                <CheckCircleFilled
-                  disabled={Boolean(displayString)}
-                  style={displayString ? { cursor: 'not-allowed', color: 'lightgray' } : { cursor: 'pointer', color: 'black' }}
-                  onClick={() => updateValues(textArea)}
-                />
-                <UndoOutlined style={{ cursor: 'pointer' }} onClick={() => setTextArea(getText(text.v, sourceString))} />
-              </>
-            ) : null}
-          </span>
+        )
+      }
+    >
+      <span style={{ display: 'flex', flexDirection: 'row', gap: 8, maxWidth: '100%', width: '100%' }}>
+        <Input
+          size={size}
+          placeholder={placeholder}
+          key={(textEntry as any).bitstring}
+          value={textArea}
+          onChange={handleChange}
+          status={!isValid ? 'error' : textEntry.descriptor.maxCount === textEntry.value.length ? 'warning' : undefined}
+          style={{
+            minWidth: styleOverwrite?.minWidth ?? 60,
+            maxWidth: styleOverwrite?.maxWidth ?? '100%',
+            width: '100%'
+          }}
+        />
+        <span
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            transition: 'all .5s',
+            width: hasChanges ? 40 : 0,
+            marginLeft: hasChanges ? 0 : -8,
+            gap: 8
+          }}
+        >
+          {hasChanges ? (
+            <>
+              <CheckCircleFilled
+                disabled={Boolean(displayString)}
+                style={
+                  displayString ? { cursor: 'not-allowed', color: 'lightgray' } : { cursor: 'pointer', color: 'black' }
+                }
+                onClick={() => updateValues(textArea)}
+              />
+              <UndoOutlined style={{ cursor: 'pointer' }} onClick={() => setTextArea(getText(textEntry))} />
+            </>
+          ) : null}
         </span>
-      </Popover>
-    </div>
+      </span>
+    </Popover>
   );
 };
