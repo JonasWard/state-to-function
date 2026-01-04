@@ -1,26 +1,19 @@
 import { ArrayNode, EnumArrayNode, EnumOptionsNode, IntNode } from 'url-safe-bitpacking';
-import { AvailableMethodsTypes, InputDefinitionTypes } from '../../../modelDefinition/newModel';
+import { InputDefinitionTypes } from '../../../modelDefinition/newModel';
 import React, { ReactNode, useMemo } from 'react';
 import { Button, Select } from 'antd';
 import './method.css';
 import { SymbolNameType } from '../../../specificInputs/NameEditor';
 import { SymbolRenderer } from '../icon/SymbolRenderer';
-import { TNodeUIProps } from '../../../nodeProps';
 import { HardcodedNumber } from '../../inputs/HardcodedNumber';
-
-const selectVariantData: 'filled' | 'outlined' | 'borderless' | 'underlined' = 'filled';
-const selectVariantMethod: 'filled' | 'outlined' | 'borderless' | 'underlined' = 'borderless';
-
-const shortSymbol: Record<(typeof AvailableMethodsTypes)[number], string> = {
-  addition: '+',
-  multiplication: 'x',
-  subtraction: '-',
-  division: '÷',
-  power: '^'
-};
-
-const getOperationForMethod = (node: EnumOptionsNode) =>
-  node.descriptor.mapping[node.state] as (typeof AvailableMethodsTypes)[number];
+import {
+  selectVariantMethod,
+  shortSymbol,
+  TypeSymbol,
+  MethodHandlingProps,
+  selectVariantData,
+  getOperationForMethod
+} from './methodType';
 
 const MethodSelect: React.FC<{ node: EnumOptionsNode; forceRender: () => void; disabled?: boolean }> = ({
   node,
@@ -50,18 +43,6 @@ const getSelectOptions = (
     ),
     value: `${name}[${value}]`
   }));
-
-const TypeSymbol: Record<(typeof InputDefinitionTypes)[number], string> = {
-  hardcoded: '𝑐',
-  numericInput: 'ℝ',
-  methodOutput: '𝑓()',
-  method: '𝑓'
-};
-
-type MethodHandlingProps = TNodeUIProps<EnumOptionsNode> & {
-  availableNumericInputs: SymbolNameType[];
-  availableMethodInputs: SymbolNameType[];
-};
 
 const getOptionValues = (
   availableNumericInputs: SymbolNameType[],

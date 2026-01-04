@@ -5,6 +5,7 @@ import { getStateData, GetStateNodeTree, StateDataObjectValue } from 'url-safe-b
 import { SpecificNodeUI } from './specificInputs/SpecificNodeUI';
 import { useMethodStore } from './state/methodStore';
 import { LispStyle } from './Components/renderers/method/LispStyle';
+import { MethodFlatRenderer } from './Components/renderers/method/MethodFlatRenderer';
 
 export const ROOT_NODE_NAME = 'ROOT_NODE';
 
@@ -34,6 +35,14 @@ export const ModelCheck: React.FC = () => {
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         {method && (
           <LispStyle
+            node={method}
+            forceRender={forceRender}
+            availableNumericInputs={numericInputNames}
+            availableMethodInputs={methodInputNames.slice(0, methodIndex)}
+          />
+        )}
+        {method && (
+          <MethodFlatRenderer
             node={method}
             forceRender={forceRender}
             availableNumericInputs={numericInputNames}
