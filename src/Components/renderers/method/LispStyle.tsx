@@ -1,33 +1,40 @@
 import { ArrayNode, EnumArrayNode, EnumOptionsNode, IntNode } from 'url-safe-bitpacking';
 import { AvailableMethodsTypes, InputDefinitionTypes } from '../../../modelDefinition/newModel';
 import React, { ReactNode, useMemo } from 'react';
-import { Select } from 'antd';
+import { Button, Select } from 'antd';
 import './method.css';
 import { SymbolNameType } from '../../../specificInputs/NameEditor';
 import { SymbolRenderer } from '../icon/SymbolRenderer';
 import { TNodeUIProps } from '../../../nodeProps';
 import { HardcodedNumber } from '../../inputs/HardcodedNumber';
 
+const selectVariantData: 'filled' | 'outlined' | 'borderless' | 'underlined' = 'filled';
+const selectVariantMethod: 'filled' | 'outlined' | 'borderless' | 'underlined' = 'borderless';
+
 const shortSymbol: Record<(typeof AvailableMethodsTypes)[number], string> = {
   addition: '+',
   multiplication: 'x',
   subtraction: '-',
-  division: '/',
+  division: '÷',
   power: '^'
 };
 
-const MethodSelect: React.FC<{ node: EnumOptionsNode; forceRender: () => void }> = ({ node, forceRender }) => (
-  <select
-    style={{ height: '24px' }}
-    onChange={(e) => (node.updateState(Number(e.target.value)), forceRender())}
+const getOperationForMethod = (node: EnumOptionsNode) =>
+  node.descriptor.mapping[node.state] as (typeof AvailableMethodsTypes)[number];
+
+const MethodSelect: React.FC<{ node: EnumOptionsNode; forceRender: () => void; disabled?: boolean }> = ({
+  node,
+  forceRender,
+  disabled
+}) => (
+  <Select
+    variant={selectVariantMethod}
+    style={{ height: '24px', color: node.descriptor.mapping[node.state] === 'division' ? 'transparent' : 'inherit' }}
+    onChange={(e) => (node.updateState(e), forceRender())}
     value={node.state}
-  >
-    {node.descriptor.mapping.map((method, value) => (
-      <option key={value} value={value}>
-        {shortSymbol[method]}
-      </option>
-    ))}
-  </select>
+    options={node.descriptor.mapping.map((method, value) => ({ label: shortSymbol[method], value }))}
+    disabled={disabled}
+  />
 );
 
 const getSelectOptions = (
@@ -95,6 +102,7 @@ const ValueWrapper: React.FC<MethodHandlingProps> = (props) =>
   props.node && props.node.descriptor && props.node.descriptor.mapping ? (
     <span style={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
       <Select
+        variant={selectVariantData}
         style={{ height: '24px', minWidth: '50px' }}
         value={getOptionValue(props.node)}
         onChange={
@@ -146,21 +154,67 @@ const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
   }
 };
 
+const AddRemoveTerm: React.FC<{ onAdd?: () => void; onRemove?: () => void }> = ({ onAdd, onRemove }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+    <Button
+      size="small"
+      style={{ maxWidth: 20, maxHeight: 11, fontSize: 10, textJustify: 'distribute', justifyContent: 'center' }}
+      type="text"
+      disabled={!onRemove}
+      onClick={onRemove}
+    >
+      -
+    </Button>
+    <Button
+      size="small"
+      style={{ maxWidth: 20, maxHeight: 11, fontSize: 10, textJustify: 'distribute', justifyContent: 'center' }}
+      type="text"
+      disabled={!onAdd}
+      onClick={onAdd}
+    >
+      +
+    </Button>
+  </div>
+);
+
 export const LispStyle: React.FC<MethodHandlingProps> = (props) => {
-  const children = useMemo(
-    () => (props.node.getChildData()![0] as ArrayNode).getChildren() as EnumOptionsNode[],
-    [props.node.name, props.node.bitstring]
-  );
+  const [nodeArray, [nodeA, nodeB, ...otherNodes]] = useMemo(() => {
+    const nodeArray = props.node.getChildData()![0] as ArrayNode;
+    const [nodeA, nodeB, ...otherNodes] = nodeArray.getChildren() as [
+      EnumOptionsNode,
+      EnumOptionsNode,
+      ...EnumOptionsNode[]
+    ];
+    return [nodeArray, [nodeA, nodeB, ...otherNodes]];
+  }, [props.node.name, props.node.bitstring]);
+
+  const operation = getOperationForMethod(props.node);
 
   return (
-    <span className="lisp-parent">
+    <span className={`lisp-parent ${operation}`}>
+      <ValueWrapper key={'a'} {...props} node={nodeA} />
       <MethodSelect {...props} />
-      {children.map((child, i) => (
+      <ValueWrapper key={'b'} {...props} node={nodeB} />
+      {otherNodes.map((node, i) => (
         <>
-          <span>,</span>
-          <ValueWrapper key={i} {...props} node={child} />
+          <MethodSelect disabled key={i + 'method'} {...props} />
+          <ValueWrapper key={i} {...props} node={node} />
         </>
       ))}
+      {operation === 'addition' || operation === 'multiplication' ? (
+        <AddRemoveTerm
+          onAdd={
+            nodeArray.state < nodeArray.descriptor.maxCount
+              ? () => (nodeArray.updateState(nodeArray.state + 1), props.forceRender())
+              : undefined
+          }
+          onRemove={
+            nodeArray.state > nodeArray.descriptor.minCount
+              ? () => (nodeArray.updateState(nodeArray.state - 1), props.forceRender())
+              : undefined
+          }
+        />
+      ) : null}
     </span>
   );
 };

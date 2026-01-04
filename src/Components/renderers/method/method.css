@@ -28,8 +28,24 @@
   display: flex;
   gap: 2px;
   align-items: center;
-  border: 1px solid #3334;
   padding: 1px 3px;
   border-radius: 3px;
-  background: #99999911;
+  border: 1px solid #3334;
+}
+
+.lisp-parent.division {
+  flex-direction: column;
+}
+
+.lisp-parent.division > :nth-child(2) {
+  max-height: 5px;
+  width: 100%;
+  overflow: hidden;
+  border-top: 1px solid black;
+  color: transparent !important;
+  height: 0;
+}
+
+.lisp-parent.division > :nth-child(2) .ant-select-selection-item {
+  color: transparent !important;
 }

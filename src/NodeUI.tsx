@@ -126,7 +126,7 @@ export const GeneralContentSplitter = (
         />
       );
     case 'ENUM_ARRAY':
-      return <TextInput textEntry={node as EnumArrayNode} forceRender={forceRender} />;
+      return <TextInput textEntry={node as EnumArrayNode} placeholder={node.name} forceRender={forceRender} />;
     case 'OPTIONAL':
       return (
         <NodeWithChildrenUI

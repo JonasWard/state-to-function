@@ -18,7 +18,7 @@ export const AvailableMethodsTypes = [...ArrayMethodTypes, ...PairMethodTypes] a
 const hardcodedNumber = DataEntryFactory.ENUM_ARRAY([0], charsHardCodedNumbers, 0, 31, 'inlineInput');
 const symbol = DataEntryFactory.ENUM(0, charsSymbol, 'symbol');
 const subscriptValue = DataEntryFactory.ENUM_ARRAY([], charsSubscript, 0, 31, 'subscript');
-const name = DataEntryFactory.ENUM_ARRAY([21, 26, 37, 46, 30], charsName, 1, 32, 'name');
+const name = DataEntryFactory.ENUM_ARRAY([], charsName, 0, 31, 'name');
 
 const hardcodedInputObject = DataEntryFactory.OBJECT([hardcodedNumber], 'hardcoded');
 
@@ -49,7 +49,6 @@ const valuesExtended = DataEntryFactory.ARRAY(inputDefinition, 2, 2, 8, 'values'
 
 const addition = DataEntryFactory.OBJECT([valuesExtended], 'addition');
 const multiplication = DataEntryFactory.OBJECT([valuesExtended], 'multiplication');
-
 const subtraction = DataEntryFactory.OBJECT([valuesPair], 'subtraction');
 const division = DataEntryFactory.OBJECT([valuesPair], 'division');
 const power = DataEntryFactory.OBJECT([valuesPair], 'power');

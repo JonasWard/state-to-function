@@ -6,7 +6,7 @@ const SymbolRenderer: React.FC<{ symbol: string; size?: string }> = ({ symbol, s
   <var style={{ fontSize: size }}>{symbol}</var>
 );
 const SubscriptRenderer: React.FC<{ subscript: string; size?: string }> = ({ subscript, size = defaultSize }) => (
-  <sub style={{ fontSize: size }}>{subscript}</sub>
+  <sub style={{ fontSize: `calc(${size} * 0.5)` }}>{subscript}</sub>
 );
 
 export const IconRenderer: React.FC<{ symbol: string; subscript: string; size?: string }> = ({
