@@ -1,13 +1,15 @@
 import { useEffect, useReducer, useRef } from 'react';
 import { ModelStateDescriptor } from './modelDefinition/newModel';
 import React from 'react';
-import { getStateData, GetStateNodeTree, StateDataObjectValue } from 'url-safe-bitpacking';
+import { FromState, getStateData, GetStateNodeTree, StateDataObjectValue } from 'url-safe-bitpacking';
 import { SpecificNodeUI } from './specificInputs/SpecificNodeUI';
 import { useMethodStore } from './state/methodStore';
 import { LispStyle } from './Components/renderers/method/LispStyle';
 import { MethodFlatRenderer } from './Components/renderers/method/MethodFlatRenderer';
+import { useParams } from 'react-router-dom';
 
 export const ROOT_NODE_NAME = 'ROOT_NODE';
+const initialString = 'ABJQAoAfSCcQ-hIDYAUAPpBOIfQkCEAKAH0gnEPoSAoAKYCECEAEUBCFEACkAhAiAAARgwIMICRUACICI';
 
 const getStateDataString = (stateData: StateDataObjectValue): [number, string][] =>
   JSON.stringify(stateData, null, 2)
@@ -18,13 +20,15 @@ const getStateDataString = (stateData: StateDataObjectValue): [number, string][]
     });
 
 export const ModelCheck: React.FC = () => {
+  const { base64String } = useParams();
   const { numericInputNames, methodInputNames, method, methodIndex } = useMethodStore();
-  const stateNode = useRef(GetStateNodeTree(ModelStateDescriptor, ROOT_NODE_NAME));
+  const stateNode = useRef(FromState(ModelStateDescriptor, ROOT_NODE_NAME, base64String || initialString));
 
   const [rerenders, forceRender] = useReducer((x) => x + 1, 0);
 
   useEffect(() => {
-    console.log(stateNode.current);
+    const base64String = stateNode.current.getBase64String();
+    window.location.hash = base64String;
   }, [rerenders]);
 
   return (

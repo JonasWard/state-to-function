@@ -12,6 +12,7 @@ root.render(
         {/* <Route element={<Applet />} path="/:methodStateString/:inputStateString" /> */}
         {/* <Route element={<MethodComposerApp />} path="/:methodStateString" /> */}
         <Route element={<ModelCheck />} path="/" />
+        <Route element={<ModelCheck />} path="/:base64String" />
       </Routes>
     </Router>
   </React.StrictMode>
