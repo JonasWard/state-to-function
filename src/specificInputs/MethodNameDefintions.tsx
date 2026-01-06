@@ -18,6 +18,7 @@ export const MethodInputsArray: React.FC<TNodeUIProps<ArrayNode>> = (props) => {
 
         return (
           <Button
+            key={`${index}-button`}
             style={{ height: '4.2rem' }}
             onClick={() => setMethodNode(content, index)}
             children={<SymbolRenderer {...{ symbol, subscript }} />}

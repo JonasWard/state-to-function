@@ -37,15 +37,16 @@ export const NamedInputsArrayEditor: React.FC<
         {node.getChildren().map((child, i) => (
           <NameEditor
             node={child as ObjectNode}
+            key={i}
             index={i}
             remove={() => node.canRemoveChild(i) && (node.removeChild(i), props.forceRender())}
             canRemove={node.canRemoveChild(i)}
             {...props}
           />
         ))}
-        <span />
-        <span />
-        {props.contentRenderer && <span />}
+        <span key="empty-0" />
+        <span key="empty-1" />
+        {props.contentRenderer && <span key="empty-2" />}
         <Button
           type="text"
           style={{ width: 10, cursor: node.state >= node.descriptor.maxCount ? 'not-allowed' : 'pointer' }}
@@ -99,17 +100,17 @@ export const NameEditor: React.FC<
 
   return (
     <>
-      <SymbolInputs symbol={symbol} forceRender={forceRender} subscript={subscript} />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-        <SpecificNodeUI node={name} forceRender={forceRender} />
-        <SpecificNodeUI node={subscript} forceRender={forceRender} />
+      <SymbolInputs key={`${index}-symbol`} symbol={symbol} forceRender={forceRender} subscript={subscript} />
+      <div key={`${index}-node`} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <SpecificNodeUI key={`${index}-name`} node={name} forceRender={forceRender} />
+        <SpecificNodeUI key={`${index}-subscript`} node={subscript} forceRender={forceRender} />
       </div>
-      {contentRenderer && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      {contentRenderer ? (
+        <div key={`${index}-content`} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           {contentRenderer(content, index, forceRender, [symbol, subscript, name])}
         </div>
-      )}
-      <Button type="text" disabled={!canRemove} onClick={remove} style={{ width: 10 }}>
+      ) : null}
+      <Button key={`${index}-button`} type="text" disabled={!canRemove} onClick={remove} style={{ width: 10 }}>
         <DeleteFilled />
       </Button>
     </>

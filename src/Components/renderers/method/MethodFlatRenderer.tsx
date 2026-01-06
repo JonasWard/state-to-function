@@ -4,6 +4,8 @@ import { MethodHandlingProps, getOperationForMethod, shortSymbol } from './metho
 import { getText } from '../../../lib/textHelpers';
 import { AvailableMethodsTypes, InputDefinitionTypes } from '../../../modelDefinition/newModel';
 import { SymbolRenderer } from '../icon/SymbolRenderer';
+import { Button, Popover } from 'antd';
+import { LispStyle } from './LispStyle';
 
 const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
   const state = useMemo(
@@ -21,7 +23,20 @@ const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
     case 'hardcoded':
       return getText(props.node.getChildData()![0] as EnumArrayNode);
     case 'method':
-      return <MethodFlatRenderer {...props} node={props.node.getChildData()![0] as EnumOptionsNode} />;
+      return (
+        <Popover
+          trigger="click"
+          content={<LispStyle {...props} node={props.node.getChildData()![0] as EnumOptionsNode} />}
+        >
+          <Button
+            onClick={(e) => e.stopPropagation()}
+            type="text"
+            style={{ padding: 0, margin: 0, border: 'none', height: 'auto', cursor: 'pointer' }}
+          >
+            <MethodFlatRenderer {...props} node={props.node.getChildData()![0] as EnumOptionsNode} />
+          </Button>
+        </Popover>
+      );
   }
 };
 
