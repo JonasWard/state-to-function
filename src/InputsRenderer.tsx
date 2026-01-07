@@ -1,12 +1,13 @@
 import { useEffect, useReducer, useRef } from 'react';
 import { ModelStateDescriptor } from './modelDefinition/newModel';
 import React from 'react';
-import { FromState, getStateData, SpecificTypeNode, StateDataObjectValue } from 'url-safe-bitpacking';
+import { FromState, SpecificTypeNode } from 'url-safe-bitpacking';
 import { SpecificNodeUI } from './specificInputs/SpecificNodeUI';
 import { useMethodStore } from './state/methodStore';
 import { LispStyle } from './Components/renderers/method/LispStyle';
 import { MethodFlatRenderer } from './Components/renderers/method/MethodFlatRenderer';
 import { useParams } from 'react-router-dom';
+import { RenderStateNodeData } from './Components/renderers/state/RenderStateNodeData';
 
 export const ROOT_NODE_NAME = 'ROOT_NODE';
 const initialString = 'ABJQAoAfSCcQ-hIDYAUAPpBOIfQkCEAKAH0gnEPoSAoAKYCECEAEUBCFEACkAhAiAAARgwIMICRUACICI';
@@ -23,18 +24,6 @@ const getStateNodeForDataString = (base64string: string | undefined): SpecificTy
     return FromState(ModelStateDescriptor, ROOT_NODE_NAME, initialString);
   }
 };
-
-/**
- * Helper method to display current state node
- * @param stateData
- */
-const getStateDataString = (stateData: StateDataObjectValue): [number, string][] =>
-  JSON.stringify(stateData, null, 2)
-    .split('\n')
-    .map((s) => {
-      const trailingSpaces = s.match(/^\s*/)?.[0]?.length || 0;
-      return [trailingSpaces, s];
-    });
 
 export const ModelCheck: React.FC = () => {
   const { base64String } = useParams();
@@ -70,14 +59,7 @@ export const ModelCheck: React.FC = () => {
             availableMethodInputs={methodInputNames.slice(0, methodIndex)}
           />
         )}
-        <div style={{ display: 'flex', flexDirection: 'column', maxWidth: 420, wordBreak: 'break-all' }}>
-          {stateNode.current.getBase64String()}
-          {getStateDataString(getStateData(stateNode.current.toDataEntry())).map(([trailingSpaces, line], i) => (
-            <span key={i} style={{ paddingLeft: trailingSpaces * 8 }}>
-              {line}
-            </span>
-          ))}
-        </div>
+        <RenderStateNodeData node={stateNode.current} />
       </div>
     </div>
   );
