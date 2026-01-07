@@ -14,6 +14,7 @@ import {
   selectVariantData,
   getOperationForMethod
 } from './methodType';
+import { MethodFlatRenderer } from './MethodFlatRenderer';
 
 const MethodSelect: React.FC<{ node: EnumOptionsNode; forceRender: () => void; disabled?: boolean }> = ({
   node,
@@ -124,7 +125,7 @@ const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
     case 'hardcoded':
       return <HardcodedNumber {...props} size="small" node={props.node.getChildData()![0] as EnumArrayNode} />;
     case 'method':
-      return <LispStyle {...props} node={props.node.getChildData()![0] as EnumOptionsNode} />;
+      return <MethodFlatRenderer {...props} node={props.node.getChildData()![0] as EnumOptionsNode} />;
   }
 };
 
@@ -164,8 +165,9 @@ export const LispStyle: React.FC<MethodHandlingProps> = (props) => {
 
   const operation = getOperationForMethod(props.node);
 
+  // this propagation is there to prevent parent divs to trigger when clicking any UI items the lisp style renderer of the method
   return (
-    <span className={`lisp-parent ${operation}`}>
+    <span className={`lisp-parent ${operation}`} onClick={(e) => e.stopPropagation()}>
       <ValueWrapper key={'a'} {...props} node={nodeA} />
       <MethodSelect {...props} />
       <ValueWrapper key={'b'} {...props} node={nodeB} />
