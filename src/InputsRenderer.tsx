@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef } from 'react';
 import { ModelStateDescriptor } from './modelDefinition/newModel';
 import React from 'react';
-import { FromState, getStateData, GetStateNodeTree, StateDataObjectValue } from 'url-safe-bitpacking';
+import { FromState, getStateData, SpecificTypeNode, StateDataObjectValue } from 'url-safe-bitpacking';
 import { SpecificNodeUI } from './specificInputs/SpecificNodeUI';
 import { useMethodStore } from './state/methodStore';
 import { LispStyle } from './Components/renderers/method/LispStyle';
@@ -11,6 +11,23 @@ import { useParams } from 'react-router-dom';
 export const ROOT_NODE_NAME = 'ROOT_NODE';
 const initialString = 'ABJQAoAfSCcQ-hIDYAUAPpBOIfQkCEAKAH0gnEPoSAoAKYCECEAEUBCFEACkAhAiAAARgwIMICRUACICI';
 
+/**
+ * Helper method that tries to parse the provided base string, if it fails, falls back to the default string (surface volume and surface area of a box)
+ * @param base64string
+ */
+const getStateNodeForDataString = (base64string: string | undefined): SpecificTypeNode => {
+  try {
+    return FromState(ModelStateDescriptor, ROOT_NODE_NAME, base64string || initialString);
+  } catch (e) {
+    console.error(e);
+    return FromState(ModelStateDescriptor, ROOT_NODE_NAME, initialString);
+  }
+};
+
+/**
+ * Helper method to display current state node
+ * @param stateData
+ */
 const getStateDataString = (stateData: StateDataObjectValue): [number, string][] =>
   JSON.stringify(stateData, null, 2)
     .split('\n')
@@ -22,7 +39,7 @@ const getStateDataString = (stateData: StateDataObjectValue): [number, string][]
 export const ModelCheck: React.FC = () => {
   const { base64String } = useParams();
   const { numericInputNames, methodInputNames, method, methodIndex } = useMethodStore();
-  const stateNode = useRef(FromState(ModelStateDescriptor, ROOT_NODE_NAME, base64String || initialString));
+  const stateNode = useRef(getStateNodeForDataString(base64String));
 
   const [rerenders, forceRender] = useReducer((x) => x + 1, 0);
 
