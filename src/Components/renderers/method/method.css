@@ -49,3 +49,7 @@
 .lisp-parent.division > :nth-child(2) .ant-select-selection-item {
   color: transparent !important;
 }
+
+.method-flat {
+  width: auto;
+}

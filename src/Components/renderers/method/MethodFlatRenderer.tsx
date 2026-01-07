@@ -23,20 +23,7 @@ const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
     case 'hardcoded':
       return getText(props.node.getChildData()![0] as EnumArrayNode);
     case 'method':
-      return (
-        <Popover
-          trigger="click"
-          content={<LispStyle {...props} node={props.node.getChildData()![0] as EnumOptionsNode} />}
-        >
-          <Button
-            onClick={(e) => e.stopPropagation()}
-            type="text"
-            style={{ padding: 0, margin: 0, border: 'none', height: 'auto', cursor: 'pointer' }}
-          >
-            <MethodFlatRenderer {...props} node={props.node.getChildData()![0] as EnumOptionsNode} />
-          </Button>
-        </Popover>
-      );
+      return <MethodFlatRenderer {...props} node={props.node.getChildData()![0] as EnumOptionsNode} />;
   }
 };
 
@@ -57,16 +44,23 @@ export const MethodFlatRenderer: React.FC<MethodHandlingProps> = (props) => {
   const operation = getOperationForMethod(props.node);
 
   return (
-    <span className={`lisp-parent ${operation}`}>
-      <ValueInput key={'a'} {...props} node={nodeA} />
-      <OperationIcon operation={operation} />
-      <ValueInput key={'b'} {...props} node={nodeB} />
-      {otherNodes.map((node, i) => (
-        <>
+    <Popover trigger="click" content={<LispStyle {...props} node={props.node} />}>
+      <div
+        onClick={(e) => e.target !== e.currentTarget && e.stopPropagation()}
+        style={{ padding: 0, margin: 0, border: 'none', height: 'auto', cursor: 'pointer' }}
+      >
+        <span className={`lisp-parent method-flat ${operation}`}>
+          <ValueInput key={'a'} {...props} node={nodeA} />
           <OperationIcon operation={operation} />
-          <ValueInput key={i} {...props} node={node} />
-        </>
-      ))}
-    </span>
+          <ValueInput key={'b'} {...props} node={nodeB} />
+          {otherNodes.map((node, i) => (
+            <>
+              <OperationIcon operation={operation} />
+              <ValueInput key={i} {...props} node={node} />
+            </>
+          ))}
+        </span>
+      </div>
+    </Popover>
   );
 };

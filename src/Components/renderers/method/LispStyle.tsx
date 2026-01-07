@@ -122,14 +122,7 @@ const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
     case 'methodOutput':
       return null;
     case 'hardcoded':
-      return (
-        <HardcodedNumber
-          {...props}
-          size={'small'}
-          styleOverwrite={{ minWidth: 40, maxWidth: 60 }}
-          node={props.node.getChildData()![0] as EnumArrayNode}
-        />
-      );
+      return <HardcodedNumber {...props} size="small" node={props.node.getChildData()![0] as EnumArrayNode} />;
     case 'method':
       return <LispStyle {...props} node={props.node.getChildData()![0] as EnumOptionsNode} />;
   }

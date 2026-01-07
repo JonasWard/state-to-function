@@ -4,6 +4,9 @@ import { getIndexesFromText, getMappingString } from '../lib/textHelpers';
 import { getText } from '../lib/textHelpers';
 import { CheckCircleFilled, UndoOutlined } from '@ant-design/icons';
 import { EnumArrayNode } from 'url-safe-bitpacking';
+import { useGlobalUIStore } from '../state/globalUIStore';
+
+const GAP_SIZE = 4;
 
 const getDisplayString = (s: string, sourceString: string): null | ReactNode => {
   const chars: ReactNode[] = [];
@@ -37,7 +40,9 @@ export const TextInput: React.FC<{
   styleOverwrite?: { minWidth?: number; maxWidth?: number };
   forceRender: () => void;
   customValidation?: (s: string) => string | null;
-}> = ({ textEntry, placeholder, forceRender, size, customValidation, styleOverwrite }) => {
+}> = ({ textEntry, placeholder, forceRender, customValidation, size }) => {
+  const { isDesktop } = useGlobalUIStore();
+
   const [textArea, setTextArea] = React.useState(getText(textEntry));
 
   const sourceString = getMappingString(textEntry);
@@ -79,18 +84,16 @@ export const TextInput: React.FC<{
         )
       }
     >
-      <span style={{ display: 'flex', flexDirection: 'row', gap: 8, maxWidth: '100%', width: '100%' }}>
+      <span style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: GAP_SIZE, width: '100%' }}>
         <Input
-          size={size}
+          size={size ?? isDesktop ? 'middle' : 'small'}
           placeholder={placeholder}
           key={(textEntry as any).bitstring}
           value={textArea}
           onChange={handleChange}
           status={!isValid ? 'error' : textEntry.descriptor.maxCount === textEntry.value.length ? 'warning' : undefined}
           style={{
-            minWidth: styleOverwrite?.minWidth ?? 60,
-            maxWidth: styleOverwrite?.maxWidth ?? '100%',
-            width: '100%'
+            width: `calc(100% + ${hasChanges ? 0 : GAP_SIZE}px)`
           }}
         />
         <span
@@ -98,13 +101,13 @@ export const TextInput: React.FC<{
             display: 'flex',
             flexDirection: 'row',
             transition: 'all .5s',
-            width: hasChanges ? 40 : 0,
-            marginLeft: hasChanges ? 0 : -8,
-            gap: 8
+            width: hasChanges ? 36 : 0,
+            marginLeft: hasChanges ? 0 : -GAP_SIZE,
+            gap: GAP_SIZE
           }}
         >
           {hasChanges ? (
-            <>
+            <span style={{ display: 'flex', flexDirection: 'row', gap: GAP_SIZE }}>
               <CheckCircleFilled
                 disabled={Boolean(displayString)}
                 style={
@@ -112,9 +115,11 @@ export const TextInput: React.FC<{
                 }
                 onClick={() => updateValues(textArea)}
               />
-              <UndoOutlined style={{ cursor: 'pointer' }} onClick={() => setTextArea(getText(textEntry))} />
-            </>
-          ) : null}
+              <UndoOutlined size={12} style={{ cursor: 'pointer' }} onClick={() => setTextArea(getText(textEntry))} />
+            </span>
+          ) : (
+            <span />
+          )}
         </span>
       </span>
     </Popover>

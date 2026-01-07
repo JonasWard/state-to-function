@@ -2,7 +2,7 @@ import React from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { ModelCheck } from './InputsRenderer';
+import { InputView } from './InputView';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -11,8 +11,8 @@ root.render(
       <Routes>
         {/* <Route element={<Applet />} path="/:methodStateString/:inputStateString" /> */}
         {/* <Route element={<MethodComposerApp />} path="/:methodStateString" /> */}
-        <Route element={<ModelCheck />} path="/" />
-        <Route element={<ModelCheck />} path="/:base64String" />
+        <Route element={<InputView />} path="/" />
+        <Route element={<InputView />} path="/:base64String" />
       </Routes>
     </Router>
   </React.StrictMode>

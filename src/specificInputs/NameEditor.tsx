@@ -5,6 +5,8 @@ import { ArrayNode, EnumArrayNode, EnumNode, EnumOptionsNode, ObjectNode, Specif
 import { SpecificNodeUI } from './SpecificNodeUI';
 import { SymbolRenderer, TSymbolProps } from '../Components/renderers/icon/SymbolRenderer';
 import { TNodeUIProps } from '../nodeProps';
+import { useMethodStore } from '../state/methodStore';
+import { useGlobalUIStore } from '../state/globalUIStore';
 
 export type NamedInputsArrayContentRenderer = (
   node: EnumOptionsNode,
@@ -23,8 +25,9 @@ export const NamedInputsArrayEditor: React.FC<
     contentRenderer?: NamedInputsArrayContentRenderer;
   }
 > = ({ node, name, withSymbol = false, ...props }) => {
+  const { isDesktop } = useGlobalUIStore();
   return (
-    <>
+    <div className={`input-column ${isDesktop ? 'desktop' : 'mobile'}`}>
       <span style={{ height: 32, display: 'flex', alignItems: 'center' }}>{name}</span>
       <div
         style={{
@@ -56,7 +59,7 @@ export const NamedInputsArrayEditor: React.FC<
           <PlusCircleFilled />
         </Button>
       </div>
-    </>
+    </div>
   );
 };
 

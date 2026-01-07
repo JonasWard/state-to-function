@@ -14,6 +14,7 @@ import {
 } from 'url-safe-bitpacking';
 import { TextInput } from './Components/TextInput';
 import { GeneralChildrenRenderer, NodeUIProps, TNodeUIProps, WrapperComponentFunction } from './nodeProps';
+import { useGlobalUIStore } from './state/globalUIStore';
 
 const nullContent = (
   <>
@@ -50,12 +51,10 @@ const NodeWithChildrenUI: React.FC<
   />
 );
 
-export const GeneralNodeUIRenderer: React.FC<NodeUIProps & { customWrapper?: WrapperComponentFunction }> = ({
-  node,
-  forceRender,
-  customWrapper
-}) => (
-  <div id={node.name} style={{ display: 'flex', flexDirection: 'row', gap: 4 }}>
+export const GeneralNodeUIRenderer: React.FC<
+  NodeUIProps & { customWrapper?: WrapperComponentFunction; style?: React.CSSProperties }
+> = ({ node, forceRender, customWrapper }) => (
+  <div id={node.name} style={{ display: 'flex', flexDirection: 'row', gap: 4, width: '100%' }}>
     {(customWrapper ? customWrapper : generalContentWrapper)(node, forceRender)}
   </div>
 );
@@ -72,10 +71,13 @@ export const GeneralContentSplitter = (
   forceRender: () => void,
   wrapper: WrapperComponentFunction = generalContentWrapper
 ) => {
+  const { isDesktop } = useGlobalUIStore();
+
   switch (node.type) {
     case 'VERSION':
       return (
         <Select
+          size={isDesktop ? 'middle' : 'small'}
           options={Array.from({ length: 2 ** (node as VersionNode).descriptor.bits }, (_, i) => ({
             label: i,
             value: i
@@ -94,6 +96,7 @@ export const GeneralContentSplitter = (
     case 'ENUM':
       return (
         <Select
+          size={isDesktop ? 'middle' : 'small'}
           options={(node as EnumNode).descriptor.mapping.map((label, value) => ({ label, value }))}
           value={(node as EnumNode).value}
           onChange={(v) => ((node as EnumNode).updateValue(v), forceRender())}
@@ -102,6 +105,8 @@ export const GeneralContentSplitter = (
     case 'INT':
       return (
         <InputNumber
+          size={isDesktop ? 'middle' : 'small'}
+          style={{ minWidth: '40px', width: '100%' }}
           value={(node as IntNode).value}
           onChange={(v) => (
             (node as IntNode).updateValue(v === null ? (node as IntNode).descriptor.value : v), forceRender()
@@ -115,6 +120,8 @@ export const GeneralContentSplitter = (
     case 'FLOAT':
       return (
         <InputNumber
+          size={isDesktop ? 'middle' : 'small'}
+          style={{ minWidth: '40px', width: '100%' }}
           value={(node as FloatNode).value}
           onChange={(v) => (
             (node as FloatNode).updateValue(v === null ? (node as FloatNode).descriptor.value : v), forceRender()
@@ -148,6 +155,7 @@ export const GeneralContentSplitter = (
           forceRender={forceRender}
           stateChange={
             <Select
+              size={isDesktop ? 'middle' : 'small'}
               options={(node as EnumOptionsNode).descriptor.mapping.map((d, i) => ({ label: d, value: i }))}
               value={(node as EnumOptionsNode).state}
               onChange={(v) => ((node as EnumOptionsNode).updateState(v), forceRender())}
@@ -163,6 +171,7 @@ export const GeneralContentSplitter = (
           forceRender={forceRender}
           stateChange={
             <Select
+              size={isDesktop ? 'middle' : 'small'}
               options={Array.from({
                 length: (node as ArrayNode).descriptor.maxCount - (node as ArrayNode).descriptor.minCount
               }).map((_, i) => ({
