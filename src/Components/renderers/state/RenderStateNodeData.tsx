@@ -13,6 +13,11 @@ const getStateDataString = (stateData: StateDataObjectValue): [number, string][]
       return [trailingSpaces, s];
     });
 
+/**
+ * Component to render current `StateData` (data stripped of descriptor) of the data tree as a json
+ * ToDo make UI a bit cleaner
+ * @prop node - `SpecificTypeNode` (root) node of the state
+ */
 export const RenderStateNodeData: React.FC<{ node: SpecificTypeNode }> = ({ node }) => (
   <div style={{ display: 'flex', flexDirection: 'column', maxWidth: 420, wordBreak: 'break-all' }}>
     {node.getBase64String()}
