@@ -1,40 +1,15 @@
 import React, { useMemo } from 'react';
-import { ArrayNode, EnumArrayNode, EnumOptionsNode, IntNode } from 'url-safe-bitpacking';
-import { MethodHandlingProps, getOperationForMethod, shortSymbol } from './methodType';
-import { getText } from '../../../lib/textHelpers';
-import { AvailableMethodsTypes, InputDefinitionTypes } from '../../../modelDefinition/newModel';
-import { SymbolRenderer } from '../icon/SymbolRenderer';
+import { ArrayNode, EnumOptionsNode } from 'url-safe-bitpacking';
+import { MethodHandlingProps, getOperationForMethod, ShortSymbol } from './methodType';
+import { AvailableMethodsTypes } from '../../../modelDefinition/newModel';
 import { Popover } from 'antd';
-import { LispStyle } from './LispStyle';
+import { LispStyle } from './MethodLispStyle';
 import { useGlobalUIStore } from '../../../state/globalUIStore';
+import { MethodValue } from './MethodValue';
+import { MethodOperation } from './MethodOperation';
 
 const DESKTOP_SYMBOL_SIZE = '1.2rem';
 const MOBILE_SYMBOL_SIZE = '.95rem';
-
-const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
-  const { isDesktop } = useGlobalUIStore();
-
-  const state = useMemo(
-    () => props.node.descriptor.mapping[props.node.state] as (typeof InputDefinitionTypes)[number],
-    [props.node.name, props.node.bitstring]
-  );
-
-  switch (state) {
-    case 'numericInput':
-    case 'methodOutput':
-      const [symbol, subscript] = (
-        state === 'numericInput' ? props.availableNumericInputs : props.availableMethodInputs
-      )[(props.node.getChildData()![0] as IntNode).value];
-      return <SymbolRenderer {...{ symbol, subscript, size: isDesktop ? DESKTOP_SYMBOL_SIZE : MOBILE_SYMBOL_SIZE }} />;
-    case 'hardcoded':
-      return getText(props.node.getChildData()![0] as EnumArrayNode);
-    case 'method':
-      return <MethodFlatRenderer {...props} node={props.node.getChildData()![0] as EnumOptionsNode} />;
-  }
-};
-
-const OperationIcon: React.FC<{ operation: (typeof AvailableMethodsTypes)[number] }> = ({ operation }) =>
-  shortSymbol[operation];
 
 export const MethodFlatRenderer: React.FC<MethodHandlingProps> = (props) => {
   const { isDesktop } = useGlobalUIStore();
@@ -61,13 +36,13 @@ export const MethodFlatRenderer: React.FC<MethodHandlingProps> = (props) => {
           className={`lisp-parent method-flat ${operation} ${isDesktop ? 'desktop' : 'mobile'}`}
           style={{ fontSize: isDesktop ? DESKTOP_SYMBOL_SIZE : MOBILE_SYMBOL_SIZE }}
         >
-          <ValueInput key={'a'} {...props} node={nodeA} />
-          <OperationIcon operation={operation} />
-          <ValueInput key={'b'} {...props} node={nodeB} />
+          <MethodValue key={'a'} {...props} node={nodeA} />
+          <MethodOperation {...props} />
+          <MethodValue key={'b'} {...props} node={nodeB} />
           {otherNodes.map((node, i) => (
             <>
-              <OperationIcon operation={operation} />
-              <ValueInput key={i} {...props} node={node} />
+              <MethodOperation {...props} />
+              <MethodValue key={i} {...props} node={node} />
             </>
           ))}
         </span>
