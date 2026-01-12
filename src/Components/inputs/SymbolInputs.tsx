@@ -8,6 +8,7 @@ export const SymbolInputs: React.FC<
   }
 > = ({ forceRender, ...props }) => (
   <Popover
+    trigger="click"
     content={
       <div className="symbol-editor">
         {(props.symbol.descriptor.mapping as string[]).map((s, i) => (

@@ -1,15 +1,36 @@
 import React, { useMemo } from 'react';
-import { ArrayNode, EnumOptionsNode } from 'url-safe-bitpacking';
-import { MethodHandlingProps, getOperationForMethod, ShortSymbol } from './methodType';
-import { AvailableMethodsTypes } from '../../../modelDefinition/newModel';
-import { Popover } from 'antd';
-import { LispStyle } from './MethodLispStyle';
+import { ArrayNode, EnumOptionsNode, ObjectNode } from 'url-safe-bitpacking';
+import { MethodHandlingProps, getOperationForMethod } from './methodType';
+import { Button, Popover } from 'antd';
 import { useGlobalUIStore } from '../../../state/globalUIStore';
-import { MethodValue } from './MethodValue';
+import { MethodValue, ValuesGrid } from './MethodValue';
 import { MethodOperation } from './MethodOperation';
 
 const DESKTOP_SYMBOL_SIZE = '1.2rem';
 const MOBILE_SYMBOL_SIZE = '.95rem';
+
+const AddRemoveTerm: React.FC<{ onAdd?: () => void; onRemove?: () => void }> = ({ onAdd, onRemove }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+    <Button
+      size="small"
+      style={{ maxWidth: 20, maxHeight: 11, fontSize: 10, textJustify: 'distribute', justifyContent: 'center' }}
+      type="text"
+      disabled={!onRemove}
+      onClick={onRemove}
+    >
+      -
+    </Button>
+    <Button
+      size="small"
+      style={{ maxWidth: 20, maxHeight: 11, fontSize: 10, textJustify: 'distribute', justifyContent: 'center' }}
+      type="text"
+      disabled={!onAdd}
+      onClick={onAdd}
+    >
+      +
+    </Button>
+  </div>
+);
 
 export const MethodFlatRenderer: React.FC<MethodHandlingProps> = (props) => {
   const { isDesktop } = useGlobalUIStore();
@@ -27,7 +48,7 @@ export const MethodFlatRenderer: React.FC<MethodHandlingProps> = (props) => {
   const operation = getOperationForMethod(props.node);
 
   return (
-    <Popover trigger="click" content={<LispStyle {...props} node={props.node} />}>
+    <Popover trigger="click" content={<ValuesGrid {...props} node={props.node} />}>
       <div
         onClick={(e) => e.target !== e.currentTarget && e.stopPropagation()}
         style={{ padding: 0, margin: 0, border: 'none', height: 'auto', cursor: 'pointer' }}
@@ -45,6 +66,20 @@ export const MethodFlatRenderer: React.FC<MethodHandlingProps> = (props) => {
               <MethodValue key={i} {...props} node={node} />
             </>
           ))}
+          {operation === 'addition' || operation === 'multiplication' ? (
+            <AddRemoveTerm
+              onAdd={
+                nodeArray.state < nodeArray.descriptor.maxCount
+                  ? () => (nodeArray.updateState(nodeArray.state + 1), props.forceRender())
+                  : undefined
+              }
+              onRemove={
+                nodeArray.state > nodeArray.descriptor.minCount
+                  ? () => (nodeArray.updateState(nodeArray.state - 1), props.forceRender())
+                  : undefined
+              }
+            />
+          ) : null}
         </span>
       </div>
     </Popover>

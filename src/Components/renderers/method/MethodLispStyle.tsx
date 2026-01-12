@@ -50,7 +50,7 @@ export const LispStyle: React.FC<MethodHandlingProps> = (props) => {
       <MethodValue key={'b'} {...props} node={nodeB} />
       {otherNodes.map((node, i) => (
         <>
-          <MethodOperation disabled key={i + 'method'} {...props} />
+          <MethodOperation key={i + 'method'} {...props} />
           <MethodValue key={i} {...props} node={node} />
         </>
       ))}

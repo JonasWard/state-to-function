@@ -2,42 +2,36 @@ import { Button, Checkbox, Popover } from 'antd';
 import { useMemo } from 'react';
 import { IntNode, EnumArrayNode, EnumOptionsNode } from 'url-safe-bitpacking';
 import { InputDefinitionTypes } from '../../../modelDefinition/newModel';
-import { SymbolNameType } from '../../../specificInputs/NameEditor';
 import { HardcodedNumber } from '../../inputs/HardcodedNumber';
 import { SymbolRenderer } from '../icon/SymbolRenderer';
 import { MethodFlatRenderer } from './MethodFlatRenderer';
-import { MethodHandlingProps } from './methodType';
+import { MethodHandlingProps, ShortSymbol } from './methodType';
 import React from 'react';
 import { getText } from '../../../lib/textHelpers';
+import { MethodOptionsGrid } from './MethodOptionsGrid';
+import './method.css';
 
-const Cell: React.FC<{ value: SymbolNameType; name: string; activeName: string; onClick: () => void }> = ({
-  value: [symbol, subscript],
-  name,
-  activeName,
-  onClick
-}) => (
-  <span
-    onClick={(e) => (onClick(), e.stopPropagation())}
-    className={activeName === name ? 'symbol-boxes selected' : 'symbol-boxes'}
-  >
-    <SymbolRenderer {...{ symbol, subscript, size: '.8rem' }} />
-  </span>
-);
+const nameKeyMap: Record<(typeof InputDefinitionTypes)[number], string> = {
+  numericInput: 'Numeric Inputs',
+  methodOutput: 'Method Outputs',
+  hardcoded: 'Hardcoded Value',
+  method: 'Method'
+};
 
-const StyledGrid: React.FC<{
-  values: SymbolNameType[];
-  select: (i: number) => void;
-  parentName: string;
-  activeName: string;
-}> = ({ values, select, parentName, activeName }) => (
-  <div className="symbol-editor">
-    {values.map((sn, index) => (
-      <Cell value={sn} name={`${parentName}[${index}]`} activeName={activeName} onClick={() => select(index)} />
-    ))}
-  </div>
-);
+const MethodGrid: React.FC<MethodHandlingProps> = ({ node, forceRender }) => {
+  const child = node.getChildData()![0] as EnumOptionsNode;
 
-const ValuesGrid: React.FC<MethodHandlingProps> = ({
+  return (
+    <MethodOptionsGrid
+      values={child.descriptor.mapping.map((method) => ShortSymbol[method])}
+      select={(i) => (child.updateState(i), forceRender())}
+      activeName={ShortSymbol[child.descriptor.mapping[child.state]]}
+      parentName={''}
+    />
+  );
+};
+
+export const ValuesGrid: React.FC<MethodHandlingProps> = ({
   node,
   availableNumericInputs,
   availableMethodInputs,
@@ -50,29 +44,27 @@ const ValuesGrid: React.FC<MethodHandlingProps> = ({
       style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: '1rem', fontWeight: 'bold' }}
       onClick={(e) => e.stopPropagation()}
     >
-      Available Numeric Inputs
-      <StyledGrid
+      <MethodOptionsGrid
         values={availableNumericInputs}
         select={(i) => (
           node.updateState(node.descriptor.mapping.indexOf('numericInput')),
           (node.getChildData()![0] as IntNode).updateValue(i),
           forceRender()
         )}
-        parentName="numericInput"
+        parentName={nameKeyMap.numericInput}
         activeName={activeKey}
       />
-      Available Method Outputs
-      <StyledGrid
+      <MethodOptionsGrid
         values={availableMethodInputs}
         select={(i) => (
           node.updateState(node.descriptor.mapping.indexOf('methodOutput')),
           (node.getChildData()![0] as IntNode).updateValue(i),
           forceRender()
         )}
-        parentName="methodOutput"
+        parentName={nameKeyMap.methodOutput}
         activeName={activeKey}
       />
-      Hardcoded Value
+      {nameKeyMap.hardcoded}
       <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Checkbox
           checked={node.descriptor.mapping[node.state] === 'hardcoded'}
@@ -89,7 +81,7 @@ const ValuesGrid: React.FC<MethodHandlingProps> = ({
           <HardcodedNumber size="small" node={node.getChildData()![0] as EnumArrayNode} forceRender={forceRender} />
         ) : null}
       </span>
-      Method
+      {nameKeyMap.method}
       <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Checkbox
           checked={node.descriptor.mapping[node.state] === 'method'}
@@ -103,8 +95,8 @@ const ValuesGrid: React.FC<MethodHandlingProps> = ({
           }}
         />
         {node.descriptor.mapping[node.state] === 'method' ? (
-          <MethodFlatRenderer
-            node={node.getChildData()![0] as EnumOptionsNode}
+          <MethodGrid
+            node={node}
             forceRender={forceRender}
             availableNumericInputs={availableNumericInputs}
             availableMethodInputs={availableMethodInputs}
@@ -123,7 +115,7 @@ const getOptionValue = (node: EnumOptionsNode) => {
       return state;
     case 'numericInput':
     case 'methodOutput':
-      return `${state}[${(node.getChildData()![0] as IntNode).value}]`;
+      return `${nameKeyMap[state]}[${(node.getChildData()![0] as IntNode).value}]`;
   }
 };
 
