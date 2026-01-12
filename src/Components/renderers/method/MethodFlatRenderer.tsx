@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
-import { ArrayNode, EnumOptionsNode, ObjectNode } from 'url-safe-bitpacking';
+import { ArrayNode, EnumOptionsNode } from 'url-safe-bitpacking';
 import { MethodHandlingProps, getOperationForMethod } from './methodType';
-import { Button, Popover } from 'antd';
+import { Button } from 'antd';
 import { useGlobalUIStore } from '../../../state/globalUIStore';
-import { MethodValue, ValuesGrid } from './MethodValue';
+import { MethodValue } from './MethodValue';
 import { MethodOperation } from './MethodOperation';
 
 const DESKTOP_SYMBOL_SIZE = '1.2rem';
@@ -25,7 +25,7 @@ const AddRemoveTerm: React.FC<{ onAdd?: () => void; onRemove?: () => void }> = (
       style={{ maxWidth: 20, maxHeight: 11, fontSize: 10, textJustify: 'distribute', justifyContent: 'center' }}
       type="text"
       disabled={!onAdd}
-      onClick={onAdd}
+      onClick={(e) => (e.stopPropagation(), onAdd?.())}
     >
       +
     </Button>
@@ -48,40 +48,35 @@ export const MethodFlatRenderer: React.FC<MethodHandlingProps> = (props) => {
   const operation = getOperationForMethod(props.node);
 
   return (
-    <Popover trigger="click" content={<ValuesGrid {...props} node={props.node} />}>
-      <div
-        onClick={(e) => e.target !== e.currentTarget && e.stopPropagation()}
-        style={{ padding: 0, margin: 0, border: 'none', height: 'auto', cursor: 'pointer' }}
+    <div style={{ padding: 0, margin: 0, border: 'none', height: 'auto', cursor: 'pointer' }}>
+      <span
+        className={`lisp-parent method-flat ${operation} ${isDesktop ? 'desktop' : 'mobile'}`}
+        style={{ fontSize: isDesktop ? DESKTOP_SYMBOL_SIZE : MOBILE_SYMBOL_SIZE }}
       >
-        <span
-          className={`lisp-parent method-flat ${operation} ${isDesktop ? 'desktop' : 'mobile'}`}
-          style={{ fontSize: isDesktop ? DESKTOP_SYMBOL_SIZE : MOBILE_SYMBOL_SIZE }}
-        >
-          <MethodValue key={'a'} {...props} node={nodeA} />
-          <MethodOperation {...props} />
-          <MethodValue key={'b'} {...props} node={nodeB} />
-          {otherNodes.map((node, i) => (
-            <>
-              <MethodOperation {...props} />
-              <MethodValue key={i} {...props} node={node} />
-            </>
-          ))}
-          {operation === 'addition' || operation === 'multiplication' ? (
-            <AddRemoveTerm
-              onAdd={
-                nodeArray.state < nodeArray.descriptor.maxCount
-                  ? () => (nodeArray.updateState(nodeArray.state + 1), props.forceRender())
-                  : undefined
-              }
-              onRemove={
-                nodeArray.state > nodeArray.descriptor.minCount
-                  ? () => (nodeArray.updateState(nodeArray.state - 1), props.forceRender())
-                  : undefined
-              }
-            />
-          ) : null}
-        </span>
-      </div>
-    </Popover>
+        <MethodValue key={'a'} {...props} node={nodeA} />
+        <MethodOperation {...props} />
+        <MethodValue key={'b'} {...props} node={nodeB} />
+        {otherNodes.map((node, i) => (
+          <>
+            <MethodOperation {...props} />
+            <MethodValue key={i} {...props} node={node} />
+          </>
+        ))}
+        {operation === 'addition' || operation === 'multiplication' ? (
+          <AddRemoveTerm
+            onAdd={
+              nodeArray.state < nodeArray.descriptor.maxCount
+                ? () => (nodeArray.updateState(nodeArray.state + 1), props.forceRender())
+                : undefined
+            }
+            onRemove={
+              nodeArray.state > nodeArray.descriptor.minCount
+                ? () => (nodeArray.updateState(nodeArray.state - 1), props.forceRender())
+                : undefined
+            }
+          />
+        ) : null}
+      </span>
+    </div>
   );
 };

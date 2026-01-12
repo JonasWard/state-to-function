@@ -153,7 +153,7 @@ const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
     case 'hardcoded':
       return <Button type="text" size="small" children={getText(props.node.getChildData()![0] as EnumArrayNode)} />;
     case 'method':
-      return <MethodFlatRenderer {...props} node={props.node.getChildData()![0] as EnumOptionsNode} />;
+      return <MethodFlatRenderer {...props} node={props.node.getChildData()![0]! as EnumOptionsNode} />;
   }
 };
 
