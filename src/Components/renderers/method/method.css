@@ -58,4 +58,18 @@
 
 .method-flat {
   width: auto;
+  transition: background-color 0.3s ease-in-out;
+  background-color: white;
+}
+
+.method-flat:hover {
+  background-color: #f2eeee;
+}
+
+.method-flat:has(.method-flat:hover) {
+  background: white;
+}
+
+.method-operation {
+  font-size: 1.0rem;
 }
