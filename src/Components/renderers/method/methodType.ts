@@ -27,4 +27,12 @@ export const ShortSymbol: Record<(typeof AvailableMethodsTypes)[number], string>
   power: '^'
 };
 
+export const JavascriptOperation: Record<(typeof AvailableMethodsTypes)[number], string> = {
+  addition: '+',
+  multiplication: '*',
+  subtraction: '-',
+  division: '/',
+  power: '**'
+};
+
 export const getOperationForMethod = (node: EnumOptionsNode) => node.descriptor.mapping[node.state] as (typeof AvailableMethodsTypes)[number];

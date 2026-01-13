@@ -21,9 +21,9 @@ const getStateNodeForDataString = (base64string: string | undefined): SpecificTy
 };
 
 export const InputView: React.FC = () => {
-  const { base64String } = useParams();
+  const { base64MethodStateString } = useParams();
   const { setIsDesktop } = useGlobalUIStore();
-  const stateNode = useRef(getStateNodeForDataString(base64String));
+  const stateNode = useRef(getStateNodeForDataString(base64MethodStateString));
 
   const [rerenders, forceRender] = useReducer((x) => x + 1, 0);
 
