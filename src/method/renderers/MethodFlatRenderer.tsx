@@ -48,35 +48,33 @@ export const MethodFlatRenderer: React.FC<MethodHandlingProps> = (props) => {
   const operation = getOperationForMethod(props.node);
 
   return (
-    <div style={{ padding: 0, margin: 0, border: 'none', height: 'auto', cursor: 'pointer' }}>
-      <span
-        className={`lisp-parent method-flat ${operation} ${isDesktop ? 'desktop' : 'mobile'}`}
-        style={{ fontSize: isDesktop ? DESKTOP_SYMBOL_SIZE : MOBILE_SYMBOL_SIZE }}
-      >
-        <MethodValue key={'a'} {...props} node={nodeA} />
-        <MethodOperation {...props} />
-        <MethodValue key={'b'} {...props} node={nodeB} />
-        {otherNodes.map((node, i) => (
-          <>
-            <MethodOperation {...props} />
-            <MethodValue key={i} {...props} node={node} />
-          </>
-        ))}
-        {operation === 'addition' || operation === 'multiplication' ? (
-          <AddRemoveTerm
-            onAdd={
-              nodeArray.state < nodeArray.descriptor.maxCount
-                ? () => (nodeArray.updateState(nodeArray.state + 1), props.forceRender())
-                : undefined
-            }
-            onRemove={
-              nodeArray.state > nodeArray.descriptor.minCount
-                ? () => (nodeArray.updateState(nodeArray.state - 1), props.forceRender())
-                : undefined
-            }
-          />
-        ) : null}
-      </span>
+    <div
+      className={`lisp-parent method-flat ${operation} ${isDesktop ? 'desktop' : 'mobile'}`}
+      style={{ fontSize: isDesktop ? DESKTOP_SYMBOL_SIZE : MOBILE_SYMBOL_SIZE, cursor: 'pointer' }}
+    >
+      <MethodValue key={'a'} {...props} node={nodeA} />
+      <MethodOperation {...props} />
+      <MethodValue key={'b'} {...props} node={nodeB} />
+      {otherNodes.map((node, i) => (
+        <>
+          <MethodOperation {...props} />
+          <MethodValue key={i} {...props} node={node} />
+        </>
+      ))}
+      {operation === 'addition' || operation === 'multiplication' ? (
+        <AddRemoveTerm
+          onAdd={
+            nodeArray.state < nodeArray.descriptor.maxCount
+              ? () => (nodeArray.updateState(nodeArray.state + 1), props.forceRender())
+              : undefined
+          }
+          onRemove={
+            nodeArray.state > nodeArray.descriptor.minCount
+              ? () => (nodeArray.updateState(nodeArray.state - 1), props.forceRender())
+              : undefined
+          }
+        />
+      ) : null}
     </div>
   );
 };

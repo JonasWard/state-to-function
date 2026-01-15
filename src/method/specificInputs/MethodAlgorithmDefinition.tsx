@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react';
-import { ArrayNode, EnumArrayNode, EnumNode, EnumOptionsNode, ObjectNode, VersionNode } from 'url-safe-bitpacking';
+import React, { useMemo } from 'react';
+import { ArrayNode, EnumArrayNode, EnumNode, EnumOptionsNode, ObjectNode } from 'url-safe-bitpacking';
 import { SpecificNodeUI } from './SpecificNodeUI';
-import { Button } from 'antd';
+import { Button, Popover } from 'antd';
 import './reference-name.css';
 import { PlusCircleFilled, DeleteFilled } from '@ant-design/icons';
 import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
@@ -10,6 +10,8 @@ import { useGlobalUIStore } from '../../state/globalUIStore';
 import { MethodFlatRenderer } from '../renderers/MethodFlatRenderer';
 import { useMethodStore } from '../../state/methodStore';
 import { SymbolNameType } from './NameEditor';
+import { MethodOptionsGrid } from '../renderers/MethodOptionsGrid';
+import { ShortSymbol } from '../renderers/methodType';
 
 type NamedInputsChildrenType = [EnumNode, EnumArrayNode, EnumArrayNode, EnumOptionsNode];
 
@@ -61,9 +63,6 @@ const MethodInputEditor: React.FC<
     availableMethodInputs: SymbolNameType[];
   }
 > = ({ node, index, forceRender, remove, canRemove, ...props }) => {
-  const { isDesktop } = useGlobalUIStore();
-  const [inFocus, setInFocus] = useState<'method' | 'numeric'>('numeric');
-
   const [symbol, subscript, name, content] = useMemo(
     () => node.getChildren() as NamedInputsChildrenType,
     [node.bitstring]
@@ -77,7 +76,21 @@ const MethodInputEditor: React.FC<
           <SpecificNodeUI key={`${index}-subscript`} node={subscript} forceRender={forceRender} />
           <SpecificNodeUI key={`${index}-name`} node={name} forceRender={forceRender} />
         </div>
-        <MethodFlatRenderer node={content} forceRender={forceRender} {...props} />
+        <Popover
+          trigger="click"
+          content={
+            <MethodOptionsGrid
+              values={content.descriptor.mapping.map((method) => ShortSymbol[method])}
+              select={(i) => (content.updateState(i), forceRender())}
+              activeName={`[${content.state}]`}
+              parentName={''}
+            />
+          }
+        >
+          <span>
+            <MethodFlatRenderer node={content} forceRender={forceRender} {...props} />
+          </span>
+        </Popover>
       </div>
       <Button key={`${index}-button`} type="text" disabled={!canRemove} onClick={remove} style={{ width: 10 }}>
         <DeleteFilled />

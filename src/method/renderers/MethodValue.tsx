@@ -10,6 +10,7 @@ import React from 'react';
 import { getText } from '../../Components/lib/textHelpers';
 import { MethodOptionsGrid } from './MethodOptionsGrid';
 import './method.css';
+import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
 
 const nameKeyMap: Record<(typeof InputDefinitionTypes)[number], string> = {
   numericInput: 'Numeric Inputs',
@@ -18,7 +19,7 @@ const nameKeyMap: Record<(typeof InputDefinitionTypes)[number], string> = {
   method: 'Method'
 };
 
-const MethodGrid: React.FC<MethodHandlingProps> = ({ node, forceRender }) => {
+const MethodGrid: React.FC<TNodeUIProps<EnumOptionsNode>> = ({ node, forceRender }) => {
   const child = node.getChildData()![0] as EnumOptionsNode;
 
   return (
@@ -94,14 +95,7 @@ export const ValuesGrid: React.FC<MethodHandlingProps> = ({
             forceRender();
           }}
         />
-        {node.descriptor.mapping[node.state] === 'method' ? (
-          <MethodGrid
-            node={node}
-            forceRender={forceRender}
-            availableNumericInputs={availableNumericInputs}
-            availableMethodInputs={availableMethodInputs}
-          />
-        ) : null}
+        {node.descriptor.mapping[node.state] === 'method' ? <MethodGrid node={node} forceRender={forceRender} /> : null}
       </span>
     </div>
   );
