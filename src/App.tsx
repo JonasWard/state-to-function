@@ -12,8 +12,31 @@ import { ModelStateDescriptor } from './modelDefinition/newModel';
 import { getStateDataForNumericInputs, getStateNodeForDataString } from './applet/utils';
 import { MethodStateData } from './applet/methodDataType';
 
+const handleUndoRedo = (e: KeyboardEvent) => {
+  let undoRedoNothing: 'undo' | 'redo' | undefined = undefined;
+
+  if (e.metaKey || e.ctrlKey) {
+    if (e.key === 'z') undoRedoNothing = e.shiftKey ? 'redo' : 'undo';
+    else if (e.key === 'y') undoRedoNothing = 'redo';
+  }
+
+  if (!undoRedoNothing) return;
+
+  const uiInFocus = useGlobalUIStore.getState().uiInFocus;
+  console.log(undoRedoNothing, uiInFocus);
+  if (uiInFocus === 'applet' && undoRedoNothing === 'undo')
+    useAppState.getState().undoAppletStateString(), e.preventDefault();
+  if (uiInFocus === 'applet' && undoRedoNothing === 'redo')
+    useAppState.getState().redoAppletStateString(), e.preventDefault();
+  if (uiInFocus !== 'applet' && undoRedoNothing === 'undo')
+    useAppState.getState().undoInputStateString(), e.preventDefault();
+  if (uiInFocus !== 'applet' && undoRedoNothing === 'redo')
+    useAppState.getState().redoInputStateString(), e.preventDefault();
+};
+
 export const App: React.FC = () => {
-  const [hasInitialLoad, setHasInitialLoad] = useState(false);
+  const loading = useGlobalUIStore((s) => s.loading);
+  const setLoading = useGlobalUIStore((s) => s.setLoading);
   const { base64InputStateString, base64AppletStateString } = useParams();
 
   useEffect(() => {
@@ -57,13 +80,19 @@ export const App: React.FC = () => {
     }
 
     window.addEventListener('resize', handleResize);
+    window.addEventListener('keydown', handleUndoRedo);
 
-    setHasInitialLoad(true);
-
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('keydown', handleUndoRedo);
+    };
   }, []);
+
+  useEffect(() => {
+    if (loading) setLoading(false);
+  }, [loading]);
 
   const { uiInFocus } = useGlobalUIStore();
 
-  return <Navigation>{hasInitialLoad ? uiInFocus === 'applet' ? <Applet /> : <InputView /> : null}</Navigation>;
+  return <Navigation>{loading ? null : uiInFocus === 'applet' ? <Applet /> : <InputView />}</Navigation>;
 };

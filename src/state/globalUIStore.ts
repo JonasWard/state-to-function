@@ -6,6 +6,10 @@ type GlobalUIStore = {
   setIsDesktop: (isDesktop: boolean) => void;
   uiInFocus: null | 'method' | 'numeric' | 'applet';
   setUiInFocus: (uiInFocus: null | 'method' | 'numeric' | 'applet') => void;
+  showNamesInApplet: boolean;
+  setShowNamesInApplet: (showNames: boolean) => void;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
 };
 
 export const useGlobalUIStore = create<GlobalUIStore>((set) => ({
@@ -19,5 +23,9 @@ export const useGlobalUIStore = create<GlobalUIStore>((set) => ({
         useAppState.getState().base64AppletStateString ?? ''
       }`;
     set({ uiInFocus });
-  }
+  },
+  showNamesInApplet: false,
+  setShowNamesInApplet: (showNamesInApplet: boolean) => set({ showNamesInApplet }),
+  loading: true,
+  setLoading: (loading: boolean) => set({ loading })
 }));

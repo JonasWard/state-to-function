@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { useGlobalUIStore } from './globalUIStore';
 
 type AppStateStore = {
   base64InputStateString: string | null;
@@ -65,7 +66,8 @@ export const useAppState = create<AppStateStore>()((set, get) => ({
         inputStateStringStack,
         inputStateStringStackCurrentIndex: inputStateStringStack.length - 1,
         base64InputStateString,
-        canUndoInput: inputStateStringStack.length > 1
+        canUndoInput: inputStateStringStack.length > 1,
+        canRedoInput: false
       }));
       window.location.hash = `${base64InputStateString ?? ''}`;
     } else {
@@ -73,7 +75,8 @@ export const useAppState = create<AppStateStore>()((set, get) => ({
         inputStateStringStack: [],
         inputStateStringStackCurrentIndex: -1,
         base64InputStateString: null,
-        canUndoInput: false
+        canUndoInput: false,
+        canRedoInput: false
       }));
       window.location.hash = ``;
     }
@@ -85,7 +88,8 @@ export const useAppState = create<AppStateStore>()((set, get) => ({
         appletStateStringStack,
         appletStateStringStackCurrentIndex: appletStateStringStack.length - 1,
         base64AppletStateString,
-        canUndoApplet: appletStateStringStack.length > 1
+        canUndoApplet: appletStateStringStack.length > 1,
+        canRedoApplet: false
       }));
       window.location.hash = `${get().base64InputStateString ?? ''}/${base64AppletStateString ?? ''}`;
     } else {
@@ -93,15 +97,23 @@ export const useAppState = create<AppStateStore>()((set, get) => ({
         appletStateStringStack: [],
         appletStateStringStackCurrentIndex: -1,
         base64AppletStateString: null,
-        canUndoApplet: false
+        canUndoApplet: false,
+        canRedoApplet: false
       }));
       window.location.hash = `${get().base64InputStateString ?? ''}/`;
     }
   },
   addInputStateStringToStack: (iNs) =>
-    get().setInputStack([...get().inputStateStringStack.slice(0, get().inputStateStringStackCurrentIndex), iNs]),
+    get().inputStateStringStack[get().inputStateStringStackCurrentIndex] !== iNs
+      ? get().setInputStack([...get().inputStateStringStack.slice(0, get().inputStateStringStackCurrentIndex + 1), iNs])
+      : void 0,
   addAppletStateStringToStack: (aNs) =>
-    get().setAppletStack([...get().appletStateStringStack.slice(0, get().appletStateStringStackCurrentIndex), aNs]),
+    get().appletStateStringStack[get().appletStateStringStackCurrentIndex] !== aNs
+      ? get().setAppletStack([
+          ...get().appletStateStringStack.slice(0, get().appletStateStringStackCurrentIndex + 1),
+          aNs
+        ])
+      : void 0,
   clearInputStateStringToStack: () => get().setInputStack([]),
   clearAppletStateStringToStack: () => get().setAppletStack([]),
   undoInputStateString: () => {
@@ -109,39 +121,39 @@ export const useAppState = create<AppStateStore>()((set, get) => ({
     set((state) => ({
       inputStateStringStackCurrentIndex: state.inputStateStringStackCurrentIndex - 1,
       base64InputStateString: state.inputStateStringStack[state.inputStateStringStackCurrentIndex - 1] ?? null,
-      canUndoInput:
-        state.inputStateStringStackCurrentIndex - 1 > 0 &&
-        Boolean(state.inputStateStringStack[state.inputStateStringStackCurrentIndex - 1])
+      canRedoInput: true,
+      canUndoInput: state.inputStateStringStackCurrentIndex - 1 > 0
     }));
+    useGlobalUIStore.getState().setLoading(true);
   },
   redoInputStateString: () => {
     if (get().inputStateStringStackCurrentIndex >= get().inputStateStringStack.length - 1) return;
     set((state) => ({
       inputStateStringStackCurrentIndex: state.inputStateStringStackCurrentIndex + 1,
       base64InputStateString: state.inputStateStringStack[state.inputStateStringStackCurrentIndex + 1] ?? null,
-      canRedoInput:
-        state.inputStateStringStackCurrentIndex + 1 < state.inputStateStringStack.length &&
-        Boolean(state.inputStateStringStack[state.inputStateStringStackCurrentIndex + 1])
+      canUndoInput: true,
+      canRedoInput: state.inputStateStringStackCurrentIndex + 1 < state.inputStateStringStack.length - 1
     }));
+    useGlobalUIStore.getState().setLoading(true);
   },
   undoAppletStateString: () => {
     if (get().appletStateStringStackCurrentIndex < 1) return;
     set((state) => ({
       appletStateStringStackCurrentIndex: state.appletStateStringStackCurrentIndex - 1,
       base64AppletStateString: state.appletStateStringStack[state.appletStateStringStackCurrentIndex - 1] ?? null,
-      canUndoApplet:
-        state.appletStateStringStackCurrentIndex - 1 > 0 &&
-        Boolean(state.appletStateStringStack[state.appletStateStringStackCurrentIndex - 1])
+      canRedoApplet: true,
+      canUndoApplet: state.appletStateStringStackCurrentIndex - 1 > 0
     }));
+    useGlobalUIStore.getState().setLoading(true);
   },
   redoAppletStateString: () => {
     if (get().appletStateStringStackCurrentIndex >= get().appletStateStringStack.length - 1) return;
     set((state) => ({
       appletStateStringStackCurrentIndex: state.appletStateStringStackCurrentIndex + 1,
       base64AppletStateString: state.appletStateStringStack[state.appletStateStringStackCurrentIndex + 1] ?? null,
-      canRedoApplet:
-        state.appletStateStringStackCurrentIndex + 1 < state.appletStateStringStack.length &&
-        Boolean(state.appletStateStringStack[state.appletStateStringStackCurrentIndex + 1])
+      canUndoApplet: true,
+      canRedoApplet: state.appletStateStringStackCurrentIndex + 1 < state.appletStateStringStack.length - 1
     }));
+    useGlobalUIStore.getState().setLoading(true);
   }
 }));

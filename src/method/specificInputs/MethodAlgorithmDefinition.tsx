@@ -25,7 +25,7 @@ const NamedInputsArrayEditor: React.FC<
   const { isDesktop } = useGlobalUIStore();
   return (
     <div className={`input-column ${isDesktop ? 'desktop' : 'mobile'}`}>
-      <span style={{ height: 32, display: 'flex', alignItems: 'center' }}>{name}</span>
+      <span style={{ height: 32, display: 'flex', alignItems: 'center', fontWeight: 'bold' }}>{name}</span>
       <div className={`method-input-content ${isDesktop ? 'desktop' : 'mobile'}`}>
         {node.getChildren().map((child, i) => (
           <MethodInputEditor
@@ -102,4 +102,4 @@ const MethodInputEditor: React.FC<
 export const MethodAlgorithmDefinition: React.FC<TNodeUIProps<ArrayNode> & { forceRender: () => void }> = ({
   node,
   forceRender
-}) => <NamedInputsArrayEditor node={node} name="Method Algorithm" forceRender={forceRender} />;
+}) => <NamedInputsArrayEditor node={node} name="Method Definitions" forceRender={forceRender} />;

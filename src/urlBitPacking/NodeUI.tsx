@@ -15,6 +15,7 @@ import {
 import { TextInput } from '../Components/TextInput';
 import { GeneralChildrenRenderer, NodeUIProps, TNodeUIProps, WrapperComponentFunction } from './nodeProps';
 import { useGlobalUIStore } from '../state/globalUIStore';
+import { InputNumberWrapper } from '../Components/inputs/InputNumberWrapper';
 
 const nullContent = (
   <>
@@ -104,7 +105,7 @@ export const GeneralContentSplitter = (
       );
     case 'INT':
       return (
-        <InputNumber
+        <InputNumberWrapper
           size={isDesktop ? 'middle' : 'small'}
           style={{ minWidth: '40px', width: '100%' }}
           value={(node as IntNode).value}
@@ -119,7 +120,7 @@ export const GeneralContentSplitter = (
       );
     case 'FLOAT':
       return (
-        <InputNumber
+        <InputNumberWrapper
           size={isDesktop ? 'middle' : 'small'}
           style={{ minWidth: '40px', width: '100%' }}
           value={(node as FloatNode).value}

@@ -1,0 +1,19 @@
+.ant-descriptions-item-label {
+  padding: 0.25rem 0.5rem !important;
+}
+
+.ant-descriptions-item-content {
+  padding: 0.25rem 0.5rem !important;
+  min-width: 0;
+}
+
+.applet-nested-result-content {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.ant-descriptions-header {
+  margin-bottom: 0.75rem !important;
+}

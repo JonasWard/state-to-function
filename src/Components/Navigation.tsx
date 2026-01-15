@@ -3,6 +3,7 @@ import { useGlobalUIStore } from '../state/globalUIStore';
 import { Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import './navigation.css';
+import { UndoRedoButtons } from '../applet/UndoRedoButtons';
 
 const NavigationComponent: React.FC = () => {
   const { uiInFocus, setUiInFocus, isDesktop } = useGlobalUIStore();
@@ -16,7 +17,7 @@ const NavigationComponent: React.FC = () => {
           className="arrow-button"
         >
           <ArrowLeftOutlined className={`arrow-icon ${uiInFocus === 'method' ? 'left' : 'right'}`} />
-          {uiInFocus === 'method' ? 'Numeric Inputs' : 'Method Inputs'}
+          {uiInFocus === 'method' ? 'Input Definitions' : 'Method Definitions'}
         </Button>
       ) : null}
       <Button
@@ -25,8 +26,9 @@ const NavigationComponent: React.FC = () => {
         className="arrow-button"
       >
         <ArrowLeftOutlined className={`arrow-icon ${uiInFocus === 'applet' ? 'left' : 'right'}`} />
-        {uiInFocus === 'applet' ? 'Inputs' : 'Applet'}
+        {uiInFocus === 'applet' ? 'Definitions' : 'Applet'}
       </Button>
+      <UndoRedoButtons />
     </div>
   );
 };

@@ -5,10 +5,16 @@ import { getMethodStateData, getStateDataForNumericInputs, getStateNodeForDataSt
 import { SpecificNodeUI } from '../method/specificInputs/SpecificNodeUI';
 import { IconRenderer } from '../Components/icon/IconRenderer';
 import { useAppState } from '../state/appState';
+import { Checkbox, Descriptions } from 'antd';
+import { useGlobalUIStore } from '../state/globalUIStore';
+import './applet.css';
 
 export const Applet: React.FC = () => {
   const base64InputStateString = useAppState((s) => s.base64InputStateString!);
   const base64AppletStateString = useAppState((s) => s.base64AppletStateString);
+  const isDesktop = useGlobalUIStore((s) => s.isDesktop);
+  const showNamesInApplet = useGlobalUIStore((s) => s.showNamesInApplet);
+  const setShowNamesInApplet = useGlobalUIStore((s) => s.setShowNamesInApplet);
 
   const methodStateData = useMemo(() => getMethodStateData(base64InputStateString!), [base64InputStateString]);
   const { dataEntries, indexMapping } = useMemo(
@@ -40,41 +46,89 @@ export const Applet: React.FC = () => {
   const currentResult = useMemo(() => evalMethod(methodStateData, variableValues), [methodStateData, variableValues]);
 
   return (
-    <div style={{ width: '100svw', padding: 8 }}>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'auto 1fr',
-          gap: 8,
-          maxWidth: 300,
-          width: '100%',
-          margin: '0 auto',
-          alignItems: 'center'
-        }}
+    <div style={{ width: '100svw', marginTop: isDesktop ? 0 : -42, transition: '0.3s ease-in-out' }}>
+      <Checkbox
+        style={{ position: 'fixed', right: 10, top: 13 }}
+        checked={showNamesInApplet}
+        onChange={() => setShowNamesInApplet(!showNamesInApplet)}
       >
-        {stateNode.current.getChildren()!.map((c, i) => (
-          <>
+        Names
+      </Checkbox>
+      <Descriptions
+        style={{ margin: 16 }}
+        size="small"
+        title="Inputs"
+        bordered
+        colon={false}
+        items={stateNode.current.getChildren()!.map((c, key) => ({
+          key,
+          label: (
+            <>
+              <IconRenderer
+                key={`n${key}`}
+                symbol={methodStateData.inputValues[indexMapping[key]].symbol}
+                subscript={methodStateData.inputValues[indexMapping[key]].subscript}
+                size="1.3rem"
+              />
+            </>
+          ),
+          children: (
+            <div
+              className="applet-nested-result-content"
+              style={{
+                gridTemplateColumns:
+                  isDesktop && showNamesInApplet && methodStateData.inputValues[indexMapping[key]].name
+                    ? '1fr auto'
+                    : '1fr'
+              }}
+            >
+              <SpecificNodeUI key={`n-i${key}`} node={c!} forceRender={forceRender} />
+              {showNamesInApplet && methodStateData.inputValues[indexMapping[key]].name ? (
+                <var style={{ fontSize: '.9rem', fontWeight: 'normal', margin: '0 8px' }} key={`n-${key}`}>
+                  {methodStateData.inputValues[indexMapping[key]].name}
+                </var>
+              ) : null}
+            </div>
+          )
+        }))}
+      />
+      <Descriptions
+        style={{ margin: 16 }}
+        bordered
+        size="small"
+        title="Results"
+        colon={false}
+        column={isDesktop ? undefined : 2}
+        items={currentResult.map((c, key) => ({
+          key,
+          label: (
             <IconRenderer
-              key={`n${i}`}
-              symbol={methodStateData.inputValues[indexMapping[i]].symbol}
-              subscript={methodStateData.inputValues[indexMapping[i]].subscript}
+              key={`m${key}`}
+              symbol={methodStateData.methodValues[key].symbol}
+              subscript={methodStateData.methodValues[key].subscript}
+              size="1.3rem"
             />
-            <SpecificNodeUI key={`n-i${i}`} node={c!} forceRender={forceRender} />
-          </>
-        ))}
-        {currentResult.map((c, i) => (
-          <>
-            <IconRenderer
-              key={`m${i}`}
-              symbol={methodStateData.methodValues[i].symbol}
-              subscript={methodStateData.methodValues[i].subscript}
-            />
-            <var style={{ fontSize: '1.1rem', fontWeight: 'medium' }} key={`m-${i}`}>
-              {c}
-            </var>
-          </>
-        ))}
-      </div>
+          ),
+          children: (
+            <div
+              className="applet-nested-result-content"
+              style={{
+                gridTemplateColumns:
+                  isDesktop && showNamesInApplet && methodStateData.methodValues[key].name ? '1fr auto' : '1fr'
+              }}
+            >
+              <var style={{ fontSize: '1.1rem', fontWeight: 'medium', margin: 'auto 0' }} key={`m-${key}`}>
+                {c}
+              </var>
+              {showNamesInApplet && methodStateData.methodValues[key].name ? (
+                <var style={{ fontSize: '.9rem', fontWeight: 'normal' }} key={`n-${key}`}>
+                  {methodStateData.methodValues[key].name}
+                </var>
+              ) : null}
+            </div>
+          )
+        }))}
+      />
     </div>
   );
 };

@@ -19,7 +19,7 @@ const NamedInputsArrayEditor: React.FC<
   const { isDesktop } = useGlobalUIStore();
   return (
     <div className={`input-column ${isDesktop ? 'desktop' : 'mobile'}`}>
-      <span style={{ height: 32, display: 'flex', alignItems: 'center' }}>{name}</span>
+      <span style={{ height: 32, display: 'flex', alignItems: 'center', fontWeight: 'bold' }}>{name}</span>
       <div className={`numeric-input-content ${isDesktop ? 'desktop' : 'mobile'}`}>
         {node.getChildren().map((child, i) => (
           <NumericInputEditor
@@ -86,6 +86,25 @@ const NumericInputEditor: React.FC<
             <SpecificNodeUI key={i} node={child!} forceRender={forceRender} />
           ))}
         </div>
+        {content.descriptor.mapping[content.state] !== 'hardcoded' ? (
+          <div
+            key="numeric-content-info"
+            style={{
+              fontSize: '0.8rem',
+              textAlign: 'center',
+              display: 'grid',
+              gridTemplateColumns: '1fr auto 1fr auto 1fr',
+              gap: 4,
+              width: '100%'
+            }}
+          >
+            <span>min</span>
+            <span>{'≤'}</span>
+            <span>default</span>
+            <span>{'≤'}</span>
+            <span>max</span>
+          </div>
+        ) : null}
       </div>
       <Button key={`${index}-button`} type="text" disabled={!canRemove} onClick={remove} style={{ width: 10 }}>
         <DeleteFilled />
@@ -94,7 +113,6 @@ const NumericInputEditor: React.FC<
   );
 };
 
-export const NumericInputDefinitions: React.FC<{ node: ArrayNode; forceRender: () => void }> = ({
-  node,
-  forceRender
-}) => <NamedInputsArrayEditor node={node} name="Numeric Inputs" forceRender={forceRender} />;
+export const NumericInputDefinitions: React.FC<{ node: ArrayNode; forceRender: () => void }> = ({ node, forceRender }) => (
+  <NamedInputsArrayEditor node={node} name="Input Definitions" forceRender={forceRender} />
+);
