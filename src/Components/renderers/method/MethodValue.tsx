@@ -1,4 +1,4 @@
-import { Button, Checkbox, Popover } from 'antd';
+import { Button, Checkbox, Popover, Tag } from 'antd';
 import { useMemo } from 'react';
 import { IntNode, EnumArrayNode, EnumOptionsNode } from 'url-safe-bitpacking';
 import { InputDefinitionTypes } from '../../../modelDefinition/newModel';
@@ -127,27 +127,37 @@ const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
 
   switch (state) {
     case 'numericInput':
+      const numericInput = props.availableNumericInputs[(props.node.getChildData()![0] as IntNode).value] || undefined;
       return (
         <Button type="text" size="small">
-          <SymbolRenderer
-            {...{
-              symbol: props.availableNumericInputs[(props.node.getChildData()![0] as IntNode).value][0],
-              subscript: props.availableNumericInputs[(props.node.getChildData()![0] as IntNode).value][1],
-              size: 'small'
-            }}
-          />
+          {numericInput ? (
+            <SymbolRenderer
+              {...{
+                symbol: numericInput[0],
+                subscript: numericInput[1],
+                size: 'small'
+              }}
+            />
+          ) : (
+            <Tag color="red">missing</Tag>
+          )}
         </Button>
       );
     case 'methodOutput':
+      const methodOutput = props.availableMethodInputs[(props.node.getChildData()![0] as IntNode).value] || undefined;
       return (
         <Button type="text" size="small">
-          <SymbolRenderer
-            {...{
-              symbol: props.availableMethodInputs[(props.node.getChildData()![0] as IntNode).value][0],
-              subscript: props.availableMethodInputs[(props.node.getChildData()![0] as IntNode).value][1],
-              size: 'small'
-            }}
-          />
+          {methodOutput ? (
+            <SymbolRenderer
+              {...{
+                symbol: methodOutput[0],
+                subscript: methodOutput[1],
+                size: 'small'
+              }}
+            />
+          ) : (
+            <Tag color="red">missing</Tag>
+          )}
         </Button>
       );
     case 'hardcoded':

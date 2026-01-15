@@ -26,13 +26,6 @@
   transform: translateX(-100svw);
 }
 
-.arrow-button {
-  position: fixed;
-  top: 1rem;
-  left: calc(50% - 5rem);
-  z-index: 1000;
-}
-
 .arrow-icon {
   font-size: 1.5rem;
   transition: 0.3s ease-in-out;

@@ -1,66 +1,29 @@
 import React, { useEffect, useMemo, useReducer, useRef } from 'react';
-import { useParams } from 'react-router-dom';
-import {
-  DataEntry,
-  FromState,
-  getStateData,
-  GetStateNodeTree,
-  ObjectNode,
-  SpecificTypeNode,
-  VersionDataEntry
-} from 'url-safe-bitpacking';
-import { ModelStateDescriptor } from '../modelDefinition/newModel';
-import { INITIAL_INPUT_VIEW_STRING, ROOT_NODE_NAME } from '../state/c';
+import { getStateData, ObjectNode } from 'url-safe-bitpacking';
 import { evalMethod } from './getMethod';
-import { MethodStateData } from './methodDataType';
-import { getStateDataForNumericInputs } from './utils';
+import { getMethodStateData, getStateDataForNumericInputs, getStateNodeForDataString } from './utils';
 import { SpecificNodeUI } from '../specificInputs/SpecificNodeUI';
 import { IconRenderer } from '../Components/renderers/icon/IconRenderer';
+import { useAppState } from '../state/appState';
 
-/**
- * Helper method that tries to parse the provided base string, if it fails, falls back to the default string (surface volume and surface area of a box)
- * @param base64string
- */
-const getStateNodeForDataString = (
-  stateModelDescriptor: DataEntry[],
-  base64string: string | undefined
-): SpecificTypeNode => {
-  if (!base64string)
-    return GetStateNodeTree(stateModelDescriptor as [VersionDataEntry, ...DataEntry[]], ROOT_NODE_NAME);
-  try {
-    return FromState(stateModelDescriptor as [VersionDataEntry, ...DataEntry[]], ROOT_NODE_NAME, base64string);
-  } catch (e) {
-    console.error(e);
-    return GetStateNodeTree(stateModelDescriptor as [VersionDataEntry, ...DataEntry[]], ROOT_NODE_NAME);
-  }
-};
+export const Applet: React.FC = () => {
+  const base64InputStateString = useAppState((s) => s.base64InputStateString!);
+  const base64AppletStateString = useAppState((s) => s.base64AppletStateString);
 
-export const Applet = () => {
-  const { base64MethodStateString, base64InputStateString } = useParams();
-
-  const methodStateData = useMemo(
-    () =>
-      getStateData(
-        FromState(
-          ModelStateDescriptor,
-          ROOT_NODE_NAME,
-          base64MethodStateString || INITIAL_INPUT_VIEW_STRING
-        ).toDataEntry()
-      ) as MethodStateData,
-    [base64MethodStateString]
-  );
+  const methodStateData = useMemo(() => getMethodStateData(base64InputStateString!), [base64InputStateString]);
   const { dataEntries, indexMapping } = useMemo(
     () => getStateDataForNumericInputs(methodStateData.inputValues),
     [methodStateData.inputValues]
   );
 
-  const stateNode = useRef(getStateNodeForDataString(dataEntries, base64InputStateString) as ObjectNode);
+  const stateNode = useRef(getStateNodeForDataString(dataEntries, base64AppletStateString) as ObjectNode);
 
   const [rerenders, forceRender] = useReducer((x) => x + 1, 0);
 
   useEffect(() => {
-    const base64String = stateNode.current.getBase64String();
-    window.location.hash = `${base64MethodStateString}/${base64String}`;
+    const aBISS = stateNode.current.getBase64String();
+    if (useAppState.getState().base64AppletStateString !== aBISS)
+      useAppState.getState().addAppletStateStringToStack(aBISS);
   }, [rerenders]);
 
   const variableValues = useMemo(

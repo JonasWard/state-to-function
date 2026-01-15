@@ -44,6 +44,13 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+.navigation-wrapper {
+  display: 'grid';
+  max-height: 100svh;
+  overflow-x: hidden;
+  grid-template-rows: 1fr auto;
+}
+
 /* Firefox */
 input[type='number'] {
   -moz-appearance: textfield;

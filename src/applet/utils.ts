@@ -1,5 +1,15 @@
-import { DataEntry, DataEntryFactory } from 'url-safe-bitpacking';
-import { InputNumber } from './methodDataType';
+import {
+  DataEntry,
+  DataEntryFactory,
+  FromState,
+  getStateData,
+  GetStateNodeTree,
+  SpecificTypeNode,
+  VersionDataEntry
+} from 'url-safe-bitpacking';
+import { InputNumber, MethodStateData } from './methodDataType';
+import { INITIAL_INPUT_VIEW_STRING, ROOT_NODE_NAME } from '../state/c';
+import { ModelStateDescriptor } from '../modelDefinition/newModel';
 
 const getDataEntryForNumericInputs = (input: InputNumber, index: number) => {
   switch (input.inputType.state) {
@@ -38,3 +48,26 @@ export const getStateDataForNumericInputs = (inputs: InputNumber[]) => {
     dataEntries
   };
 };
+
+/**
+ * Helper method that tries to parse the provided base string, if it fails, falls back to the default string (surface volume and surface area of a box)
+ * @param base64string
+ */
+export const getStateNodeForDataString = (
+  stateModelDescriptor: DataEntry[],
+  base64string: string | undefined | null
+): SpecificTypeNode => {
+  if (!base64string)
+    return GetStateNodeTree(stateModelDescriptor as [VersionDataEntry, ...DataEntry[]], ROOT_NODE_NAME);
+  try {
+    return FromState(stateModelDescriptor as [VersionDataEntry, ...DataEntry[]], ROOT_NODE_NAME, base64string);
+  } catch (e) {
+    console.error(e);
+    return GetStateNodeTree(stateModelDescriptor as [VersionDataEntry, ...DataEntry[]], ROOT_NODE_NAME);
+  }
+};
+
+export const getMethodStateData = (base64MethodStateString: string) =>
+  getStateData(
+    FromState(ModelStateDescriptor, ROOT_NODE_NAME, base64MethodStateString).toDataEntry()
+  ) as MethodStateData;
