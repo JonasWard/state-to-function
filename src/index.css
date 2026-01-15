@@ -8,8 +8,3 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
-
-.babylon-scene {
-  height: calc(100vh - 20px);
-  width: calc(100vw - 20px);
-}

@@ -1,0 +1,75 @@
+.method-value-renderer {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.method-value-renderer.multiplication {
+  flex-direction: row;
+}
+
+.method-value-renderer.addition {
+  flex-direction: row;
+}
+
+.method-value-renderer.division-divider {
+  border-top: 1px solid black;
+  height: 0;
+}
+
+.method-value-renderer.divison {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lisp-parent {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  padding: -1px 1px;
+  border-radius: 4px;
+  border: 1px solid #e5e5e5;
+}
+
+.lisp-parent.desktop {
+  gap: 4px;
+  padding: 0;
+  border-radius: 6px;
+}
+
+.lisp-parent.division {
+  flex-direction: column;
+}
+
+.lisp-parent.division > :nth-child(2) {
+  max-height: 5px;
+  width: 100%;
+  overflow: hidden;
+  border-top: 1px solid black;
+  color: transparent !important;
+  height: 0;
+}
+
+.lisp-parent.division > :nth-child(2) .ant-select-selection-item {
+  color: transparent !important;
+}
+
+.method-flat {
+  width: auto;
+  transition: background-color 0.3s ease-in-out;
+  background-color: white;
+}
+
+.method-flat:hover {
+  background-color: #f2eeee;
+}
+
+.method-flat:has(.method-flat:hover) {
+  background: white;
+}
+
+.method-operation {
+  font-size: 1.0rem;
+}

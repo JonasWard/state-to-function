@@ -1,0 +1,91 @@
+.reference-name {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.symbol-editor {
+  display: grid;
+  grid-template-columns: repeat(8, 30px);
+  gap: 2px;
+}
+
+.symbol-boxes {
+  text-align: center;
+  cursor: pointer;
+  background-color: #eeeeff;
+  color: gray;
+  font-weight: 400;
+  transition: all 0.3s ease;
+}
+
+.symbol-boxes:hover {
+  background-color: #b3b3dd;
+  color: rgb(31, 31, 31);
+}
+
+.symbol-boxes.selected {
+  background-color: #ccccff;
+  color: black;
+  font-weight: bold;
+}
+
+var {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+sub {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.numeric-editor {
+  display: grid;
+  grid-template-columns: 5.5rem auto;
+  width: 100%;
+  gap: 4px;
+}
+
+.numeric-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+}
+
+.ant-input-number-outlined.left {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  margin-right: -1px;
+  width: calc(100% + 1px);
+}
+
+.ant-input-number-outlined.middle {
+  border-radius: 0 !important;
+  margin-right: -1px;
+  width: calc(100% + 1px);
+}
+
+.ant-input-number-outlined.right {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  width: 100%;
+}
+
+select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.icon-renderer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.numeric-inputs-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}

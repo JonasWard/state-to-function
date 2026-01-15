@@ -1,0 +1,23 @@
+.navigation-component {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+  margin: 0.5rem auto;
+  padding: auto 0.5rem;
+  transition: 0.3s ease-in-out;
+}
+
+.arrow-icon {
+  font-size: 1.5rem;
+  transition: 0.3s ease-in-out;
+}
+
+.arrow-icon.left {
+  transform: rotate(0deg);
+}
+
+.arrow-icon.right {
+  transform: rotate(-180deg);
+}
