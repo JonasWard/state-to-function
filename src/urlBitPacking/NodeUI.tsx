@@ -12,9 +12,9 @@ import {
   VersionNode,
   EnumArrayNode
 } from 'url-safe-bitpacking';
-import { TextInput } from './Components/TextInput';
+import { TextInput } from '../Components/TextInput';
 import { GeneralChildrenRenderer, NodeUIProps, TNodeUIProps, WrapperComponentFunction } from './nodeProps';
-import { useGlobalUIStore } from './state/globalUIStore';
+import { useGlobalUIStore } from '../state/globalUIStore';
 
 const nullContent = (
   <>

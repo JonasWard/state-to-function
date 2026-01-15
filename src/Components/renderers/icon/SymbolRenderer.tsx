@@ -1,5 +1,5 @@
 import { EnumArrayNode, EnumNode } from 'url-safe-bitpacking';
-import { getText } from '../../../lib/textHelpers';
+import { getText } from '../../lib/textHelpers';
 import { IconRenderer } from './IconRenderer';
 import React from 'react';
 

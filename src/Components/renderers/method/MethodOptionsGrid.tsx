@@ -1,5 +1,5 @@
 import React from 'react';
-import { SymbolNameType } from '../../../specificInputs/NameEditor';
+import { SymbolNameType } from '../../../method/specificInputs/NameEditor';
 import { SymbolRenderer } from '../icon/SymbolRenderer';
 import { EnumArrayNode, EnumNode } from 'url-safe-bitpacking';
 

@@ -1,5 +1,5 @@
 import { EnumArrayNode } from 'url-safe-bitpacking';
-import { TNodeUIProps } from '../../nodeProps';
+import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
 import { TextInput } from '../TextInput';
 import React from 'react';
 

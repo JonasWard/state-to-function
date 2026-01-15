@@ -5,7 +5,7 @@ import { Navigation } from './Components/Navigation';
 import React from 'react';
 import { useGlobalUIStore } from './state/globalUIStore';
 import { Applet } from './applet/Applet';
-import { InputView } from './InputView';
+import { InputView } from './method/InputView';
 import { FromState, getStateData, ObjectNode } from 'url-safe-bitpacking';
 import { INITIAL_INPUT_VIEW_STRING, MIN_DESKTOP_WIDTH, ROOT_NODE_NAME } from './state/c';
 import { ModelStateDescriptor } from './modelDefinition/newModel';

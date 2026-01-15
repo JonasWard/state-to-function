@@ -1,10 +1,10 @@
 import { useEffect, useReducer, useRef } from 'react';
-import { ModelStateDescriptor } from './modelDefinition/newModel';
+import { ModelStateDescriptor } from '../modelDefinition/newModel';
 import React from 'react';
 import { FromState, ObjectNode, SpecificTypeNode } from 'url-safe-bitpacking';
-import { ROOT_NODE_NAME, INITIAL_INPUT_VIEW_STRING } from './state/c';
+import { ROOT_NODE_NAME, INITIAL_INPUT_VIEW_STRING } from '../state/c';
 import { InputMethodsComponent } from './specificInputs/InputMethodsComponent';
-import { useAppState } from './state/appState';
+import { useAppState } from '../state/appState';
 
 /**
  * Helper method that tries to parse the provided base string, if it fails, falls back to the default string (surface volume and surface area of a box)

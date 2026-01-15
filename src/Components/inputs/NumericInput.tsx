@@ -1,7 +1,7 @@
 import React from 'react';
-import { TNodeUIProps } from '../../nodeProps';
+import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
 import { EnumOptionsNode } from 'url-safe-bitpacking';
-import { SpecificNodeUI } from '../../specificInputs/SpecificNodeUI';
+import { SpecificNodeUI } from '../../method/specificInputs/SpecificNodeUI';
 import { Select } from 'antd';
 
 export const NumericInput: React.FC<TNodeUIProps<EnumOptionsNode>> = ({ node, forceRender }) => (

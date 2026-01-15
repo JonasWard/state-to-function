@@ -2,10 +2,10 @@ import React, { useMemo } from 'react';
 import { ObjectNode, VersionNode, ArrayNode } from 'url-safe-bitpacking';
 import { NumericInputDefinitions } from './NumericInputDefinitions';
 import { SymbolNameType } from './NameEditor';
-import { TNodeUIProps } from '../nodeProps';
-import { useMethodStore } from '../state/methodStore';
+import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
+import { useMethodStore } from '../../state/methodStore';
 import './inputmethods.css';
-import { useGlobalUIStore } from '../state/globalUIStore';
+import { useGlobalUIStore } from '../../state/globalUIStore';
 import { MethodAlgorithmDefinition } from './MethodAlgorithmDefinition';
 
 export const InputMethodsComponent: React.FC<TNodeUIProps<ObjectNode>> = ({ node, forceRender }) => {

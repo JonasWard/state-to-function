@@ -1,7 +1,7 @@
 import { Input, Popover } from 'antd';
 import React, { ReactNode, useEffect } from 'react';
-import { getIndexesFromText, getMappingString } from '../lib/textHelpers';
-import { getText } from '../lib/textHelpers';
+import { getIndexesFromText, getMappingString } from './lib/textHelpers';
+import { getText } from './lib/textHelpers';
 import { CheckCircleFilled, UndoOutlined } from '@ant-design/icons';
 import { EnumArrayNode } from 'url-safe-bitpacking';
 import { useGlobalUIStore } from '../state/globalUIStore';

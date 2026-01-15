@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useReducer, useRef } from 'react';
 import { getStateData, ObjectNode } from 'url-safe-bitpacking';
 import { evalMethod } from './getMethod';
 import { getMethodStateData, getStateDataForNumericInputs, getStateNodeForDataString } from './utils';
-import { SpecificNodeUI } from '../specificInputs/SpecificNodeUI';
+import { SpecificNodeUI } from '../method/specificInputs/SpecificNodeUI';
 import { IconRenderer } from '../Components/renderers/icon/IconRenderer';
 import { useAppState } from '../state/appState';
 

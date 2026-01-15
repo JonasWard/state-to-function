@@ -1,12 +1,11 @@
 import React from 'react';
-import { GeneralContentSplitter, GeneralNodeUIRenderer, NodeWithChildrenWrapper } from '../NodeUI';
-import { NodeUIProps, WrapperComponentFunction } from '../nodeProps';
+import { GeneralContentSplitter, GeneralNodeUIRenderer, NodeWithChildrenWrapper } from '../../urlBitPacking/NodeUI';
+import { NodeUIProps, WrapperComponentFunction } from '../../urlBitPacking/nodeProps';
 import { EnumArrayNode, EnumOptionsNode, ObjectNode } from 'url-safe-bitpacking';
-import { ROOT_NODE_NAME } from '../state/c';
+import { ROOT_NODE_NAME } from '../../state/c';
 import { InputMethodsComponent } from './InputMethodsComponent';
-import { HardcodedNumber } from '../Components/inputs/HardcodedNumber';
-import { Select } from 'antd';
-import { NumericInput } from '../Components/inputs/NumericInput';
+import { HardcodedNumber } from '../../Components/inputs/HardcodedNumber';
+import { NumericInput } from '../../Components/inputs/NumericInput';
 
 const specificContentWrapper: WrapperComponentFunction = (node, forceRender) =>
   SpecificContentSplitter(node, forceRender);

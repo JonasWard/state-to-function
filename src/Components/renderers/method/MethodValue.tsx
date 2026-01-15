@@ -7,7 +7,7 @@ import { SymbolRenderer } from '../icon/SymbolRenderer';
 import { MethodFlatRenderer } from './MethodFlatRenderer';
 import { MethodHandlingProps, ShortSymbol } from './methodType';
 import React from 'react';
-import { getText } from '../../../lib/textHelpers';
+import { getText } from '../../lib/textHelpers';
 import { MethodOptionsGrid } from './MethodOptionsGrid';
 import './method.css';
 

@@ -50,8 +50,3 @@ input::-webkit-inner-spin-button {
   overflow-x: hidden;
   grid-template-rows: 1fr auto;
 }
-
-/* Firefox */
-input[type='number'] {
-  -moz-appearance: textfield;
-}

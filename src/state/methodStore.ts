@@ -1,6 +1,6 @@
 import { EnumOptionsNode } from 'url-safe-bitpacking';
 import { create } from 'zustand';
-import { SymbolNameType } from '../specificInputs/NameEditor';
+import { SymbolNameType } from '../method/specificInputs/NameEditor';
 
 type MethodStore = {
   method: EnumOptionsNode | null;
