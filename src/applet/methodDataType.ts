@@ -1,3 +1,5 @@
+import { IfMethodTypes, SimpleMethodTypes } from '../modelDefinition/newModel';
+
 type descriptionType = {
   symbol: string;
   subscript: string;
@@ -51,7 +53,7 @@ export type methodInputType = methodOutputType | numericInputType | inlineInputT
 export type MethodType = {
   method: {
     values: methodInputType[];
-    state: 'addition' | 'multiplication' | 'subtraction' | 'division' | 'power';
+    state: (typeof SimpleMethodTypes)[number] | (typeof IfMethodTypes)[number];
   };
   state: 'method';
 };

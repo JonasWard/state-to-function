@@ -1,5 +1,5 @@
 import { EnumOptionsNode } from 'url-safe-bitpacking';
-import { InputDefinitionTypes, AvailableMethodsTypes } from '../../modelDefinition/newModel';
+import { InputDefinitionTypes, AvailableMethodsTypes, SimpleMethodTypes } from '../../modelDefinition/newModel';
 import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
 import { SymbolNameType } from '../specificInputs/NameEditor';
 
@@ -24,7 +24,10 @@ export const ShortSymbol: Record<(typeof AvailableMethodsTypes)[number], string>
   multiplication: 'x',
   subtraction: '-',
   division: '÷',
-  power: '^'
+  power: '^',
+  smallerThan: '<',
+  greaterThan: '>',
+  equal: '='
 };
 
 export const JavascriptOperation: Record<(typeof AvailableMethodsTypes)[number], string> = {
@@ -32,7 +35,10 @@ export const JavascriptOperation: Record<(typeof AvailableMethodsTypes)[number],
   multiplication: '*',
   subtraction: '-',
   division: '/',
-  power: '**'
+  power: '**',
+  smallerThan: '<',
+  greaterThan: '>',
+  equal: '==='
 };
 
 export const getOperationForMethod = (node: EnumOptionsNode) => node.descriptor.mapping[node.state] as (typeof AvailableMethodsTypes)[number];

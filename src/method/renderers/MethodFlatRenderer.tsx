@@ -53,11 +53,11 @@ export const MethodFlatRenderer: React.FC<MethodHandlingProps> = (props) => {
       style={{ fontSize: isDesktop ? DESKTOP_SYMBOL_SIZE : MOBILE_SYMBOL_SIZE, cursor: 'pointer' }}
     >
       <MethodValue key={'a'} {...props} node={nodeA} />
-      <MethodOperation {...props} />
+      <MethodOperation {...props} index={0} />
       <MethodValue key={'b'} {...props} node={nodeB} />
       {otherNodes.map((node, i) => (
         <>
-          <MethodOperation {...props} />
+          <MethodOperation {...props} index={i + 1} />
           <MethodValue key={i} {...props} node={node} />
         </>
       ))}

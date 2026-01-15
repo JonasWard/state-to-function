@@ -1,4 +1,5 @@
 import { JavascriptOperation } from '../method/renderers/methodType';
+import { IfMethodTypes } from '../modelDefinition/newModel';
 import {
   methodInputType,
   methodOutputType,
@@ -23,8 +24,20 @@ const parseMethodInputType = (mi: methodInputType) => {
   }
 };
 
+const parseIfMethod = (m: MethodType & { method: { state: (typeof IfMethodTypes)[number] } }) => {
+  try {
+    const [a, b, c, d] = m.method.values.map(parseMethodInputType);
+    return `(${a} ${JavascriptOperation[m.method.state]} ${b} ? ${c} : ${d})`;
+  } catch (e) {
+    console.error(m);
+    return '';
+  }
+};
+
 const parseMethodFlat = (m: MethodType) => {
   try {
+    if (IfMethodTypes.includes(m.method.state as (typeof IfMethodTypes)[number]))
+      return parseIfMethod(m as MethodType & { method: { state: (typeof IfMethodTypes)[number] } });
     return '(' + m.method.values.map(parseMethodInputType).join(JavascriptOperation[m.method.state]) + ')';
   } catch (e) {
     console.error(m);
@@ -59,6 +72,8 @@ export const getMethod = (methodStateData: MethodStateData, variableValues: Reco
   ${allData.join('\n')}
     return ${returnObject};
 }`;
+
+  console.log(fs);
 
   return fs;
 };

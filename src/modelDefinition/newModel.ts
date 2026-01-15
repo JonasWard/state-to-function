@@ -13,7 +13,9 @@ const charsName = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 01234567
 
 export const ArrayMethodTypes = ['addition', 'multiplication'] as const;
 export const PairMethodTypes = ['subtraction', 'division', 'power'] as const;
-export const AvailableMethodsTypes = [...ArrayMethodTypes, ...PairMethodTypes] as const;
+export const IfMethodTypes = ['smallerThan', 'greaterThan', 'equal'] as const;
+export const SimpleMethodTypes = [...ArrayMethodTypes, ...PairMethodTypes] as const;
+export const AvailableMethodsTypes = [...ArrayMethodTypes, ...PairMethodTypes, ...IfMethodTypes] as const;
 
 const hardcodedNumber = DataEntryFactory.ENUM_ARRAY([0], charsHardCodedNumbers, 0, 31, 'inlineInput');
 const symbol = DataEntryFactory.ENUM(0, charsSymbol, 'symbol');
@@ -46,19 +48,26 @@ const floatInputObject = DataEntryFactory.OBJECT([floatValue, floatMin, floatMax
 
 const valuesPair = DataEntryFactory.ARRAY(inputDefinition, 2, 2, 2, 'values');
 const valuesExtended = DataEntryFactory.ARRAY(inputDefinition, 2, 2, 8, 'values');
+const valuesQuad = DataEntryFactory.ARRAY(inputDefinition, 4, 4, 4, 'values');
 
 const addition = DataEntryFactory.OBJECT([valuesExtended], 'addition');
 const multiplication = DataEntryFactory.OBJECT([valuesExtended], 'multiplication');
 const subtraction = DataEntryFactory.OBJECT([valuesPair], 'subtraction');
 const division = DataEntryFactory.OBJECT([valuesPair], 'division');
 const power = DataEntryFactory.OBJECT([valuesPair], 'power');
+const smallerThan = DataEntryFactory.OBJECT([valuesQuad], 'smallerThan');
+const greaterThan = DataEntryFactory.OBJECT([valuesQuad], 'greaterThan');
+const equal = DataEntryFactory.OBJECT([valuesQuad], 'equal');
 
 const methods: Record<(typeof AvailableMethodsTypes)[number], DataEntry> = {
   addition,
   multiplication,
   subtraction,
   division,
-  power
+  power,
+  smallerThan,
+  greaterThan,
+  equal
 };
 
 const availableMethods = Object.values(methods) as ObjectDataEntry[];
