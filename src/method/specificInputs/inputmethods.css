@@ -26,19 +26,6 @@
   transform: translateX(-100svw);
 }
 
-.arrow-icon {
-  font-size: 1.5rem;
-  transition: 0.3s ease-in-out;
-}
-
-.arrow-icon.left {
-  transform: rotate(0deg);
-}
-
-.arrow-icon.right {
-  transform: rotate(-180deg);
-}
-
 .input-column {
   display: flex;
   flex-direction: column;

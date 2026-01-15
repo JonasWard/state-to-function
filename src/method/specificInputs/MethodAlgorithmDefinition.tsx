@@ -7,7 +7,7 @@ import { PlusCircleFilled, DeleteFilled } from '@ant-design/icons';
 import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
 import { SymbolInputs } from '../../Components/inputs/SymbolInputs';
 import { useGlobalUIStore } from '../../state/globalUIStore';
-import { MethodFlatRenderer } from '../../Components/renderers/method/MethodFlatRenderer';
+import { MethodFlatRenderer } from '../renderers/MethodFlatRenderer';
 import { useMethodStore } from '../../state/methodStore';
 import { SymbolNameType } from './NameEditor';
 

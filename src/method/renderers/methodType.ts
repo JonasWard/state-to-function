@@ -1,7 +1,7 @@
 import { EnumOptionsNode } from 'url-safe-bitpacking';
-import { InputDefinitionTypes, AvailableMethodsTypes } from '../../../modelDefinition/newModel';
-import { TNodeUIProps } from '../../../urlBitPacking/nodeProps';
-import { SymbolNameType } from '../../../method/specificInputs/NameEditor';
+import { InputDefinitionTypes, AvailableMethodsTypes } from '../../modelDefinition/newModel';
+import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
+import { SymbolNameType } from '../specificInputs/NameEditor';
 
 export const TypeSymbol: Record<(typeof InputDefinitionTypes)[number], string> = {
   hardcoded: '𝑐',

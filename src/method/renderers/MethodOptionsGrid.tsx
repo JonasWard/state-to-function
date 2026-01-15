@@ -1,6 +1,6 @@
 import React from 'react';
-import { SymbolNameType } from '../../../method/specificInputs/NameEditor';
-import { SymbolRenderer } from '../icon/SymbolRenderer';
+import { SymbolNameType } from '../specificInputs/NameEditor';
+import { SymbolRenderer } from '../../Components/icon/SymbolRenderer';
 import { EnumArrayNode, EnumNode } from 'url-safe-bitpacking';
 
 const Cell: React.FC<{ value: String | SymbolNameType; name: string; activeName: string; onClick: () => void }> = ({

@@ -1,13 +1,13 @@
 import { Button, Checkbox, Popover, Tag } from 'antd';
 import { useMemo } from 'react';
 import { IntNode, EnumArrayNode, EnumOptionsNode } from 'url-safe-bitpacking';
-import { InputDefinitionTypes } from '../../../modelDefinition/newModel';
-import { HardcodedNumber } from '../../inputs/HardcodedNumber';
-import { SymbolRenderer } from '../icon/SymbolRenderer';
+import { InputDefinitionTypes } from '../../modelDefinition/newModel';
+import { HardcodedNumber } from '../../Components/inputs/HardcodedNumber';
+import { SymbolRenderer } from '../../Components/icon/SymbolRenderer';
 import { MethodFlatRenderer } from './MethodFlatRenderer';
 import { MethodHandlingProps, ShortSymbol } from './methodType';
 import React from 'react';
-import { getText } from '../../lib/textHelpers';
+import { getText } from '../../Components/lib/textHelpers';
 import { MethodOptionsGrid } from './MethodOptionsGrid';
 import './method.css';
 

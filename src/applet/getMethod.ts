@@ -1,4 +1,4 @@
-import { JavascriptOperation } from '../Components/renderers/method/methodType';
+import { JavascriptOperation } from '../method/renderers/methodType';
 import {
   methodInputType,
   methodOutputType,

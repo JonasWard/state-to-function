@@ -3,7 +3,7 @@ import { Button, Popover } from 'antd';
 import React, { useMemo } from 'react';
 import { ArrayNode, EnumArrayNode, EnumNode, EnumOptionsNode, ObjectNode, SpecificTypeNode } from 'url-safe-bitpacking';
 import { SpecificNodeUI } from './SpecificNodeUI';
-import { SymbolRenderer, TSymbolProps } from '../../Components/renderers/icon/SymbolRenderer';
+import { SymbolRenderer, TSymbolProps } from '../../Components/icon/SymbolRenderer';
 import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
 import { useMethodStore } from '../../state/methodStore';
 import { useGlobalUIStore } from '../../state/globalUIStore';

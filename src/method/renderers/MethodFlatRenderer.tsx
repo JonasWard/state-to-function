@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ArrayNode, EnumOptionsNode } from 'url-safe-bitpacking';
 import { MethodHandlingProps, getOperationForMethod } from './methodType';
 import { Button } from 'antd';
-import { useGlobalUIStore } from '../../../state/globalUIStore';
+import { useGlobalUIStore } from '../../state/globalUIStore';
 import { MethodValue } from './MethodValue';
 import { MethodOperation } from './MethodOperation';
 

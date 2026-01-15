@@ -1,5 +1,5 @@
 import { Popover } from 'antd';
-import { TSymbolProps, SymbolRenderer } from '../renderers/icon/SymbolRenderer';
+import { TSymbolProps, SymbolRenderer } from '../icon/SymbolRenderer';
 import React from 'react';
 
 export const SymbolInputs: React.FC<

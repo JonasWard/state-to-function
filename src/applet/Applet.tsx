@@ -3,7 +3,7 @@ import { getStateData, ObjectNode } from 'url-safe-bitpacking';
 import { evalMethod } from './getMethod';
 import { getMethodStateData, getStateDataForNumericInputs, getStateNodeForDataString } from './utils';
 import { SpecificNodeUI } from '../method/specificInputs/SpecificNodeUI';
-import { IconRenderer } from '../Components/renderers/icon/IconRenderer';
+import { IconRenderer } from '../Components/icon/IconRenderer';
 import { useAppState } from '../state/appState';
 
 export const Applet: React.FC = () => {
