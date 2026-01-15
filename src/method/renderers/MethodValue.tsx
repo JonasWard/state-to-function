@@ -26,7 +26,7 @@ const MethodGrid: React.FC<TNodeUIProps<EnumOptionsNode>> = ({ node, forceRender
     <MethodOptionsGrid
       values={child.descriptor.mapping.map((method) => ShortSymbol[method])}
       select={(i) => (child.updateState(i), forceRender())}
-      activeName={ShortSymbol[child.descriptor.mapping[child.state]]}
+      activeName={`[${child.state}]`}
       parentName={''}
     />
   );
