@@ -1,4 +1,4 @@
-import { Checkbox, InputNumber, Select } from 'antd';
+import { Checkbox, Select } from 'antd';
 import React from 'react';
 import {
   BooleanNode,
@@ -14,7 +14,6 @@ import {
 } from 'url-safe-bitpacking';
 import { TextInput } from '../Components/TextInput';
 import { GeneralChildrenRenderer, NodeUIProps, TNodeUIProps, WrapperComponentFunction } from './nodeProps';
-import { useGlobalUIStore } from '../state/globalUIStore';
 import { InputNumberWrapper } from '../Components/inputs/InputNumberWrapper';
 
 const nullContent = (

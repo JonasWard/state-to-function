@@ -5,7 +5,7 @@ import { getMethodStateData, getStateDataForNumericInputs, getStateNodeForDataSt
 import { SpecificNodeUI } from '../method/specificInputs/SpecificNodeUI';
 import { IconRenderer } from '../Components/icon/IconRenderer';
 import { useAppState } from '../state/appState';
-import { Checkbox, Descriptions } from 'antd';
+import { Descriptions } from 'antd';
 import { useGlobalUIStore } from '../state/globalUIStore';
 import './applet.css';
 
