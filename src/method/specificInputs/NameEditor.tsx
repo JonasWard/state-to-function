@@ -5,7 +5,6 @@ import { ArrayNode, EnumArrayNode, EnumNode, EnumOptionsNode, ObjectNode, Specif
 import { SpecificNodeUI } from './SpecificNodeUI';
 import { SymbolRenderer, TSymbolProps } from '../../Components/icon/SymbolRenderer';
 import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
-import { useMethodStore } from '../../state/methodStore';
 import { useGlobalUIStore } from '../../state/globalUIStore';
 
 export type NamedInputsArrayContentRenderer = (

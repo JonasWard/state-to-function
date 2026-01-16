@@ -1,5 +1,5 @@
 import React from 'react';
-import { GeneralContentSplitter, GeneralNodeUIRenderer, NodeWithChildrenWrapper } from '../../urlBitPacking/NodeUI';
+import { GeneralContentSplitter, GeneralNodeUIRenderer } from '../../urlBitPacking/NodeUI';
 import { NodeUIProps, WrapperComponentFunction } from '../../urlBitPacking/nodeProps';
 import { EnumArrayNode, EnumOptionsNode, ObjectNode } from 'url-safe-bitpacking';
 import { ROOT_NODE_NAME } from '../../state/c';

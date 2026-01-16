@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ArrayNode, EnumArrayNode, EnumNode, EnumOptionsNode, ObjectNode, SpecificTypeNode } from 'url-safe-bitpacking';
+import { ArrayNode, EnumArrayNode, EnumNode, EnumOptionsNode, ObjectNode } from 'url-safe-bitpacking';
 import { SpecificNodeUI } from './SpecificNodeUI';
 import { Button, Select } from 'antd';
 import './reference-name.css';
