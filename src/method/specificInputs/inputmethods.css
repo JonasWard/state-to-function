@@ -56,13 +56,12 @@
 
 .numeric-input-content.cell {
   grid-template-columns: 1fr;
-  align-self: start;
 }
 
 .method-input-content {
   display: grid;
   gap: 4px;
-  grid-template-columns: auto 1fr 2rem;
+  grid-template-columns: auto 1fr 1.5rem;
   align-items: center;
 }
 

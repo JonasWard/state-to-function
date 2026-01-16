@@ -21,8 +21,10 @@ const NamedInputsArrayEditor: React.FC<
     withSymbol?: boolean;
   }
 > = ({ node, withSymbol = false, ...props }) => {
-  const { numericInputNames, methodInputNames } = useMethodStore();
-  const { isDesktop } = useGlobalUIStore();
+  const numericInputNames = useMethodStore((s) => s.numericInputNames);
+  const methodInputNames = useMethodStore((s) => s.methodInputNames);
+  const isDesktop = useGlobalUIStore((s) => s.isDesktop);
+
   return (
     <div className={`input-column ${isDesktop ? 'desktop' : 'mobile'}`}>
       {isDesktop ? <IconTitle icon={<FunctionOutlined />} title="Method Definitions" size="medium" /> : null}
@@ -63,6 +65,7 @@ const MethodInputEditor: React.FC<
     availableMethodInputs: SymbolNameType[];
   }
 > = ({ node, index, forceRender, remove, canRemove, ...props }) => {
+  const hideNameAndSubscriptInInput = useGlobalUIStore((s) => s.hideNameAndSubscriptInInput);
   const [symbol, subscript, name, content] = useMemo(
     () => node.getChildren() as NamedInputsChildrenType,
     [node.bitstring]
@@ -72,10 +75,12 @@ const MethodInputEditor: React.FC<
     <>
       <SymbolInputs key={`${index}-symbol`} symbol={symbol} forceRender={forceRender} subscript={subscript} />
       <div className="method-input-content cell">
-        <div className="method-input-content name">
-          <SpecificNodeUI key={`${index}-subscript`} node={subscript} forceRender={forceRender} />
-          <SpecificNodeUI key={`${index}-name`} node={name} forceRender={forceRender} />
-        </div>
+        {!hideNameAndSubscriptInInput ? (
+          <div className="method-input-content name">
+            <SpecificNodeUI key={`${index}-subscript`} node={subscript} forceRender={forceRender} />
+            <SpecificNodeUI key={`${index}-name`} node={name} forceRender={forceRender} />
+          </div>
+        ) : null}
         <Popover
           trigger="click"
           content={
@@ -92,7 +97,13 @@ const MethodInputEditor: React.FC<
           </span>
         </Popover>
       </div>
-      <Button key={`${index}-button`} type="text" disabled={!canRemove} onClick={remove} style={{ width: 10 }}>
+      <Button
+        key={`${index}-button`}
+        type="text"
+        disabled={!canRemove}
+        onClick={remove}
+        style={{ height: '100%', paddingLeft: 3, padding: 0 }}
+      >
         <DeleteFilled />
       </Button>
     </>

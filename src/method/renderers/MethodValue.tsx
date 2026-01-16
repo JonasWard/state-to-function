@@ -128,7 +128,7 @@ const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
               }}
             />
           ) : (
-            <Tag color="red">missing</Tag>
+            <Tag color="red">?</Tag>
           )}
         </Button>
       );
@@ -145,7 +145,7 @@ const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
               }}
             />
           ) : (
-            <Tag color="red">missing</Tag>
+            <Tag color="red">?</Tag>
           )}
         </Button>
       );

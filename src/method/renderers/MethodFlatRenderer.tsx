@@ -33,7 +33,7 @@ const AddRemoveTerm: React.FC<{ onAdd?: () => void; onRemove?: () => void }> = (
 );
 
 export const MethodFlatRenderer: React.FC<MethodHandlingProps> = (props) => {
-  const { isDesktop } = useGlobalUIStore();
+  const isDesktop = useGlobalUIStore((s) => s.isDesktop);
 
   const [nodeArray, [nodeA, nodeB, ...otherNodes]] = useMemo(() => {
     const nodeArray = props.node.getChildData()![0] as ArrayNode;
@@ -49,7 +49,7 @@ export const MethodFlatRenderer: React.FC<MethodHandlingProps> = (props) => {
 
   return (
     <div
-      className={`lisp-parent method-flat ${operation} ${isDesktop ? 'desktop' : 'mobile'}`}
+      className={`lisp-parent method-flat ${operation}`}
       style={{ fontSize: isDesktop ? DESKTOP_SYMBOL_SIZE : MOBILE_SYMBOL_SIZE, cursor: 'pointer' }}
     >
       <MethodValue key={'a'} {...props} node={nodeA} />

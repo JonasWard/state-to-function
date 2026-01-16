@@ -16,7 +16,7 @@ const NamedInputsArrayEditor: React.FC<
     withSymbol?: boolean;
   }
 > = ({ node, withSymbol = false, ...props }) => {
-  const { isDesktop } = useGlobalUIStore();
+  const isDesktop = useGlobalUIStore((s) => s.isDesktop);
   return (
     <div className={`input-column ${isDesktop ? 'desktop' : 'mobile'}`}>
       {isDesktop ? <IconTitle icon={<NumberOutlined />} title="Inputs" size="medium" /> : null}
@@ -60,7 +60,8 @@ const NumericInputEditor: React.FC<
     remove: () => void;
   }
 > = ({ node, index, forceRender, remove, canRemove }) => {
-  const { isDesktop, showAdditionalDefinitionInformation } = useGlobalUIStore();
+  const hideNameAndSubscriptInInput = useGlobalUIStore((s) => s.hideNameAndSubscriptInInput);
+  const showAdditionalDefinitionInformation = useGlobalUIStore((s) => s.showAdditionalDefinitionInformation);
 
   const [symbol, subscript, name, content] = useMemo(
     () => node.getChildren() as NamedInputsChildrenType,
@@ -71,7 +72,9 @@ const NumericInputEditor: React.FC<
     <>
       <SymbolInputs key={`${index}-symbol`} symbol={symbol} forceRender={forceRender} subscript={subscript} />
       <div className="numeric-input-content cell">
-        <SpecificNodeUI key={`${index}-subscript`} node={subscript} forceRender={forceRender} />
+        {!hideNameAndSubscriptInInput ? (
+          <SpecificNodeUI key={`${index}-subscript`} node={subscript} forceRender={forceRender} />
+        ) : null}
         <Select
           size="middle"
           options={content.descriptor.mapping.map((d, i) => ({ label: shortSymbol[d], value: i }))}
@@ -80,7 +83,9 @@ const NumericInputEditor: React.FC<
         />
       </div>
       <div className="numeric-input-content cell">
-        <SpecificNodeUI key={`${index}-name`} node={name} forceRender={forceRender} />
+        {!hideNameAndSubscriptInInput ? (
+          <SpecificNodeUI key={`${index}-name`} node={name} forceRender={forceRender} />
+        ) : null}
         <div key="numeric-content" style={{ display: 'flex', flexDirection: 'row', gap: 4, width: '100%' }}>
           {content.getChildData()!.map((child, i) => (
             <SpecificNodeUI key={i} node={child!} forceRender={forceRender} />

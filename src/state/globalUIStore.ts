@@ -13,6 +13,8 @@ type GlobalUIStore = {
   setLoading: (loading: boolean) => void;
   showAdditionalDefinitionInformation: boolean;
   setShowAdditionalDefinitionInformation: (showAdditionalDefinitionInformation: boolean) => void;
+  hideNameAndSubscriptInInput: boolean;
+  setHideNameAndSubscriptInInput: (hideNameAndSubscriptInInput: boolean) => void;
 };
 
 export const useGlobalUIStore = create<GlobalUIStore>((set) => ({
@@ -32,7 +34,9 @@ export const useGlobalUIStore = create<GlobalUIStore>((set) => ({
   setShowNamesInApplet: (showNamesInApplet) => set({ showNamesInApplet }),
   loading: true,
   setLoading: (loading) => set({ loading }),
-  showAdditionalDefinitionInformation: true,
+  showAdditionalDefinitionInformation: false,
   setShowAdditionalDefinitionInformation: (showAdditionalDefinitionInformation) =>
-    set({ showAdditionalDefinitionInformation })
+    set({ showAdditionalDefinitionInformation }),
+  hideNameAndSubscriptInInput: false,
+  setHideNameAndSubscriptInInput: (hideNameAndSubscriptInInput) => set({ hideNameAndSubscriptInInput })
 }));

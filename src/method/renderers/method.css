@@ -26,17 +26,11 @@
 
 .lisp-parent {
   display: flex;
-  gap: 2px;
+  gap: 4px;
   align-items: center;
   padding: -1px 1px;
-  border-radius: 4px;
-  border: 1px solid #e5e5e5;
-}
-
-.lisp-parent.desktop {
-  gap: 4px;
-  padding: 0;
   border-radius: 6px;
+  border: 1px solid #e5e5e5;
 }
 
 .lisp-parent.division {
