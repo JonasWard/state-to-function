@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useAppState } from './state/appState';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Navigation } from './Components/Navigation';
 import React from 'react';
 import { useGlobalUIStore } from './state/globalUIStore';
@@ -68,14 +68,14 @@ export const App: React.FC = () => {
             console.error(e);
             // use the default state string
             useAppState.getState().addAppletStateStringToStack(INITIAL_INPUT_VIEW_STRING);
-            useGlobalUIStore.getState().setUiInFocus(isDesktop ? 'method' : null);
+            useGlobalUIStore.getState().setUiInFocus(isDesktop ? null : 'method');
           }
-        } else useGlobalUIStore.getState().setUiInFocus(isDesktop ? 'method' : null);
+        } else useGlobalUIStore.getState().setUiInFocus(isDesktop ? null : 'method');
       } catch (e) {
         console.error(e);
         // use the default state string
         useAppState.getState().addInputStateStringToStack(INITIAL_INPUT_VIEW_STRING);
-        useGlobalUIStore.getState().setUiInFocus(isDesktop ? 'method' : null);
+        useGlobalUIStore.getState().setUiInFocus(isDesktop ? null : 'method');
       }
     }
 
