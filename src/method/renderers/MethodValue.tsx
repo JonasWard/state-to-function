@@ -60,7 +60,7 @@ export const ValuesGrid: React.FC<MethodHandlingProps> = ({
         parentName={'methodOutput'}
         activeName={activeKey}
       />
-      <IconTitle icon={'𝑐'} title="Hardcoded Value" size="small" />
+      <IconTitle icon={'𝑐'} title="Constant" size="small" />
       <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Checkbox
           checked={node.descriptor.mapping[node.state] === 'hardcoded'}

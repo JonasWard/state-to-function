@@ -5,13 +5,7 @@ import type { SegmentedOptions } from 'antd/es/segmented';
 import './navigation.css';
 import { UndoRedoButtons } from '../applet/UndoRedoButtons';
 import { SettingsComponent } from './settings/Settings';
-import {
-  QuestionOutlined,
-  FormOutlined,
-  CalculatorOutlined,
-  NumberOutlined,
-  FunctionOutlined
-} from '@ant-design/icons';
+import { QuestionOutlined, FormOutlined, SignatureOutlined, NumberOutlined, FunctionOutlined } from '@ant-design/icons';
 
 const SegmentWithIcon: React.FC<{ icon: React.ReactNode; text: string }> = ({ icon, text }) => {
   const isDesktop = useGlobalUIStore((s) => s.isDesktop);
@@ -30,14 +24,14 @@ const NavigationComponent: React.FC = () => {
   const desktopOptions: SegmentedOptions = [
     { label: <SegmentWithIcon icon={<QuestionOutlined />} text="Help" />, value: 'help' },
     { label: <SegmentWithIcon icon={<FormOutlined />} text="Definitions" />, value: 'null' },
-    { label: <SegmentWithIcon icon={<CalculatorOutlined />} text="Applet" />, value: 'applet' }
+    { label: <SegmentWithIcon icon={<SignatureOutlined />} text="Applet" />, value: 'applet' }
   ];
 
   const mobileOptions: SegmentedOptions = [
     { label: <SegmentWithIcon icon={<QuestionOutlined />} text="Help" />, value: 'help' },
     { label: <SegmentWithIcon icon={<NumberOutlined />} text="Inputs" />, value: 'numeric' },
     { label: <SegmentWithIcon icon={<FunctionOutlined />} text="Methods" />, value: 'method' },
-    { label: <SegmentWithIcon icon={<CalculatorOutlined />} text="Applet" />, value: 'applet' }
+    { label: <SegmentWithIcon icon={<SignatureOutlined />} text="Applet" />, value: 'applet' }
   ];
 
   const options = isDesktop ? desktopOptions : mobileOptions;

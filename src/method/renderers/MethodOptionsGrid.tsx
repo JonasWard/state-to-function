@@ -3,12 +3,12 @@ import { SymbolNameType } from '../specificInputs/NameEditor';
 import { SymbolRenderer } from '../../Components/icon/SymbolRenderer';
 import { EnumArrayNode, EnumNode } from 'url-safe-bitpacking';
 import { IconTitle } from '../../Components/icon/IconTitle';
-import { NumberOutlined, FunctionOutlined } from '@ant-design/icons';
+import { NumberOutlined, FunctionOutlined, CalculatorOutlined } from '@ant-design/icons';
 import { InputDefinitionTypes } from '../../modelDefinition/newModel';
 
 const nameKeyMapIcon: Record<(typeof InputDefinitionTypes)[number], React.ReactNode> = {
   numericInput: <NumberOutlined />,
-  methodOutput: '=',
+  methodOutput: <CalculatorOutlined />,
   hardcoded: '𝑐',
   method: <FunctionOutlined />
 };
@@ -16,7 +16,7 @@ const nameKeyMapIcon: Record<(typeof InputDefinitionTypes)[number], React.ReactN
 const nameKeyMap: Record<(typeof InputDefinitionTypes)[number], string> = {
   numericInput: 'Inputs',
   methodOutput: 'Method Outputs',
-  hardcoded: 'Hardcoded',
+  hardcoded: 'Contant',
   method: 'Method Operation'
 };
 

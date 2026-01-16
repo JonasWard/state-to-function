@@ -1,7 +1,13 @@
 import React from 'react';
 import './help.css';
 import { useGlobalUIStore } from '../state/globalUIStore';
-import { CalculatorOutlined, FormOutlined, FunctionOutlined, NumberOutlined } from '@ant-design/icons';
+import {
+  CalculatorOutlined,
+  FormOutlined,
+  FunctionOutlined,
+  NumberOutlined,
+  SignatureOutlined
+} from '@ant-design/icons';
 import { IconTitle } from './icon/IconTitle';
 
 const NumericInputDefinition: React.FC = () => {
@@ -9,21 +15,22 @@ const NumericInputDefinition: React.FC = () => {
     <div>
       <IconTitle icon={<NumberOutlined />} title="Inputs" size="large" />
       <p>
-        All inputs have a symbol, optionally you can add a subscript and a name. In the methods page you will be able to
-        select the correct input based on its symbol (and optional subscript). There are three types of inputs that you
-        can choose from: <b>Hardcoded</b> constants, <b>Integer</b> (without decimal), <b>Float</b> (decimal numbers)
+        All <b>Inputs</b> have a symbol, this symbol is used to identify that input. Optionally you can add a subscript
+        and a name. In the methods page you will be able to select these inputs as input variables. There are three
+        types of inputs that you can choose from: <b>Constants</b>, <b>Integer</b> (without decimal), <b>Float</b>{' '}
+        (decimal numbers)
       </p>
-      <IconTitle icon="𝑐" title="Hardcoded" size="large" />
-
+      <IconTitle icon="𝑐" title="Constants" size="middle" />
       <p>
-        Hardcoded inputs are constants that are not calculated. They are defined by a single value. Use them for values
-        like <b>π</b>, <b>e</b> or whatever other recurring constants you might need in your calculations.
+        Constants are defined ones. Use them to represent values you need to use multiple times or might have to change
+        in the future but are otherwise considered as constant. Typical examples could be <b>π</b> or <b>e</b> for
+        example.
       </p>
-      <IconTitle icon="ℤ | ℝ" title="Integers & Floats" size="large" />
+      <IconTitle icon="ℤ | ℝ" title="Integers & Floats" size="middle" />
       <p>
-        Integers & Floats are variables. In the inputs you defined the minimum and maximum allowed values for these
-        variables that will be able to be inputted in the applet. You are also expected to define a default value (the
-        middel value) which is the value the apple will use by default.
+        Integers & Floats are variables that are assumed to be able to change, though within a specific range. In the
+        applet you will be able to set the precise value. In the inputs menu you define besides the minimum and maximum
+        also the default value (standard value which will be used in the applet).
       </p>
     </div>
   );
@@ -34,20 +41,34 @@ const MethodDefinition: React.FC = () => {
     <div>
       <IconTitle icon={<FunctionOutlined />} title="Methods" size="large" />
       <p>
-        Methods are the formula. For each method you can define which operation should be used. For now addition{' '}
-        <b>(+)</b>,subtraction <b>(x)</b>, multiplication <b>(-)</b>, division <b>(÷)</b>, power <b>(^)</b> greater than{' '}
-        <b>({'<'})</b>,smaller than <b>({'>'})</b>, equal <b>(=)</b> are defined. Each method has to be assigned
-        specific variables. These variables are either hardcoded in-line constants, previously defined Inputs, results
-        of previous methods or even another (nested) method. Each individual method is indicated by an outline.
+        The methods are the different formulas defined. Formulas are certain operations applied onto a given amount of
+        variables. Variables can be hardcoded in-line <b>Constant</b>, defined <b>Inputs</b>, results of other{' '}
+        <b>Method Output</b> or another <b>Method</b>. You can recognise (sub)methods by an outline surrounding it.
       </p>
-      <p>
-        The addition and multiplication need to have at least two variables but can be assigned up to 8 variables. By
-        clicking the plus button at the end of the method.
+      <IconTitle icon={<CalculatorOutlined />} title="Operations" size="middle" />
+      <div className="icon-list">
+        <b>+</b> addition
+        <b>x</b> multiplication
+      </div>
+      <p style={{ margin: '12px 0' }}>
+        The addition and multiplication need to have at least two variables but can have up to 8 variables. By clicking
+        the plus and minus buttons at the end of the method, you can add or remove variables.
       </p>
-      <p>The subtraction, division, and power operations can only have two variables.</p>
-      <p>
-        The greater than, smaller than, have for variables. The first and second variables are compared, the third
-        variable is the result if the comparison is true, the fourth variable is the result if the comparison is false.
+      <div className="icon-list">
+        <b>-</b> subtraction
+        <b>÷</b> division
+        <b>^</b> power
+      </div>
+      <p style={{ margin: '12px 0' }}>The subtraction, division, and power operations can only have two variables.</p>
+      <div className="icon-list">
+        <b>{'<'}</b> smaller than
+        <b>{'>'}</b> greater than
+        <b>=</b> equal
+      </div>
+      <p style={{ margin: '12px 0' }}>
+        The greater than, smaller than, have four variables. The first and second variables are compared, the third
+        variable will be returned if the result of the comparison is true, the fourth variable is returned when the
+        result of the comparison is false.
       </p>
     </div>
   );
@@ -56,11 +77,16 @@ const MethodDefinition: React.FC = () => {
 const AppletDefinition: React.FC = () => {
   return (
     <div>
-      <IconTitle icon={<CalculatorOutlined />} title="Applet" size="large" />
+      <IconTitle icon={<SignatureOutlined />} title="Applet" size="large" />
       <p>
-        The applet page shows the variable inputs defined under the Inputs. By default the values will be the default
-        values assigned in the inputs but you can input any value within the range you have defined. The applet also
-        displays the results of all the methods you have defined under the Methods.
+        At the top of the apple the variable inputs (Integers & Floats) that you defined at the <b>Inputs</b> menu are
+        shown. Unless you are loading a previous state (using url) the values will be the default values assigned in the
+        <b>Inputs</b> menu. The minimum and maximum values of these inputs are also taken over from the <b>Inputs</b>{' '}
+        menu.
+      </p>
+      <p>
+        On the bottom of the applet the outputs of all the <b>Methods</b> are shown. In case there would be an invalid{' '}
+        inputs or outpts, all the outputs will be shown as <b>NaN</b>.
       </p>
     </div>
   );
@@ -74,7 +100,7 @@ const DesktopDefinition: React.FC = () => (
       <p>
         The <b>Definition</b> page
       </p>
-      <CalculatorOutlined />
+      <SignatureOutlined />
       <p>
         The <b>Applet</b> page
       </p>
@@ -113,7 +139,6 @@ const MobileDefinition: React.FC = () => (
     </div>
     <NumericInputDefinition />
     <MethodDefinition />
-    <AppletDefinition />
   </>
 );
 
@@ -129,6 +154,7 @@ export const Help: React.FC = () => {
       </p>
       <h2>Quick Intro</h2>
       {isDesktop ? <DesktopDefinition /> : <MobileDefinition />}
+      <AppletDefinition />
     </div>
   );
 };

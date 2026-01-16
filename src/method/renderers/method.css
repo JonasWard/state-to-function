@@ -28,7 +28,6 @@
   display: flex;
   gap: 4px;
   align-items: center;
-  padding: -1px 1px;
   border-radius: 6px;
   border: 1px solid #e5e5e5;
 }

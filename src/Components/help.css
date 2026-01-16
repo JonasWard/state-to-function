@@ -44,6 +44,12 @@
   margin: .5rem 0 .25rem 0 ;
 }
 
+.help-icon-title.middle {
+  font-size: 1.25rem;
+  gap: .25rem .75rem;
+  margin: 1.1rem 0 .85rem 0 ;
+}
+
 .help-icon-title.large {
   font-size: 1.5rem;
   gap: .25rem 1.0rem;
