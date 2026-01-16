@@ -53,7 +53,7 @@ const MethodDefinition: React.FC = () => {
 const AppletDefinition: React.FC = () => {
   return (
     <div>
-      <h4>Applet (Results)</h4>
+      <h4>Applet</h4>
       <p>
         The applet page shows the variable inputs defined under the Inputs. By default the values will be the default
         values assigned in the inputs but you can input any value within the range you have defined. The applet also

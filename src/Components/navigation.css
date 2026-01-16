@@ -13,10 +13,19 @@
 }
 
 .navigation-header {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.25rem .5rem;
+}
+
+.navigation-header.bar {
   background-color: #fafafa;
   border-bottom: 1px solid #e8e8e8;
+}
+
+.navigation-header.content {
+  padding: 0.25rem .5rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
