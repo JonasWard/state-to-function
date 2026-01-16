@@ -12,11 +12,19 @@ export const UndoRedoButtons: React.FC = () => {
   const uiInFocus = useGlobalUIStore((s) => s.uiInFocus);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 2,
+        opacity: uiInFocus === 'help' ? 0 : 1,
+        transition: 'all 0.3s'
+      }}
+    >
       <Button
         type="text"
         size="small"
-        disabled={!(uiInFocus === 'applet' ? canUndoApplet : canUndoInput)}
+        disabled={uiInFocus === 'help' || !(uiInFocus === 'applet' ? canUndoApplet : canUndoInput)}
         onClick={() =>
           useGlobalUIStore.getState().uiInFocus === 'applet'
             ? useAppState.getState().undoAppletStateString()
@@ -28,7 +36,7 @@ export const UndoRedoButtons: React.FC = () => {
       <Button
         type="text"
         size="small"
-        disabled={!(uiInFocus === 'applet' ? canRedoApplet : canRedoInput)}
+        disabled={uiInFocus === 'help' || !(uiInFocus === 'applet' ? canRedoApplet : canRedoInput)}
         onClick={() =>
           useGlobalUIStore.getState().uiInFocus === 'applet'
             ? useAppState.getState().redoAppletStateString()

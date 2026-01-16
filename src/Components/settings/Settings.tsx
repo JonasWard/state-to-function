@@ -14,13 +14,13 @@ export const SettingsComponent: React.FC = () => {
       placement="bottomRight"
       trigger="click"
       content={
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 200 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {uiInFocus === 'applet' && <ShowNamesInAppletCheckbox />}
           {uiInFocus !== 'applet' && <ShowAdditionalDefinitionInformation />}
         </div>
       }
     >
-      <Button icon={<SettingOutlined />} />
+      <Button type="text" icon={<SettingOutlined />} />
     </Popover>
   );
 };

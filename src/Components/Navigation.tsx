@@ -32,7 +32,7 @@ const NavigationComponent: React.FC = () => {
     <header className="navigation-header">
       <Segmented options={options} value={currentValue} onChange={handleChange} size="small" />
       <div style={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
-        {uiInFocus !== 'help' ? <UndoRedoButtons /> : null}
+        <UndoRedoButtons />
         <SettingsComponent />
       </div>
     </header>
@@ -42,6 +42,6 @@ const NavigationComponent: React.FC = () => {
 export const Navigation: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="navigation-wrapper">
     <NavigationComponent />
-    {children}
+    <div className="navigation-content">{children}</div>
   </div>
 );

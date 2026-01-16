@@ -7,11 +7,9 @@ export const ShowNamesInAppletCheckbox: React.FC = () => {
 
   return (
     <Checkbox
-      style={{ position: 'fixed', right: 10, top: 13 }}
       checked={showNamesInApplet}
       onChange={() => setShowNamesInApplet(!showNamesInApplet)}
-    >
-      Names
-    </Checkbox>
+      children={'Show Names in Applet'}
+    />
   );
 };

@@ -32,7 +32,7 @@ export const useGlobalUIStore = create<GlobalUIStore>((set) => ({
   setShowNamesInApplet: (showNamesInApplet) => set({ showNamesInApplet }),
   loading: true,
   setLoading: (loading) => set({ loading }),
-  showAdditionalDefinitionInformation: false,
+  showAdditionalDefinitionInformation: true,
   setShowAdditionalDefinitionInformation: (showAdditionalDefinitionInformation) =>
     set({ showAdditionalDefinitionInformation })
 }));

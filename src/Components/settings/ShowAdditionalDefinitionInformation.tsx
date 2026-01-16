@@ -7,11 +7,9 @@ export const ShowAdditionalDefinitionInformation: React.FC = () => {
 
   return (
     <Checkbox
-      style={{ position: 'fixed', right: 10, top: 13 }}
       checked={showAdditionalDefinitionInformation}
       onChange={() => setShowAdditionalDefinitionInformation(!showAdditionalDefinitionInformation)}
-    >
-      Additional Definition Information
-    </Checkbox>
+      children={'Show Helper Info'}
+    />
   );
 };

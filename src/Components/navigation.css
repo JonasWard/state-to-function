@@ -1,8 +1,21 @@
+
+.navigation-wrapper {
+  position: relative;
+  display: flex;
+  max-height: 100svh;
+  width: 100svw;
+  flex-direction: column;
+}
+
+.navigation-content {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .navigation-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 auto;
   padding: 0.25rem .5rem;
   background-color: #fafafa;
   border-bottom: 1px solid #e8e8e8;

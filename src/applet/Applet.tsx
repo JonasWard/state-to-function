@@ -50,7 +50,6 @@ export const Applet: React.FC = () => {
       <Descriptions
         style={{ margin: 16 }}
         size="small"
-        title="Inputs"
         bordered
         colon={false}
         items={stateNode.current.getChildren()!.map((c, key) => ({

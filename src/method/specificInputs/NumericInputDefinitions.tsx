@@ -60,7 +60,7 @@ const NumericInputEditor: React.FC<
     remove: () => void;
   }
 > = ({ node, index, forceRender, remove, canRemove }) => {
-  const { isDesktop } = useGlobalUIStore();
+  const { isDesktop, showAdditionalDefinitionInformation } = useGlobalUIStore();
 
   const [symbol, subscript, name, content] = useMemo(
     () => node.getChildren() as NamedInputsChildrenType,
@@ -86,7 +86,7 @@ const NumericInputEditor: React.FC<
             <SpecificNodeUI key={i} node={child!} forceRender={forceRender} />
           ))}
         </div>
-        {content.descriptor.mapping[content.state] !== 'hardcoded' ? (
+        {content.descriptor.mapping[content.state] !== 'hardcoded' && showAdditionalDefinitionInformation ? (
           <div
             key="numeric-content-info"
             style={{
