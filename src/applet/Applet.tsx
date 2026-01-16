@@ -14,7 +14,6 @@ export const Applet: React.FC = () => {
   const base64AppletStateString = useAppState((s) => s.base64AppletStateString);
   const isDesktop = useGlobalUIStore((s) => s.isDesktop);
   const showNamesInApplet = useGlobalUIStore((s) => s.showNamesInApplet);
-  const setShowNamesInApplet = useGlobalUIStore((s) => s.setShowNamesInApplet);
 
   const methodStateData = useMemo(() => getMethodStateData(base64InputStateString!), [base64InputStateString]);
   const { dataEntries, indexMapping } = useMemo(
@@ -46,9 +45,9 @@ export const Applet: React.FC = () => {
   const currentResult = useMemo(() => evalMethod(methodStateData, variableValues), [methodStateData, variableValues]);
 
   return (
-    <div style={{ width: '100svw', transition: '0.3s ease-in-out' }}>
+    <div style={{ maxWidth: 'min(100svw - 2rem, 800px)', margin: '0 auto' }}>
       <Descriptions
-        style={{ margin: 16 }}
+        style={{ margin: '1rem 0' }}
         size="small"
         bordered
         colon={false}
@@ -85,7 +84,7 @@ export const Applet: React.FC = () => {
         }))}
       />
       <Descriptions
-        style={{ margin: 16 }}
+        style={{ margin: '1rem 0' }}
         bordered
         size="small"
         title="Results"
