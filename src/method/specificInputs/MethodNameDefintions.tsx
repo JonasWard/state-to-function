@@ -12,7 +12,6 @@ export const MethodInputsArray: React.FC<TNodeUIProps<ArrayNode>> = (props) => {
   return (
     <NamedInputsArrayEditor
       withSymbol
-      name="Method Inputs"
       contentRenderer={(content, index, _forceRender, children) => {
         const [symbol, subscript] = children as NamedInputsChildrenType;
 

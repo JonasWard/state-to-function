@@ -2,6 +2,23 @@ import React from 'react';
 import { SymbolNameType } from '../specificInputs/NameEditor';
 import { SymbolRenderer } from '../../Components/icon/SymbolRenderer';
 import { EnumArrayNode, EnumNode } from 'url-safe-bitpacking';
+import { IconTitle } from '../../Components/icon/IconTitle';
+import { NumberOutlined, FunctionOutlined } from '@ant-design/icons';
+import { InputDefinitionTypes } from '../../modelDefinition/newModel';
+
+const nameKeyMapIcon: Record<(typeof InputDefinitionTypes)[number], React.ReactNode> = {
+  numericInput: <NumberOutlined />,
+  methodOutput: '=',
+  hardcoded: '𝑐',
+  method: <FunctionOutlined />
+};
+
+const nameKeyMap: Record<(typeof InputDefinitionTypes)[number], string> = {
+  numericInput: 'Inputs',
+  methodOutput: 'Method Outputs',
+  hardcoded: 'Hardcoded',
+  method: 'Method Operation'
+};
 
 const Cell: React.FC<{ value: String | SymbolNameType; name: string; activeName: string; onClick: () => void }> = ({
   value,
@@ -36,15 +53,21 @@ const DefaultCellRenderer: CellRendererType<SymbolNameType> = (value, index, act
 export const MethodOptionsGrid: React.FC<{
   values: string[] | SymbolNameType[];
   select: (i: number) => void;
-  parentName: string;
+  parentName: (typeof InputDefinitionTypes)[number];
   activeName: string;
   cellRenderer?: CellRendererType<SymbolNameType>;
 }> = ({ values, select, parentName, activeName, cellRenderer = DefaultCellRenderer }) =>
   values.length > 0 ? (
     <>
-      <span>{parentName}</span>
+      <IconTitle
+        icon={nameKeyMapIcon[parentName as (typeof InputDefinitionTypes)[number]]}
+        title={nameKeyMap[parentName as (typeof InputDefinitionTypes)[number]]}
+        size="small"
+      />
       <div className="symbol-editor">
-        {values.map((sn, index) => cellRenderer(sn, index, activeName, parentName, select))}
+        {values.map((sn, index) =>
+          cellRenderer(sn, index, activeName, parentName === 'method' ? '' : parentName, select)
+        )}
       </div>
     </>
   ) : null;

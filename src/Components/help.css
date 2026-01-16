@@ -11,6 +11,41 @@
   height: 100%;
   overflow-y: clip;
   padding: 0;
-  margin: 0.2rem;
+  margin: 0.2rem 0;
   text-align: justify;
+}
+
+.icon-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .25rem 1rem;
+  margin: 0.4rem 0 0 .5rem;
+}
+
+.icon-list p {
+  margin: 0;
+}
+
+.help-icon-title {
+  font-size: .9rem;
+  font-weight: bold;
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.help-icon-title.small {
+  gap: .25rem;
+  margin: 0;
+}
+
+.help-icon-title.medium {
+  font-size: 1.05rem;
+  gap: .25rem .5rem;
+  margin: .5rem 0 .25rem 0 ;
+}
+
+.help-icon-title.large {
+  font-size: 1.5rem;
+  gap: .25rem 1.0rem;
+  margin: 1.5rem 0 1.25rem 0 ;
 }

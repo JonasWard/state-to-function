@@ -3,23 +3,23 @@ import { ArrayNode, EnumArrayNode, EnumNode, EnumOptionsNode, ObjectNode } from 
 import { SpecificNodeUI } from './SpecificNodeUI';
 import { Button, Select } from 'antd';
 import './reference-name.css';
-import { PlusCircleFilled, DeleteFilled } from '@ant-design/icons';
+import { PlusCircleFilled, DeleteFilled, NumberOutlined } from '@ant-design/icons';
 import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
 import { SymbolInputs } from '../../Components/inputs/SymbolInputs';
 import { useGlobalUIStore } from '../../state/globalUIStore';
+import { IconTitle } from '../../Components/icon/IconTitle';
 
 type NamedInputsChildrenType = [EnumNode, EnumArrayNode, EnumArrayNode, EnumOptionsNode];
 
 const NamedInputsArrayEditor: React.FC<
   TNodeUIProps<ArrayNode> & {
-    name: string;
     withSymbol?: boolean;
   }
-> = ({ node, name, withSymbol = false, ...props }) => {
+> = ({ node, withSymbol = false, ...props }) => {
   const { isDesktop } = useGlobalUIStore();
   return (
     <div className={`input-column ${isDesktop ? 'desktop' : 'mobile'}`}>
-      <span style={{ height: 32, display: 'flex', alignItems: 'center', fontWeight: 'bold' }}>{name}</span>
+      {isDesktop ? <IconTitle icon={<NumberOutlined />} title="Inputs" size="medium" /> : null}
       <div className={`numeric-input-content ${isDesktop ? 'desktop' : 'mobile'}`}>
         {node.getChildren().map((child, i) => (
           <NumericInputEditor
@@ -73,7 +73,7 @@ const NumericInputEditor: React.FC<
       <div className="numeric-input-content cell">
         <SpecificNodeUI key={`${index}-subscript`} node={subscript} forceRender={forceRender} />
         <Select
-          size={isDesktop ? 'middle' : 'small'}
+          size="middle"
           options={content.descriptor.mapping.map((d, i) => ({ label: shortSymbol[d], value: i }))}
           value={content.state}
           onChange={(v) => (content.updateState(v), forceRender())}
@@ -113,6 +113,7 @@ const NumericInputEditor: React.FC<
   );
 };
 
-export const NumericInputDefinitions: React.FC<{ node: ArrayNode; forceRender: () => void }> = ({ node, forceRender }) => (
-  <NamedInputsArrayEditor node={node} name="Input Definitions" forceRender={forceRender} />
-);
+export const NumericInputDefinitions: React.FC<{ node: ArrayNode; forceRender: () => void }> = ({
+  node,
+  forceRender
+}) => <NamedInputsArrayEditor node={node} forceRender={forceRender} />;

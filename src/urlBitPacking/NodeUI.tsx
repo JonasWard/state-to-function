@@ -78,7 +78,7 @@ export const GeneralContentSplitter = (
     case 'VERSION':
       return (
         <Select
-          size={isDesktop ? 'middle' : 'small'}
+          size="middle"
           options={Array.from({ length: 2 ** (node as VersionNode).descriptor.bits }, (_, i) => ({
             label: i,
             value: i
@@ -97,7 +97,7 @@ export const GeneralContentSplitter = (
     case 'ENUM':
       return (
         <Select
-          size={isDesktop ? 'middle' : 'small'}
+          size="middle"
           options={(node as EnumNode).descriptor.mapping.map((label, value) => ({ label, value }))}
           value={(node as EnumNode).value}
           onChange={(v) => ((node as EnumNode).updateValue(v), forceRender())}
@@ -106,7 +106,7 @@ export const GeneralContentSplitter = (
     case 'INT':
       return (
         <InputNumberWrapper
-          size={isDesktop ? 'middle' : 'small'}
+          size="middle"
           style={{ minWidth: '40px', width: '100%' }}
           value={(node as IntNode).value}
           onChange={(v) => (
@@ -121,7 +121,7 @@ export const GeneralContentSplitter = (
     case 'FLOAT':
       return (
         <InputNumberWrapper
-          size={isDesktop ? 'middle' : 'small'}
+          size="middle"
           style={{ minWidth: '40px', width: '100%' }}
           value={(node as FloatNode).value}
           onChange={(v) => (
@@ -156,7 +156,7 @@ export const GeneralContentSplitter = (
           forceRender={forceRender}
           stateChange={
             <Select
-              size={isDesktop ? 'middle' : 'small'}
+              size="middle"
               options={(node as EnumOptionsNode).descriptor.mapping.map((d, i) => ({ label: d, value: i }))}
               value={(node as EnumOptionsNode).state}
               onChange={(v) => ((node as EnumOptionsNode).updateState(v), forceRender())}
@@ -172,7 +172,7 @@ export const GeneralContentSplitter = (
           forceRender={forceRender}
           stateChange={
             <Select
-              size={isDesktop ? 'middle' : 'small'}
+              size="middle"
               options={Array.from({
                 length: (node as ArrayNode).descriptor.maxCount - (node as ArrayNode).descriptor.minCount
               }).map((_, i) => ({

@@ -1,22 +1,25 @@
 import React from 'react';
 import './help.css';
 import { useGlobalUIStore } from '../state/globalUIStore';
+import { CalculatorOutlined, FormOutlined, FunctionOutlined, NumberOutlined } from '@ant-design/icons';
+import { IconTitle } from './icon/IconTitle';
 
 const NumericInputDefinition: React.FC = () => {
   return (
     <div>
-      <h4>Inputs (Numeric)</h4>
+      <IconTitle icon={<NumberOutlined />} title="Inputs" size="large" />
       <p>
         All inputs have a symbol, optionally you can add a subscript and a name. In the methods page you will be able to
         select the correct input based on its symbol (and optional subscript). There are three types of inputs that you
         can choose from: <b>Hardcoded</b> constants, <b>Integer</b> (without decimal), <b>Float</b> (decimal numbers)
       </p>
-      <h5>Hardcoded</h5>
+      <IconTitle icon="𝑐" title="Hardcoded" size="large" />
+
       <p>
         Hardcoded inputs are constants that are not calculated. They are defined by a single value. Use them for values
         like <b>π</b>, <b>e</b> or whatever other recurring constants you might need in your calculations.
       </p>
-      <h5>Integers & Floats</h5>
+      <IconTitle icon="ℤ | ℝ" title="Integers & Floats" size="large" />
       <p>
         Integers & Floats are variables. In the inputs you defined the minimum and maximum allowed values for these
         variables that will be able to be inputted in the applet. You are also expected to define a default value (the
@@ -29,7 +32,7 @@ const NumericInputDefinition: React.FC = () => {
 const MethodDefinition: React.FC = () => {
   return (
     <div>
-      <h4>Methods (Formulas)</h4>
+      <IconTitle icon={<FunctionOutlined />} title="Methods" size="large" />
       <p>
         Methods are the formula. For each method you can define which operation should be used. For now addition{' '}
         <b>(+)</b>,subtraction <b>(x)</b>, multiplication <b>(-)</b>, division <b>(÷)</b>, power <b>(^)</b> greater than{' '}
@@ -53,7 +56,7 @@ const MethodDefinition: React.FC = () => {
 const AppletDefinition: React.FC = () => {
   return (
     <div>
-      <h4>Applet</h4>
+      <IconTitle icon={<CalculatorOutlined />} title="Applet" size="large" />
       <p>
         The applet page shows the variable inputs defined under the Inputs. By default the values will be the default
         values assigned in the inputs but you can input any value within the range you have defined. The applet also
@@ -66,19 +69,25 @@ const AppletDefinition: React.FC = () => {
 const DesktopDefinition: React.FC = () => (
   <>
     <p>The app is composed of two pages</p>
+    <div className="icon-list">
+      <FormOutlined />
+      <p>
+        The <b>Definition</b> page
+      </p>
+      <CalculatorOutlined />
+      <p>
+        The <b>Applet</b> page
+      </p>
+    </div>
+    <IconTitle icon={<FormOutlined />} title="Definition" size="large" />
     <p>
-      1. The <b>Definition</b> page
-    </p>
-    <p>
-      2. The <b>Applet</b> page
-    </p>
-    <h2>Definition</h2>
-    <p>
-      The definition page has two sub-parts:
-      <ul>
-        <li>Inputs</li>
-        <li>Methods</li>
-      </ul>
+      The definition page has two sub-parts
+      <div className="icon-list">
+        <NumberOutlined />
+        <b>Inputs</b>
+        <FunctionOutlined />
+        <b>Methods</b>
+      </div>
       <NumericInputDefinition />
       <MethodDefinition />
     </p>
@@ -88,15 +97,20 @@ const DesktopDefinition: React.FC = () => (
 const MobileDefinition: React.FC = () => (
   <>
     <p>The app is composed of three pages</p>
-    <p>
-      1. The <b>Inputs</b> page
-    </p>
-    <p>
-      2. The <b>Methods</b> page
-    </p>
-    <p>
-      3. The <b>Applet</b> page
-    </p>
+    <div className="icon-list">
+      <NumberOutlined />
+      <p>
+        The <b>Inputs</b> page
+      </p>
+      <FunctionOutlined />
+      <p>
+        The <b>Methods</b> page
+      </p>
+      <CalculatorOutlined />
+      <p>
+        The <b>Applet</b> page
+      </p>
+    </div>
     <NumericInputDefinition />
     <MethodDefinition />
     <AppletDefinition />
@@ -107,7 +121,7 @@ export const Help: React.FC = () => {
   const isDesktop = useGlobalUIStore((s) => s.isDesktop);
   return (
     <div className="help-container">
-      <h1>Welcome to State-to-Function</h1>
+      <h1>State-to-Function</h1>
       <p>
         This is a simple app that allows you to create excel-like formulas, visualise them as a little applet and store
         them in the browser url. No backend, no database, no tracking, no cookies, no ads, no nonsense. Simply bookmark

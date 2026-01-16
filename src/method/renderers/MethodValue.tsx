@@ -11,13 +11,8 @@ import { getText } from '../../Components/lib/textHelpers';
 import { MethodOptionsGrid } from './MethodOptionsGrid';
 import './method.css';
 import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
-
-const nameKeyMap: Record<(typeof InputDefinitionTypes)[number], string> = {
-  numericInput: 'Numeric Inputs',
-  methodOutput: 'Method Outputs',
-  hardcoded: 'Hardcoded Value',
-  method: 'Method'
-};
+import { IconTitle } from '../../Components/icon/IconTitle';
+import { FunctionOutlined } from '@ant-design/icons';
 
 const MethodGrid: React.FC<TNodeUIProps<EnumOptionsNode>> = ({ node, forceRender }) => {
   const child = node.getChildData()![0] as EnumOptionsNode;
@@ -27,7 +22,7 @@ const MethodGrid: React.FC<TNodeUIProps<EnumOptionsNode>> = ({ node, forceRender
       values={child.descriptor.mapping.map((method) => ShortSymbol[method])}
       select={(i) => (child.updateState(i), forceRender())}
       activeName={`[${child.state}]`}
-      parentName={''}
+      parentName={'method'}
     />
   );
 };
@@ -52,7 +47,7 @@ export const ValuesGrid: React.FC<MethodHandlingProps> = ({
           (node.getChildData()![0] as IntNode).updateValue(i),
           forceRender()
         )}
-        parentName={nameKeyMap.numericInput}
+        parentName={'numericInput'}
         activeName={activeKey}
       />
       <MethodOptionsGrid
@@ -62,10 +57,10 @@ export const ValuesGrid: React.FC<MethodHandlingProps> = ({
           (node.getChildData()![0] as IntNode).updateValue(i),
           forceRender()
         )}
-        parentName={nameKeyMap.methodOutput}
+        parentName={'methodOutput'}
         activeName={activeKey}
       />
-      {nameKeyMap.hardcoded}
+      <IconTitle icon={'𝑐'} title="Hardcoded Value" size="small" />
       <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Checkbox
           checked={node.descriptor.mapping[node.state] === 'hardcoded'}
@@ -82,7 +77,7 @@ export const ValuesGrid: React.FC<MethodHandlingProps> = ({
           <HardcodedNumber size="small" node={node.getChildData()![0] as EnumArrayNode} forceRender={forceRender} />
         ) : null}
       </span>
-      {nameKeyMap.method}
+      <IconTitle icon={<FunctionOutlined />} title="Method Operation" size="small" />
       <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Checkbox
           checked={node.descriptor.mapping[node.state] === 'method'}
@@ -109,7 +104,7 @@ const getOptionValue = (node: EnumOptionsNode) => {
       return state;
     case 'numericInput':
     case 'methodOutput':
-      return `${nameKeyMap[state]}[${(node.getChildData()![0] as IntNode).value}]`;
+      return `${state}[${(node.getChildData()![0] as IntNode).value}]`;
   }
 };
 

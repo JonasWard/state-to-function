@@ -1,4 +1,4 @@
-import { DeleteFilled, PlusCircleFilled } from '@ant-design/icons';
+import { DeleteFilled, NumberOutlined, PlusCircleFilled } from '@ant-design/icons';
 import { Button, Popover } from 'antd';
 import React, { useMemo } from 'react';
 import { ArrayNode, EnumArrayNode, EnumNode, EnumOptionsNode, ObjectNode, SpecificTypeNode } from 'url-safe-bitpacking';
@@ -6,6 +6,7 @@ import { SpecificNodeUI } from './SpecificNodeUI';
 import { SymbolRenderer, TSymbolProps } from '../../Components/icon/SymbolRenderer';
 import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
 import { useGlobalUIStore } from '../../state/globalUIStore';
+import { IconTitle } from '../../Components/icon/IconTitle';
 
 export type NamedInputsArrayContentRenderer = (
   node: EnumOptionsNode,
@@ -19,15 +20,14 @@ export type SymbolNameType = [EnumNode, EnumArrayNode, EnumArrayNode];
 
 export const NamedInputsArrayEditor: React.FC<
   TNodeUIProps<ArrayNode> & {
-    name: string;
     withSymbol?: boolean;
     contentRenderer?: NamedInputsArrayContentRenderer;
   }
-> = ({ node, name, withSymbol = false, ...props }) => {
+> = ({ node, withSymbol = false, ...props }) => {
   const { isDesktop } = useGlobalUIStore();
   return (
     <div className={`input-column ${isDesktop ? 'desktop' : 'mobile'}`}>
-      <span style={{ height: 32, display: 'flex', alignItems: 'center' }}>{name}</span>
+      {isDesktop ? <IconTitle icon={<NumberOutlined />} title="Methods" size="medium" /> : null}
       <div
         style={{
           display: 'grid',

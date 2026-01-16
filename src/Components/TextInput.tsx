@@ -4,7 +4,6 @@ import { getIndexesFromText, getMappingString } from './lib/textHelpers';
 import { getText } from './lib/textHelpers';
 import { CheckCircleFilled, UndoOutlined } from '@ant-design/icons';
 import { EnumArrayNode } from 'url-safe-bitpacking';
-import { useGlobalUIStore } from '../state/globalUIStore';
 
 const GAP_SIZE = 4;
 
@@ -40,9 +39,7 @@ export const TextInput: React.FC<{
   styleOverwrite?: { minWidth?: number; maxWidth?: number };
   forceRender: () => void;
   customValidation?: (s: string) => string | null;
-}> = ({ textEntry, placeholder, forceRender, customValidation, size }) => {
-  const { isDesktop } = useGlobalUIStore();
-
+}> = ({ textEntry, placeholder, forceRender, customValidation, size = 'middle' }) => {
   const [textArea, setTextArea] = React.useState(getText(textEntry));
 
   const sourceString = getMappingString(textEntry);
@@ -86,7 +83,7 @@ export const TextInput: React.FC<{
     >
       <span style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: GAP_SIZE, width: '100%' }}>
         <Input
-          size={size ?? isDesktop ? 'middle' : 'small'}
+          size={size}
           placeholder={placeholder}
           key={(textEntry as any).bitstring}
           value={textArea}
