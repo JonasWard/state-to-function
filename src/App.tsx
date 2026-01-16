@@ -11,6 +11,7 @@ import { INITIAL_INPUT_VIEW_STRING, MIN_DESKTOP_WIDTH, ROOT_NODE_NAME } from './
 import { ModelStateDescriptor } from './modelDefinition/newModel';
 import { getStateDataForNumericInputs, getStateNodeForDataString } from './applet/utils';
 import { MethodStateData } from './applet/methodDataType';
+import { Help } from './Components/Help';
 
 const handleUndoRedo = (e: KeyboardEvent) => {
   let undoRedoNothing: 'undo' | 'redo' | undefined = undefined;
@@ -94,5 +95,9 @@ export const App: React.FC = () => {
 
   const { uiInFocus } = useGlobalUIStore();
 
-  return <Navigation>{loading ? null : uiInFocus === 'applet' ? <Applet /> : <InputView />}</Navigation>;
+  return (
+    <Navigation>
+      {uiInFocus === 'help' ? <Help /> : loading ? null : uiInFocus === 'applet' ? <Applet /> : <InputView />}
+    </Navigation>
+  );
 };

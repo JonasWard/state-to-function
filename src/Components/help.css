@@ -1,0 +1,16 @@
+.help-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+  gap: 0.1rem;
+  max-width: 800px;
+  margin: auto 0;
+}
+
+.help-container p {
+  height: 100%;
+  overflow-y: clip;
+  padding: 0;
+  margin: 0.2rem;
+  text-align: justify;
+}

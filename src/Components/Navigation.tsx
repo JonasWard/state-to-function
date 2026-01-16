@@ -10,11 +10,13 @@ const NavigationComponent: React.FC = () => {
   const { uiInFocus, setUiInFocus, isDesktop } = useGlobalUIStore();
 
   const desktopOptions: SegmentedOptions = [
+    { label: 'Help', value: 'help' },
     { label: 'Definitions', value: 'null' },
     { label: 'Applet', value: 'applet' }
   ];
 
   const mobileOptions: SegmentedOptions = [
+    { label: 'Help', value: 'help' },
     { label: 'Inputs', value: 'numeric' },
     { label: 'Methods', value: 'method' },
     { label: 'Applet', value: 'applet' }
@@ -30,7 +32,7 @@ const NavigationComponent: React.FC = () => {
     <header className="navigation-header">
       <Segmented options={options} value={currentValue} onChange={handleChange} size="small" />
       <div style={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
-        <UndoRedoButtons />
+        {uiInFocus !== 'help' ? <UndoRedoButtons /> : null}
         <SettingsComponent />
       </div>
     </header>
