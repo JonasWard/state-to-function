@@ -73,10 +73,14 @@ export const getMethod = (methodStateData: MethodStateData, variableValues: Reco
     return ${returnObject};
 }`;
 
-  console.log(fs);
-
   return fs;
 };
 
-export const evalMethod = (methodStateData: MethodStateData, variableValues: Record<string, number>): number[] =>
-  new Function(getMethod(methodStateData, variableValues))();
+export const evalMethod = (methodStateData: MethodStateData, variableValues: Record<string, number>): number[] => {
+  try {
+    return new Function(getMethod(methodStateData, variableValues))();
+  } catch (e) {
+    console.error(e);
+    return Array.from({ length: methodStateData.methodValues.length }, () => NaN);
+  }
+};

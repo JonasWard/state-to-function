@@ -39,6 +39,7 @@ export const App: React.FC = () => {
   const loading = useGlobalUIStore((s) => s.loading);
   const setLoading = useGlobalUIStore((s) => s.setLoading);
   const { base64InputStateString, base64AppletStateString } = useParams();
+  const uiInFocus = useGlobalUIStore((s) => s.uiInFocus);
 
   useEffect(() => {
     const handleResize = () => {
@@ -92,8 +93,6 @@ export const App: React.FC = () => {
   useEffect(() => {
     if (loading) setLoading(false);
   }, [loading]);
-
-  const { uiInFocus } = useGlobalUIStore();
 
   return (
     <Navigation>

@@ -23,7 +23,9 @@ const SegmentWithIcon: React.FC<{ icon: React.ReactNode; text: string }> = ({ ic
 };
 
 const NavigationComponent: React.FC = () => {
-  const { uiInFocus, setUiInFocus, isDesktop } = useGlobalUIStore();
+  const uiInFocus = useGlobalUIStore((s) => s.uiInFocus);
+  const setUiInFocus = useGlobalUIStore((s) => s.setUiInFocus);
+  const isDesktop = useGlobalUIStore((s) => s.isDesktop);
 
   const desktopOptions: SegmentedOptions = [
     { label: <SegmentWithIcon icon={<QuestionOutlined />} text="Help" />, value: 'help' },

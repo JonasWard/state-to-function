@@ -72,8 +72,6 @@ export const GeneralContentSplitter = (
   forceRender: () => void,
   wrapper: WrapperComponentFunction = generalContentWrapper
 ) => {
-  const { isDesktop } = useGlobalUIStore();
-
   switch (node.type) {
     case 'VERSION':
       return (

@@ -3,7 +3,8 @@ import { useGlobalUIStore } from '../../state/globalUIStore';
 import React from 'react';
 
 export const ShowNamesInAppletCheckbox: React.FC = () => {
-  const { showNamesInApplet, setShowNamesInApplet } = useGlobalUIStore();
+  const showNamesInApplet = useGlobalUIStore((s) => s.showNamesInApplet);
+  const setShowNamesInApplet = useGlobalUIStore((s) => s.setShowNamesInApplet);
 
   return (
     <Checkbox

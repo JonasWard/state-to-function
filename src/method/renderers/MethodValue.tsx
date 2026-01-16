@@ -158,11 +158,7 @@ const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
 
 export const MethodValue: React.FC<MethodHandlingProps> = (props) => (
   <Popover trigger="click" content={<ValuesGrid {...props} />}>
-    <span
-      style={{ padding: 0, margin: 0, cursor: 'pointer' }}
-      onClick={(e) => e.stopPropagation()}
-      onMouseEnter={(e) => e.stopPropagation()}
-    >
+    <span style={{ cursor: 'pointer' }} onClick={(e) => e.stopPropagation()} onMouseEnter={(e) => e.stopPropagation()}>
       <ValueInput {...props} />
     </span>
   </Popover>

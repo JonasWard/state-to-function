@@ -9,8 +9,10 @@ import { useGlobalUIStore } from '../../state/globalUIStore';
 import { MethodAlgorithmDefinition } from './MethodAlgorithmDefinition';
 
 export const InputMethodsComponent: React.FC<TNodeUIProps<ObjectNode>> = ({ node, forceRender }) => {
-  const { setNumericInputNames, setMethodInputNames } = useMethodStore();
-  const { isDesktop, uiInFocus } = useGlobalUIStore();
+  const setNumericInputNames = useMethodStore((s) => s.setNumericInputNames);
+  const setMethodInputNames = useMethodStore((s) => s.setMethodInputNames);
+  const isDesktop = useGlobalUIStore((s) => s.isDesktop);
+  const uiInFocus = useGlobalUIStore((s) => s.uiInFocus);
 
   const [inputs, methods] = useMemo(() => {
     const [_version, inputs, methods] = node.getChildren() as [VersionNode, ArrayNode, ArrayNode];

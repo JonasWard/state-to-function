@@ -3,7 +3,8 @@ import { useGlobalUIStore } from '../../state/globalUIStore';
 import React from 'react';
 
 export const ShowAdditionalDefinitionInformation: React.FC = () => {
-  const { showAdditionalDefinitionInformation, setShowAdditionalDefinitionInformation } = useGlobalUIStore();
+  const showAdditionalDefinitionInformation = useGlobalUIStore((s) => s.showAdditionalDefinitionInformation);
+  const setShowAdditionalDefinitionInformation = useGlobalUIStore((s) => s.setShowAdditionalDefinitionInformation);
 
   return (
     <Checkbox

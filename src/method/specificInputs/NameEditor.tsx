@@ -24,7 +24,7 @@ export const NamedInputsArrayEditor: React.FC<
     contentRenderer?: NamedInputsArrayContentRenderer;
   }
 > = ({ node, withSymbol = false, ...props }) => {
-  const { isDesktop } = useGlobalUIStore();
+  const isDesktop = useGlobalUIStore((s) => s.isDesktop);
   return (
     <div className={`input-column ${isDesktop ? 'desktop' : 'mobile'}`}>
       {isDesktop ? <IconTitle icon={<NumberOutlined />} title="Methods" size="medium" /> : null}
