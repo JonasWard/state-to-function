@@ -106,17 +106,15 @@ const DesktopDefinition: React.FC = () => (
       </p>
     </div>
     <IconTitle icon={<FormOutlined />} title="Definition" size="large" />
-    <p>
-      The definition page has two sub-parts
-      <div className="icon-list">
-        <NumberOutlined />
-        <b>Inputs</b>
-        <FunctionOutlined />
-        <b>Methods</b>
-      </div>
-      <NumericInputDefinition />
-      <MethodDefinition />
-    </p>
+    <p>The definition page has two sub-parts</p>
+    <div className="icon-list">
+      <NumberOutlined />
+      <b>Inputs</b>
+      <FunctionOutlined />
+      <b>Methods</b>
+    </div>
+    <NumericInputDefinition />
+    <MethodDefinition />
   </>
 );
 
