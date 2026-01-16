@@ -38,13 +38,13 @@ const integerValue = DataEntryFactory.INT(0, -512, 511, 'integerValue');
 const integerMin = DataEntryFactory.INT(0, -512, 511, 'integerMin');
 const integerMax = DataEntryFactory.INT(100, -512, 511, 'integerMax');
 
-const integerInputObject = DataEntryFactory.OBJECT([integerValue, integerMin, integerMax], 'integer');
+const integerInputObject = DataEntryFactory.OBJECT([integerMin, integerValue, integerMax], 'integer');
 
 const floatValue = DataEntryFactory.FLOAT(0, -5242.88, 5242.87, 2, 'floatValue');
 const floatMin = DataEntryFactory.FLOAT(0, -5242.88, 5242.87, 2, 'floatMin');
 const floatMax = DataEntryFactory.FLOAT(1, -5242.88, 5242.87, 2, 'floatMax');
 
-const floatInputObject = DataEntryFactory.OBJECT([floatValue, floatMin, floatMax], 'float');
+const floatInputObject = DataEntryFactory.OBJECT([floatMin, floatValue, floatMax], 'float');
 
 const valuesPair = DataEntryFactory.ARRAY(inputDefinition, 2, 2, 2, 'values');
 const valuesExtended = DataEntryFactory.ARRAY(inputDefinition, 2, 2, 8, 'values');

@@ -16,13 +16,19 @@ const getDataEntryForNumericInputs = (input: InputNumber, index: number) => {
     case 'hardcoded':
       return Number(input.inputType.inlineInput);
     case 'float':
-      return DataEntryFactory.FLOAT(
+      const de = DataEntryFactory.FLOAT(
         input.inputType.floatValue,
         input.inputType.floatMin,
         input.inputType.floatMax,
         2,
         `${input.inputType.state.slice(0, 1)}${index}`
       );
+
+      console.log(input.inputType.floatValue,
+        input.inputType.floatMin,
+        input.inputType.floatMax,)
+
+      return de;
     case 'integer':
       return DataEntryFactory.INT(
         input.inputType.integerValue,
