@@ -46,14 +46,7 @@ export const Applet: React.FC = () => {
   const currentResult = useMemo(() => evalMethod(methodStateData, variableValues), [methodStateData, variableValues]);
 
   return (
-    <div style={{ width: '100svw', marginTop: isDesktop ? 0 : -42, transition: '0.3s ease-in-out' }}>
-      <Checkbox
-        style={{ position: 'fixed', right: 10, top: 13 }}
-        checked={showNamesInApplet}
-        onChange={() => setShowNamesInApplet(!showNamesInApplet)}
-      >
-        Names
-      </Checkbox>
+    <div style={{ width: '100svw', transition: '0.3s ease-in-out' }}>
       <Descriptions
         style={{ margin: 16 }}
         size="small"

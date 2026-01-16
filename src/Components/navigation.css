@@ -1,23 +1,9 @@
-.navigation-component {
+.navigation-header {
   display: flex;
-  justify-content: center;
-  gap: 0.5rem;
+  justify-content: space-between;
   align-items: center;
-  width: 100%;
-  margin: 0.5rem auto;
-  padding: auto 0.5rem;
-  transition: 0.3s ease-in-out;
-}
-
-.arrow-icon {
-  font-size: 1.1rem;
-  transition: 0.3s ease-in-out;
-}
-
-.arrow-icon.left {
-  transform: rotate(0deg);
-}
-
-.arrow-icon.right {
-  transform: rotate(-180deg);
+  margin: 0 auto;
+  padding: 0.25rem .5rem;
+  background-color: #fafafa;
+  border-bottom: 1px solid #e8e8e8;
 }

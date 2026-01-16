@@ -10,6 +10,8 @@ type GlobalUIStore = {
   setShowNamesInApplet: (showNames: boolean) => void;
   loading: boolean;
   setLoading: (loading: boolean) => void;
+  showAdditionalDefinitionInformation: boolean;
+  setShowAdditionalDefinitionInformation: (showAdditionalDefinitionInformation: boolean) => void;
 };
 
 export const useGlobalUIStore = create<GlobalUIStore>((set) => ({
@@ -27,5 +29,8 @@ export const useGlobalUIStore = create<GlobalUIStore>((set) => ({
   showNamesInApplet: false,
   setShowNamesInApplet: (showNamesInApplet: boolean) => set({ showNamesInApplet }),
   loading: true,
-  setLoading: (loading: boolean) => set({ loading })
+  setLoading: (loading: boolean) => set({ loading }),
+  showAdditionalDefinitionInformation: false,
+  setShowAdditionalDefinitionInformation: (showAdditionalDefinitionInformation: boolean) =>
+    set({ showAdditionalDefinitionInformation })
 }));
