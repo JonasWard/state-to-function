@@ -43,6 +43,10 @@ export const Applet: React.FC = () => {
   );
 
   const currentResult = useMemo(() => evalMethod(methodStateData, variableValues), [methodStateData, variableValues]);
+  const children = useMemo(
+    () => stateNode.current.getChildren(),
+    [stateNode.current.name, stateNode.current.bitstring]
+  );
 
   return (
     <div style={{ maxWidth: 'min(100svw - 2rem, 800px)', margin: '0 auto' }}>
@@ -51,7 +55,7 @@ export const Applet: React.FC = () => {
         size="small"
         bordered
         colon={false}
-        items={stateNode.current.getChildren()!.map((c, key) => ({
+        items={children.map((c, key) => ({
           key,
           label: (
             <>

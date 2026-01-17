@@ -1,5 +1,5 @@
 import { Checkbox, Select } from 'antd';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   BooleanNode,
   EnumNode,
@@ -10,7 +10,8 @@ import {
   EnumOptionsNode,
   OptionalNode,
   VersionNode,
-  EnumArrayNode
+  EnumArrayNode,
+  ObjectNode
 } from 'url-safe-bitpacking';
 import { TextInput } from '../Components/TextInput';
 import { GeneralChildrenRenderer, NodeUIProps, TNodeUIProps, WrapperComponentFunction } from './nodeProps';
@@ -24,12 +25,13 @@ const nullContent = (
 );
 
 export const NodeWithChildrenWrapper: React.FC<
-  TNodeUIProps<ArrayNode | EnumOptionsNode | OptionalNode> & {
+  TNodeUIProps<ArrayNode | EnumOptionsNode | OptionalNode | ObjectNode> & {
     stateChange: React.ReactNode;
     childrenRenderer: GeneralChildrenRenderer;
   }
 > = ({ node, forceRender, stateChange, childrenRenderer }) => {
-  return childrenRenderer(node.getChildren(), stateChange, forceRender);
+  const children = useMemo(() => node.getChildren(), [node.name, node.bitstring]);
+  return childrenRenderer(children, stateChange, forceRender);
 };
 
 const NodeWithChildrenUI: React.FC<
@@ -186,7 +188,12 @@ export const GeneralContentSplitter = (
     case 'OBJECT':
       return (
         <div style={{ display: 'grid', width: '100%', gridTemplateColumns: '1fr', gap: 4 }}>
-          {node.getChildren().map((child) => (child === null ? nullContent : wrapper(child, forceRender)))}
+          <NodeWithChildrenWrapper
+            node={node as ObjectNode}
+            forceRender={forceRender}
+            stateChange={nullContent}
+            childrenRenderer={() => null}
+          />
         </div>
       );
   }

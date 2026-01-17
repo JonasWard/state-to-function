@@ -25,6 +25,8 @@ export const NamedInputsArrayEditor: React.FC<
   }
 > = ({ node, withSymbol = false, ...props }) => {
   const isDesktop = useGlobalUIStore((s) => s.isDesktop);
+  const children = useMemo(() => node.getChildren(), [node.name, node.bitstring]);
+
   return (
     <div className={`input-column ${isDesktop ? 'desktop' : 'mobile'}`}>
       {isDesktop ? <IconTitle icon={<NumberOutlined />} title="Methods" size="medium" /> : null}
@@ -36,7 +38,7 @@ export const NamedInputsArrayEditor: React.FC<
           alignItems: 'center'
         }}
       >
-        {node.getChildren().map((child, i) => (
+        {children.map((child, i) => (
           <NameEditor
             node={child as ObjectNode}
             key={i}

@@ -25,11 +25,13 @@ const NamedInputsArrayEditor: React.FC<
   const methodInputNames = useMethodStore((s) => s.methodInputNames);
   const isDesktop = useGlobalUIStore((s) => s.isDesktop);
 
+  const children = useMemo(() => node.getChildren(), [node.name, node.bitstring]);
+
   return (
     <div className={`input-column ${isDesktop ? 'desktop' : 'mobile'}`}>
       {isDesktop ? <IconTitle icon={<FunctionOutlined />} title="Method Definitions" size="medium" /> : null}
       <div className={`method-input-content ${isDesktop ? 'desktop' : 'mobile'}`}>
-        {node.getChildren().map((child, i) => (
+        {children.map((child, i) => (
           <MethodInputEditor
             node={child as ObjectNode}
             key={i}
