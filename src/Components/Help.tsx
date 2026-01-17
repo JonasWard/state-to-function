@@ -86,7 +86,7 @@ const AppletDefinition: React.FC = () => {
       </p>
       <p>
         On the bottom of the <b>Applet</b> the outputs of all the <b>Methods</b> are shown. In case there would be any
-        invalid inputs or outpts, all the outputs will be shown as <b>NaN</b>.
+        invalid inputs or outpts, all the results will be shown as <b>NaN</b>.
       </p>
     </div>
   );
