@@ -21,6 +21,7 @@ const AddRemoveTerm: React.FC<{ onAdd?: () => void; onRemove?: () => void }> = (
       -
     </Button>
     <Button
+      key="add"
       size="small"
       style={{ maxWidth: 20, maxHeight: 11, fontSize: 10, textJustify: 'distribute', justifyContent: 'center' }}
       type="text"
@@ -52,17 +53,18 @@ export const MethodFlatRenderer: React.FC<MethodHandlingProps> = (props) => {
       className={`lisp-parent method-flat ${operation}`}
       style={{ fontSize: isDesktop ? DESKTOP_SYMBOL_SIZE : MOBILE_SYMBOL_SIZE, cursor: 'pointer' }}
     >
-      <MethodValue key={'a'} {...props} node={nodeA} />
-      <MethodOperation {...props} index={0} />
-      <MethodValue key={'b'} {...props} node={nodeB} />
+      <MethodValue key="value-0" {...props} node={nodeA} />
+      <MethodOperation key="operation-0" {...props} index={0} />
+      <MethodValue key="value-1" {...props} node={nodeB} />
       {otherNodes.map((node, i) => (
         <>
-          <MethodOperation {...props} index={i + 1} />
-          <MethodValue key={i} {...props} node={node} />
+          <MethodOperation key={`operation-${i + 1}`} {...props} index={i + 1} />
+          <MethodValue key={`value-${i + 2}`} {...props} node={node} />
         </>
       ))}
       {operation === 'addition' || operation === 'multiplication' ? (
         <AddRemoveTerm
+          key="add-remove-term"
           onAdd={
             nodeArray.state < nodeArray.descriptor.maxCount
               ? () => (nodeArray.updateState(nodeArray.state + 1), props.forceRender())

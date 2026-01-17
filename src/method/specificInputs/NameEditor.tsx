@@ -81,9 +81,7 @@ const SymbolInputs: React.FC<
       </div>
     }
   >
-    <span style={{ cursor: 'pointer', padding: 4 }}>
-      <SymbolRenderer {...props} />
-    </span>
+    <SymbolRenderer {...props} />
   </Popover>
 );
 

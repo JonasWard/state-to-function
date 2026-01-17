@@ -47,7 +47,13 @@ type CellRendererType<T extends string | SymbolNameType> = (
 ) => React.ReactNode;
 
 const DefaultCellRenderer: CellRendererType<SymbolNameType> = (value, index, activeName, parentName, select) => (
-  <Cell value={value} name={`${parentName}[${index}]`} activeName={activeName} onClick={() => select(index)} />
+  <Cell
+    key={`cell-${index}`}
+    value={value}
+    name={`${parentName}[${index}]`}
+    activeName={activeName}
+    onClick={() => select(index)}
+  />
 );
 
 export const MethodOptionsGrid: React.FC<{
@@ -56,14 +62,17 @@ export const MethodOptionsGrid: React.FC<{
   parentName: (typeof InputDefinitionTypes)[number];
   activeName: string;
   cellRenderer?: CellRendererType<SymbolNameType>;
-}> = ({ values, select, parentName, activeName, cellRenderer = DefaultCellRenderer }) =>
+  suppressTitle?: boolean;
+}> = ({ values, select, parentName, activeName, cellRenderer = DefaultCellRenderer, suppressTitle = false }) =>
   values.length > 0 ? (
     <>
-      <IconTitle
-        icon={nameKeyMapIcon[parentName as (typeof InputDefinitionTypes)[number]]}
-        title={nameKeyMap[parentName as (typeof InputDefinitionTypes)[number]]}
-        size="small"
-      />
+      {!suppressTitle ? (
+        <IconTitle
+          icon={nameKeyMapIcon[parentName as (typeof InputDefinitionTypes)[number]]}
+          title={nameKeyMap[parentName as (typeof InputDefinitionTypes)[number]]}
+          size="small"
+        />
+      ) : null}
       <div className="symbol-editor">
         {values.map((sn, index) =>
           cellRenderer(sn, index, activeName, parentName === 'method' ? '' : parentName, select)

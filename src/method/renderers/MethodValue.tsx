@@ -15,7 +15,7 @@ import { IconTitle } from '../../Components/icon/IconTitle';
 import { FunctionOutlined } from '@ant-design/icons';
 
 const MethodGrid: React.FC<TNodeUIProps<EnumOptionsNode>> = ({ node, forceRender }) => {
-  const child = node.getChildData()![0] as EnumOptionsNode;
+  const child = useMemo(() => node.getChildData()![0] as EnumOptionsNode, [node.name, node.bitstring]);
 
   return (
     <MethodOptionsGrid
@@ -23,6 +23,7 @@ const MethodGrid: React.FC<TNodeUIProps<EnumOptionsNode>> = ({ node, forceRender
       select={(i) => (child.updateState(i), forceRender())}
       activeName={`[${child.state}]`}
       parentName={'method'}
+      suppressTitle={true}
     />
   );
 };
