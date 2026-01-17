@@ -10,6 +10,7 @@ import { useGlobalUIStore } from '../state/globalUIStore';
 import { PDFDownloadButton } from '../Components/pdf/PDFDownloadButton';
 import { usePDFData } from '../Components/pdf/usePDFData';
 import './applet.css';
+import { CSVDownloadButton } from './CSVDownloadButton';
 
 export const Applet: React.FC = () => {
   const base64InputStateString = useAppState((s) => s.base64InputStateString!);
@@ -133,8 +134,9 @@ export const Applet: React.FC = () => {
           )
         }))}
       />
-      <div style={{ display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', margin: '1rem 0' }}>
         <PDFDownloadButton inputValues={inputValues} resultValues={resultValues} />
+        <CSVDownloadButton inputValues={inputValues} resultValues={resultValues} />
       </div>
     </div>
   );
