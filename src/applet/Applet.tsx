@@ -7,6 +7,8 @@ import { IconRenderer } from '../Components/icon/IconRenderer';
 import { useAppState } from '../state/appState';
 import { Descriptions } from 'antd';
 import { useGlobalUIStore } from '../state/globalUIStore';
+import { PDFDownloadButton } from '../Components/pdf/PDFDownloadButton';
+import { usePDFData } from '../Components/pdf/usePDFData';
 import './applet.css';
 
 export const Applet: React.FC = () => {
@@ -47,6 +49,13 @@ export const Applet: React.FC = () => {
     () => stateNode.current.getChildren(),
     [stateNode.current.name, stateNode.current.bitstring]
   );
+
+  const { inputValues, resultValues } = usePDFData({
+    methodStateData,
+    indexMapping,
+    stateNode: stateNode.current,
+    currentResult
+  });
 
   return (
     <div style={{ maxWidth: 'min(100svw - 2rem, 800px)', margin: '0 auto' }}>
@@ -124,6 +133,9 @@ export const Applet: React.FC = () => {
           )
         }))}
       />
+      <div style={{ display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
+        <PDFDownloadButton inputValues={inputValues} resultValues={resultValues} />
+      </div>
     </div>
   );
 };
