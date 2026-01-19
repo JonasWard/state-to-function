@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { ArrayNode, EnumArrayNode, EnumNode, EnumOptionsNode, ObjectNode } from 'url-safe-bitpacking';
 import { SpecificNodeUI } from './SpecificNodeUI';
-import { Button, Select } from 'antd';
+import { Button, Segmented, Select } from 'antd';
 import './reference-name.css';
 import { PlusCircleFilled, DeleteFilled, NumberOutlined } from '@ant-design/icons';
 import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
@@ -47,10 +47,10 @@ const NamedInputsArrayEditor: React.FC<
   );
 };
 
-const shortSymbol: Record<'hardcoded' | 'integer' | 'float', string> = {
-  hardcoded: 'const 𝑐',
-  integer: 'int ℤ',
-  float: 'float ℝ'
+const shortSymbol: Record<'hardcoded' | 'integer' | 'float' , string> = {
+  hardcoded: '𝑐',
+  integer: 'ℤ',
+  float: 'ℝ'
 };
 
 const NumericInputEditor: React.FC<
@@ -75,7 +75,7 @@ const NumericInputEditor: React.FC<
         {!hideNameAndSubscriptInInput ? (
           <SpecificNodeUI key={`${index}-subscript`} node={subscript} forceRender={forceRender} />
         ) : null}
-        <Select
+        <Segmented
           size="middle"
           options={content.descriptor.mapping.map((d, i) => ({ label: shortSymbol[d], value: i }))}
           value={content.state}

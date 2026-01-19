@@ -51,11 +51,15 @@
 }
 
 .numeric-input-content.desktop {
-  grid-template-columns: auto 7rem 1fr 2rem;
+  grid-template-columns: auto 1fr auto 2rem;
 }
 
 .numeric-input-content.cell {
   grid-template-columns: 1fr;
+}
+
+.ant-segmented-item-label {
+  padding: 0 0.5rem !important;
 }
 
 .method-input-content {

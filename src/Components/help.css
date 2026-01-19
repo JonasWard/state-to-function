@@ -1,7 +1,7 @@
 .help-container {
   display: flex;
   flex-direction: column;
-  padding: 0 max(1.5rem, calc(400px - 50svh));
+  padding: 0 max(1.5rem,calc(50svw - 400px));
   gap: 0.1rem;
   max-width: 800px;
   margin: 2rem auto;

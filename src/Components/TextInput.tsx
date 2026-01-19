@@ -35,11 +35,12 @@ const getDisplayString = (s: string, sourceString: string): null | ReactNode => 
 export const TextInput: React.FC<{
   placeholder?: string;
   textEntry: EnumArrayNode;
+  variant?: 'filled' | 'outlined' | 'borderless' | 'underlined';
   size?: 'small' | 'middle' | 'large';
   styleOverwrite?: { minWidth?: number; maxWidth?: number };
   forceRender: () => void;
   customValidation?: (s: string) => string | null;
-}> = ({ textEntry, placeholder, forceRender, customValidation, size = 'middle' }) => {
+}> = ({ textEntry, forceRender, customValidation, ...props }) => {
   const [textArea, setTextArea] = React.useState(getText(textEntry));
 
   const sourceString = getMappingString(textEntry);
@@ -83,8 +84,7 @@ export const TextInput: React.FC<{
     >
       <span style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: GAP_SIZE, width: '100%' }}>
         <Input
-          size={size}
-          placeholder={placeholder}
+          {...props}
           key={(textEntry as any).bitstring}
           value={textArea}
           onChange={handleChange}
