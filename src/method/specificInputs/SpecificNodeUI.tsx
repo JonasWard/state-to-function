@@ -12,8 +12,8 @@ import { InputNumberWrapper } from '../../Components/inputs/InputNumberWrapper';
 const specificContentWrapper: WrapperComponentFunction = (node, forceRender) =>
   SpecificContentSplitter(node, forceRender);
 
-const filledNumberInputs = ['intMin', 'intMax', 'floatMin', 'floatMax'];
-const outlinedNumberInputs = ['intValue', 'floatValue'];
+const filledNumberInputs: string[] = [];
+const outlinedNumberInputs = ['intValue', 'floatValue', 'intMin', 'intMax', 'floatMin', 'floatMax'];
 
 const getVariant = (node: SpecificTypeNode) => {
   if (filledNumberInputs.includes(node.name)) return 'filled';
@@ -35,7 +35,7 @@ const SpecificContentSplitter: WrapperComponentFunction = (node, forceRender) =>
           return <HardcodedNumber node={node as EnumArrayNode} forceRender={forceRender} />;
         case 'subscript':
         case 'name':
-          return <TextInput textEntry={node as EnumArrayNode} placeholder={node.name} forceRender={forceRender} variant='borderless'/>;
+          return <TextInput textEntry={node as EnumArrayNode} placeholder={node.name} forceRender={forceRender} variant='filled'/>;
       }
       break;
     case 'ENUM_OPTIONS':

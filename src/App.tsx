@@ -12,6 +12,7 @@ import { ModelStateDescriptor } from './modelDefinition/newModel';
 import { getStateDataForNumericInputs, getStateNodeForDataString } from './applet/utils';
 import { MethodStateData } from './applet/methodDataType';
 import { Help } from './Components/Help';
+import './App.css';
 
 const handleUndoRedo = (e: KeyboardEvent) => {
   let undoRedoNothing: 'undo' | 'redo' | undefined = undefined;
