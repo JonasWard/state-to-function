@@ -46,7 +46,7 @@ const NodeWithChildrenUI: React.FC<
       <div style={{ display: 'flex', flexDirection: 'column', gap: 4, justifyItems: 'center' }}>
         {stateChange}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          {children.map((child, i) => (child === null ? nullContent : props.wrapper(child, forceRender)))}
+          {children.map((child) => (child === null ? nullContent : props.wrapper(child, forceRender)))}
         </div>
       </div>
     )}

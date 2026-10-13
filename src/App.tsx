@@ -25,15 +25,22 @@ const handleUndoRedo = (e: KeyboardEvent) => {
   if (!undoRedoNothing) return;
 
   const uiInFocus = useGlobalUIStore.getState().uiInFocus;
-  console.log(undoRedoNothing, uiInFocus);
-  if (uiInFocus === 'applet' && undoRedoNothing === 'undo')
-    useAppState.getState().undoAppletStateString(), e.preventDefault();
-  if (uiInFocus === 'applet' && undoRedoNothing === 'redo')
-    useAppState.getState().redoAppletStateString(), e.preventDefault();
-  if (uiInFocus !== 'applet' && undoRedoNothing === 'undo')
-    useAppState.getState().undoInputStateString(), e.preventDefault();
-  if (uiInFocus !== 'applet' && undoRedoNothing === 'redo')
-    useAppState.getState().redoInputStateString(), e.preventDefault();
+  if (uiInFocus === 'applet' && undoRedoNothing === 'undo') {
+    useAppState.getState().undoAppletStateString();
+    e.preventDefault();
+  }
+  if (uiInFocus === 'applet' && undoRedoNothing === 'redo') {
+    useAppState.getState().redoAppletStateString();
+    e.preventDefault();
+  }
+  if (uiInFocus !== 'applet' && undoRedoNothing === 'undo') {
+    useAppState.getState().undoInputStateString();
+    e.preventDefault();
+  }
+  if (uiInFocus !== 'applet' && undoRedoNothing === 'redo') {
+    useAppState.getState().redoInputStateString();
+    e.preventDefault();
+  }
 };
 
 export const App: React.FC = () => {

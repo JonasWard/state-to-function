@@ -116,7 +116,7 @@ const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
   );
 
   switch (state) {
-    case 'numericInput':
+    case 'numericInput': {
       const numericInput = props.availableNumericInputs[(props.node.getChildData()![0] as IntNode).value] || undefined;
       return (
         <Button type="text" size="small">
@@ -133,7 +133,8 @@ const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
           )}
         </Button>
       );
-    case 'methodOutput':
+    }
+    case 'methodOutput': {
       const methodOutput = props.availableMethodInputs[(props.node.getChildData()![0] as IntNode).value] || undefined;
       return (
         <Button type="text" size="small">
@@ -150,6 +151,7 @@ const ValueInput: React.FC<MethodHandlingProps> = ({ ...props }) => {
           )}
         </Button>
       );
+    }
     case 'hardcoded':
       return <Button type="text" size="small" children={getText(props.node.getChildData()![0] as EnumArrayNode)} />;
     case 'method':

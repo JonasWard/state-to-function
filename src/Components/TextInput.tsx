@@ -85,7 +85,7 @@ export const TextInput: React.FC<{
       <span style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: GAP_SIZE, width: '100%' }}>
         <Input
           {...props}
-          key={(textEntry as any).bitstring}
+          key={(textEntry as unknown as { bitstring: string }).bitstring}
           value={textArea}
           onChange={handleChange}
           status={!isValid ? 'error' : textEntry.descriptor.maxCount === textEntry.value.length ? 'warning' : undefined}

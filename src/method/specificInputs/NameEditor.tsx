@@ -20,10 +20,9 @@ export type SymbolNameType = [EnumNode, EnumArrayNode, EnumArrayNode];
 
 export const NamedInputsArrayEditor: React.FC<
   TNodeUIProps<ArrayNode> & {
-    withSymbol?: boolean;
     contentRenderer?: NamedInputsArrayContentRenderer;
   }
-> = ({ node, withSymbol = false, ...props }) => {
+> = ({ node, ...props }) => {
   const isDesktop = useGlobalUIStore((s) => s.isDesktop);
   const children = useMemo(() => node.getChildren(), [node.name, node.bitstring]);
 

@@ -20,7 +20,7 @@ const nameKeyMap: Record<(typeof InputDefinitionTypes)[number], string> = {
   method: 'Method Operation'
 };
 
-const Cell: React.FC<{ value: String | SymbolNameType; name: string; activeName: string; onClick: () => void }> = ({
+const Cell: React.FC<{ value: string | SymbolNameType; name: string; activeName: string; onClick: () => void }> = ({
   value,
   name,
   activeName,

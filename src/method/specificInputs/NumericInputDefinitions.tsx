@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { ArrayNode, EnumArrayNode, EnumNode, EnumOptionsNode, ObjectNode } from 'url-safe-bitpacking';
 import { SpecificNodeUI } from './SpecificNodeUI';
-import { Button, Segmented, Select } from 'antd';
+import { Button, Segmented } from 'antd';
 import './reference-name.css';
 import { PlusCircleFilled, DeleteFilled, NumberOutlined } from '@ant-design/icons';
 import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
@@ -13,9 +13,8 @@ type NamedInputsChildrenType = [EnumNode, EnumArrayNode, EnumArrayNode, EnumOpti
 
 const NamedInputsArrayEditor: React.FC<
   TNodeUIProps<ArrayNode> & {
-    withSymbol?: boolean;
   }
-> = ({ node, withSymbol = false, ...props }) => {
+> = ({ node, ...props }) => {
   const isDesktop = useGlobalUIStore((s) => s.isDesktop);
   return (
     <div className={`input-column ${isDesktop ? 'desktop' : 'mobile'}`}>

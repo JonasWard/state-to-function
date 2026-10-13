@@ -22,8 +22,10 @@ export const useGlobalUIStore = create<GlobalUIStore>((set) => ({
   setIsDesktop: (isDesktop) => set({ isDesktop }),
   uiInFocus: null,
   setUiInFocus: (uiInFocus) => {
-    if (uiInFocus === 'help') 0; // don't change the hash state
-    else if (uiInFocus !== 'applet') window.location.hash = `${useAppState.getState().base64InputStateString ?? ''}`;
+    // help doesn't change the hash state
+    if (uiInFocus === 'help') {
+      // noop
+    } else if (uiInFocus !== 'applet') window.location.hash = `${useAppState.getState().base64InputStateString ?? ''}`;
     else
       window.location.hash = `${useAppState.getState().base64InputStateString ?? ''}/${
         useAppState.getState().base64AppletStateString ?? ''

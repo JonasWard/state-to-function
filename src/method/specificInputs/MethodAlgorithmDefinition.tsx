@@ -18,9 +18,8 @@ type NamedInputsChildrenType = [EnumNode, EnumArrayNode, EnumArrayNode, EnumOpti
 
 const NamedInputsArrayEditor: React.FC<
   TNodeUIProps<ArrayNode> & {
-    withSymbol?: boolean;
   }
-> = ({ node, withSymbol = false, ...props }) => {
+> = ({ node, ...props }) => {
   const numericInputNames = useMethodStore((s) => s.numericInputNames);
   const methodInputNames = useMethodStore((s) => s.methodInputNames);
   const isDesktop = useGlobalUIStore((s) => s.isDesktop);

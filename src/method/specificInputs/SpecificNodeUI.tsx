@@ -43,6 +43,7 @@ const SpecificContentSplitter: WrapperComponentFunction = (node, forceRender) =>
         case 'inputType':
           return <NumericInput node={node as EnumOptionsNode} forceRender={forceRender} />;
       }
+    // falls through
     case 'INT':
       return (
         <InputNumberWrapper

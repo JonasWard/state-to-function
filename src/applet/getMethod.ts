@@ -28,7 +28,7 @@ const parseIfMethod = (m: MethodType & { method: { state: (typeof IfMethodTypes)
   try {
     const [a, b, c, d] = m.method.values.map(parseMethodInputType);
     return `(${a} ${JavascriptOperation[m.method.state]} ${b} ? ${c} : ${d})`;
-  } catch (e) {
+  } catch {
     console.error(m);
     return '';
   }
@@ -39,7 +39,7 @@ const parseMethodFlat = (m: MethodType) => {
     if (IfMethodTypes.includes(m.method.state as (typeof IfMethodTypes)[number]))
       return parseIfMethod(m as MethodType & { method: { state: (typeof IfMethodTypes)[number] } });
     return '(' + m.method.values.map(parseMethodInputType).join(JavascriptOperation[m.method.state]) + ')';
-  } catch (e) {
+  } catch {
     console.error(m);
     return '';
   }

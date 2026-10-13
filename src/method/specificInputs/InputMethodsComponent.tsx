@@ -15,7 +15,7 @@ export const InputMethodsComponent: React.FC<TNodeUIProps<ObjectNode>> = ({ node
   const uiInFocus = useGlobalUIStore((s) => s.uiInFocus);
 
   const [inputs, methods] = useMemo(() => {
-    const [_version, inputs, methods] = node.getChildren() as [VersionNode, ArrayNode, ArrayNode];
+    const [, inputs, methods] = node.getChildren() as [VersionNode, ArrayNode, ArrayNode];
     setNumericInputNames(inputs.getChildren().map((method) => method.getChildren() as SymbolNameType));
     setMethodInputNames(methods.getChildren().map((method) => method.getChildren() as SymbolNameType));
     return [inputs, methods];
