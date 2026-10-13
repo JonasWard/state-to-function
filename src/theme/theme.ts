@@ -33,7 +33,13 @@ export const getTheme = (reducedMotion: boolean): ThemeConfig => ({
     motionDurationMid: '0.15s'
   },
   components: {
-    InputNumber: { fontFamily: fonts.mono },
+    Input: { activeShadow: 'none', hoverBorderColor: palette.accent500, activeBorderColor: palette.accent700 },
+    InputNumber: {
+      fontFamily: fonts.mono,
+      activeShadow: 'none',
+      hoverBorderColor: palette.accent500,
+      activeBorderColor: palette.accent700
+    },
     Segmented: { trackBg: palette.accent100, itemSelectedBg: palette.surface, itemColor: palette.inkMuted },
     Button: { primaryShadow: 'none', defaultShadow: 'none', dangerShadow: 'none' },
     Tooltip: { colorBgSpotlight: palette.ink },

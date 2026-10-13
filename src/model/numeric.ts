@@ -20,12 +20,16 @@ export const toInt = (v: number) => clamp(Math.round(Number.isFinite(v) ? v : 0)
 
 export const parseConstant = (s: string): number => (s.trim() === '' ? NaN : Number(s));
 
-const grouped = new Intl.NumberFormat('en-US', { maximumFractionDigits: 6 });
+const plain = new Intl.NumberFormat('en-US', { maximumFractionDigits: 6, useGrouping: false });
+
+/** Groups the integer digits of a plain number string in threes with a narrow no-break space. */
+export const groupDigits = (s: string) =>
+  s.replace(/^(-?)(\d+)/, (_, sign: string, int: string) => sign + int.replace(/\B(?=(\d{3})+(?!\d))/g, '\u202F'));
 
 export const formatNumber = (n: number): string => {
   if (Number.isNaN(n)) return 'NaN';
   if (!Number.isFinite(n)) return n > 0 ? '∞' : '−∞';
   const abs = Math.abs(n);
   if (abs !== 0 && (abs >= 1e12 || abs < 1e-6)) return n.toExponential(4).replace('-', '−');
-  return grouped.format(n).replace(/,/g, ' ').replace('-', '−');
+  return groupDigits(plain.format(n)).replace('-', '−');
 };

@@ -9,6 +9,7 @@ import { useDocumentStore } from '../state/documentStore';
 import { buildShareUrl } from '../state/hashSync';
 import { notify } from '../state/notify';
 import { generateCSV } from './csvHelpers';
+import styles from './applet.module.css';
 import { downloadBlob } from './download';
 
 /** Rows from the store at the moment of export, never from a render-time snapshot. */
@@ -46,7 +47,7 @@ export const ExportButtons: React.FC = () => {
 
   return (
     <>
-      <QRCodeCanvas ref={qrRef} value={url} size={512} level="M" style={{ display: 'none' }} />
+      <QRCodeCanvas ref={qrRef} value={url} size={512} level="M" className={styles.hidden} />
       <Button icon={<DownloadOutlined />} onClick={exportCsv}>
         CSV
       </Button>

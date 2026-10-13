@@ -38,7 +38,6 @@ export const CharsetInput: React.FC<{
         aria-invalid={!!error}
         maxLength={MAX_TEXT_LENGTH}
         status={error ? 'error' : undefined}
-        variant="filled"
         onChange={(e) => setDraft(e.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => (setFocused(false), commit())}
