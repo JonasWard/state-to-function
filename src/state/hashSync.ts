@@ -48,8 +48,11 @@ const loadFromHash = async ({ view, definition, applet }: ParsedHash, mode: 'res
       doc.setStatus('ready');
     }
   }
+  // random strings often read as a high version number, so a "newer" link is only a possibility
   notify.warning(
-    decoded.reason === 'newer-version' ? 'This link was made with a newer version of the app.' : UNREADABLE
+    decoded.reason === 'newer-version'
+      ? 'This link could not be read; it may come from a newer version of the app. Showing the example instead.'
+      : UNREADABLE
   );
   doc.load(DEFAULT_DEFINITION, [], mode);
   setView();
