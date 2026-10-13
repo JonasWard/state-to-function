@@ -26,3 +26,18 @@ export const fonts = {
   math: "'STIX Two Text', 'Cambria Math', Cambria, 'Times New Roman', serif",
   mono: "'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace"
 } as const;
+
+export const type = {
+  xs: '0.6875rem', // labels, gutters
+  sm: '0.8125rem', // meta, hints, empty states
+  md: '0.875rem', // body, fields
+  lg: '1rem', // results
+  xl: '1.375rem' // page title
+} as const;
+
+export const space = { 1: '2px', 2: '4px', 3: '8px', 4: '12px', 5: '16px', 6: '24px', 7: '32px', 8: '48px' } as const;
+
+export const symbolSize = { sm: '1.05rem', md: '1.3rem', lg: '1.6rem' } as const;
+
+export const radius = 3;
+export const rowHeight = '36px';

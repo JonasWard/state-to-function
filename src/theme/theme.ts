@@ -1,5 +1,5 @@
 import type { ThemeConfig } from 'antd';
-import { fonts, palette } from './palette';
+import { fonts, palette, radius, type } from './palette';
 
 export const getTheme = (reducedMotion: boolean): ThemeConfig => ({
   token: {
@@ -18,9 +18,13 @@ export const getTheme = (reducedMotion: boolean): ThemeConfig => ({
     colorError: palette.danger,
     colorWarning: palette.warning,
     colorSuccess: palette.success,
-    borderRadius: 3,
-    borderRadiusSM: 2,
-    borderRadiusLG: 4,
+    borderRadius: radius,
+    borderRadiusSM: radius,
+    borderRadiusLG: radius,
+    fontSize: parseFloat(type.md) * 16,
+    colorBgTextHover: palette.accent100,
+    colorBgTextActive: palette.accent200,
+    controlOutline: palette.accent200,
     controlHeight: 30,
     fontFamily: fonts.ui,
     fontFamilyCode: fonts.mono,
