@@ -78,7 +78,10 @@ export const AppHeader: React.FC = () => {
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
-        <span className={styles.wordmark}>{wide ? 'state→function' : 's→f'}</span>
+        <span className={styles.brand}>
+          <img className={styles.mark} src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" aria-hidden />
+          {wide && <span className={styles.wordmark}>state→function</span>}
+        </span>
         <Segmented value={current} options={options} onChange={(v) => select(v as Tab)} />
         <div className={styles.actions}>
           <IconButton label="Undo" icon={<UndoOutlined />} disabled={!canUndo} onClick={() => useDocumentStore.getState().undo()} />

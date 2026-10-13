@@ -18,7 +18,10 @@ export const palette = {
   dangerBg: '#fef3f2',
   warning: '#b54708',
   warningBg: '#fffaeb',
-  success: '#067647'
+  success: '#067647',
+  // the app icon (public/favicon.svg); not used in the UI chrome
+  brandInk: '#111111',
+  brandAccent: '#FF5A1F'
 } as const;
 
 export const fonts = {

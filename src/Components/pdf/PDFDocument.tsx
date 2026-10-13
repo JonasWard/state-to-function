@@ -15,11 +15,16 @@ Font.registerHyphenationCallback((word) => [word]);
 
 const MATH = ['MathLatin', 'MathGreek'];
 
+// raster copy of public/favicon.svg (react-pdf cannot draw an external SVG), served from the same origin
+const ICON_URL = new URL(`${import.meta.env.BASE_URL}icon-192.png`, window.location.href).href;
+
 // the bundled latin subsets lack the narrow no-break space and ∞
 const pdfNumber = (n: number) => formatNumber(n).replace(/\u202F/g, ' ').replace('∞', 'Infinity');
 
 const styles = StyleSheet.create({
   page: { padding: 36, fontFamily: 'Helvetica', fontSize: 10, color: palette.ink },
+  heading: { flexDirection: 'row', alignItems: 'center' },
+  mark: { width: 18, height: 18, marginRight: 6 },
   title: { fontFamily: 'Mono', fontSize: 12, color: palette.accent800 },
   meta: { marginTop: 2, marginBottom: 14, fontSize: 8, color: palette.inkMuted },
   section: {
@@ -67,7 +72,10 @@ export interface PDFDocumentProps {
 export const PDFDocumentComponent: React.FC<PDFDocumentProps> = ({ inputs, results, qrCodeDataUrl, url }) => (
   <Document title="State-to-Function export">
     <Page size="A4" style={styles.page}>
-      <Text style={styles.title}>State-to-Function</Text>
+      <View style={styles.heading}>
+        <Image style={styles.mark} src={ICON_URL} />
+        <Text style={styles.title}>State-to-Function</Text>
+      </View>
       <Text style={styles.meta}>
         Generated {new Date().toLocaleString()} · <Link src="https://github.com/JonasWard/state-to-function">JonasWard/state-to-function</Link>
       </Text>

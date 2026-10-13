@@ -1,10 +1,17 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { palette } from './src/theme/palette';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: 'stf-theme-color',
+      transformIndexHtml: (html) => html.replace('%STF_THEME_COLOR%', palette.accent200)
+    }
+  ],
   server: {
     port: 3022,
   },
