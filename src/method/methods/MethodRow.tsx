@@ -7,6 +7,7 @@ import { symbolLabel } from '../../Components/math/symbolLabel';
 import { NAME_CHARS, SUBSCRIPT_CHARS } from '../../model/charsets';
 import { formatNumber } from '../../model/numeric';
 import { MethodDef } from '../../model/types';
+import sectionStyles from '../../Components/layout/Section.module.css';
 import styles from '../definitions.module.css';
 import { ReferenceContext } from '../expression/context';
 import { ExpressionView } from '../expression/ExpressionView';
@@ -42,7 +43,10 @@ export const MethodRow: React.FC<{
         <ExpressionView value={value.method} context={context} onChange={(method) => onChange({ ...value, method })} />
       </div>
       <output className={styles.result} aria-label={`${label} result`}>
-        = {formatNumber(result)}
+        <span className={sectionStyles.equals} aria-hidden>
+          =
+        </span>
+        {formatNumber(result)}
       </output>
       <div className={styles.del}>
         {references ? (

@@ -34,13 +34,11 @@
 }
 
 .index {
+  composes: hint from '../Components/layout/Section.module.css';
   grid-area: idx;
   align-self: start;
   padding-top: var(--stf-space-4);
-  font-family: var(--stf-font-mono);
-  font-size: var(--stf-text-xs);
   text-align: right;
-  color: var(--stf-ink-subtle);
 }
 
 .sym {
@@ -78,13 +76,9 @@
   min-width: 0;
 }
 .result {
+  composes: number from '../Components/layout/Section.module.css';
   grid-area: result;
   justify-self: end;
-  font-family: var(--stf-font-mono);
-  font-size: var(--stf-text-sm);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  color: var(--stf-ink-muted);
 }
 
 /* inputs: one line when there is room, otherwise labels above values */

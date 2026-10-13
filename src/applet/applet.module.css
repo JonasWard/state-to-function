@@ -39,7 +39,7 @@
 }
 
 .range {
-  font-family: var(--stf-font-mono);
+  composes: hint from '../Components/layout/Section.module.css';
 }
 
 .name {
@@ -47,11 +47,8 @@
 }
 
 .value {
-  font-family: var(--stf-font-mono);
-  font-size: var(--stf-text-lg);
-  font-variant-numeric: tabular-nums;
+  composes: number from '../Components/layout/Section.module.css';
   text-align: right;
-  white-space: nowrap;
 }
 
 

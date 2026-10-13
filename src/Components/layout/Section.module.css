@@ -48,3 +48,25 @@
   font-size: var(--stf-text-sm);
   color: var(--stf-ink-subtle);
 }
+
+/* every computed number: method rows, applet results */
+.number {
+  font-family: var(--stf-font-mono);
+  font-size: var(--stf-text-lg);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--stf-ink);
+}
+
+/* gutters and hints: row numbers, input ranges */
+.hint {
+  font-family: var(--stf-font-mono);
+  font-size: var(--stf-text-xs);
+  color: var(--stf-ink-subtle);
+}
+
+.equals {
+  margin-right: var(--stf-space-2);
+  font-family: var(--stf-font-math);
+  color: var(--stf-ink-muted);
+}
