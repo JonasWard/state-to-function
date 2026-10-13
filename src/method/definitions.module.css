@@ -1,0 +1,182 @@
+.view {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0 32px;
+}
+
+.single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.panel {
+  container-type: inline-size;
+  min-width: 0;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 16px 0 8px;
+  border-bottom: 1px solid var(--stf-line-strong);
+}
+
+.panelTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stf-ink-muted);
+}
+
+.count {
+  font-family: var(--stf-font-mono);
+  font-size: 0.75rem;
+  color: var(--stf-ink-subtle);
+}
+
+.columns,
+.row {
+  display: grid;
+  gap: 4px 6px;
+  align-items: center;
+}
+
+.columns {
+  padding: 6px 0 4px;
+  border-bottom: var(--stf-hairline);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stf-ink-subtle);
+}
+
+.row {
+  padding: 6px 0;
+  border-bottom: var(--stf-hairline);
+}
+
+.index {
+  grid-area: idx;
+  align-self: start;
+  padding-top: 0.7rem;
+  font-family: var(--stf-font-mono);
+  font-size: 0.68rem;
+  text-align: right;
+  color: var(--stf-ink-subtle);
+}
+
+.sym {
+  grid-area: sym;
+  align-self: start;
+}
+.sub {
+  grid-area: sub;
+}
+.name {
+  grid-area: name;
+}
+.type {
+  grid-area: type;
+}
+.min {
+  grid-area: min;
+}
+.val {
+  grid-area: val;
+}
+.max {
+  grid-area: max;
+}
+.del {
+  grid-area: del;
+  align-self: start;
+}
+.constant {
+  grid-row: min;
+  grid-column: min-start / max-end;
+}
+.expr {
+  grid-area: expr;
+  min-width: 0;
+}
+.result {
+  grid-area: result;
+  justify-self: end;
+  font-family: var(--stf-font-mono);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--stf-ink-muted);
+}
+
+/* inputs: one line when there is room, otherwise labels above values */
+.inputGrid {
+  grid-template-columns: 1.25rem 3rem 4.5rem minmax(4rem, 1fr) auto 5rem 5rem 5rem 2rem;
+  grid-template-areas: 'idx sym sub name type min val max del';
+}
+
+@container (max-width: 640px) {
+  .inputGrid {
+    grid-template-columns: 1.25rem 3rem 5.25rem minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 2rem;
+    grid-template-areas:
+      'idx sym sub name name name del'
+      'idx sym type min val max .';
+  }
+  .columns.inputGrid {
+    display: none;
+  }
+}
+
+@container (max-width: 420px) {
+  .inputGrid {
+    grid-template-columns: 1.25rem 2.75rem minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 2rem;
+    grid-template-areas:
+      'idx sym sub name name del'
+      'idx sym type type type .'
+      'idx sym min val max .';
+  }
+}
+
+.methodGrid {
+  grid-template-columns: 1.25rem 3rem 5.25rem minmax(0, 1fr) auto 2rem;
+  grid-template-areas:
+    'idx sym sub name name del'
+    'idx sym expr expr result del';
+}
+
+.compact.methodGrid {
+  grid-template-areas: 'idx sym expr expr result del';
+}
+
+.compact .sub,
+.compact .name {
+  display: none;
+}
+
+.compact.inputGrid {
+  grid-template-areas: 'idx sym . . type min val max del';
+}
+
+@container (max-width: 640px) {
+  .compact.inputGrid {
+    grid-template-areas: 'idx sym type min val max del';
+  }
+}
+
+@container (max-width: 420px) {
+  .compact.inputGrid {
+    grid-template-areas:
+      'idx sym type type type del'
+      'idx sym min val max .';
+  }
+}
+
+.add {
+  margin-top: 10px;
+}

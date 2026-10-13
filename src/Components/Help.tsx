@@ -1,6 +1,5 @@
 import React from 'react';
 import './help.css';
-import { useGlobalUIStore } from '../state/globalUIStore';
 import {
   CalculatorOutlined,
   FormOutlined,
@@ -8,6 +7,7 @@ import {
   NumberOutlined,
   SignatureOutlined
 } from '@ant-design/icons';
+import { Grid } from 'antd';
 import { IconTitle } from './icon/IconTitle';
 
 const NumericInputDefinition: React.FC = () => {
@@ -141,7 +141,7 @@ const MobileDefinition: React.FC = () => (
 );
 
 export const Help: React.FC = () => {
-  const isDesktop = useGlobalUIStore((s) => s.isDesktop);
+  const isDesktop = Grid.useBreakpoint().lg ?? true;
   return (
     <div className="help-container">
       <h1>State-to-Function</h1>

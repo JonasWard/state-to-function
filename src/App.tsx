@@ -1,110 +1,36 @@
-import { useParams } from 'react-router-dom';
-import { useAppState } from './state/appState';
-import { useEffect } from 'react';
-import { Navigation } from './Components/Navigation';
-import React from 'react';
-import { useGlobalUIStore } from './state/globalUIStore';
-import { Applet } from './applet/Applet';
-import { InputView } from './method/InputView';
-import { FromState, getStateData, ObjectNode } from 'url-safe-bitpacking';
-import { INITIAL_INPUT_VIEW_STRING, MIN_DESKTOP_WIDTH, ROOT_NODE_NAME } from './state/c';
-import { ModelStateDescriptor } from './legacy/oldModel';
-import { getStateDataForNumericInputs, getStateNodeForDataString } from './applet/utils';
-import { MethodStateData } from './legacy/legacyTypes';
+import { Spin } from 'antd';
+import React, { useEffect } from 'react';
+import styles from './App.module.css';
+import { AppletView } from './applet/AppletView';
 import { Help } from './Components/Help';
-import './App.css';
-
-const handleUndoRedo = (e: KeyboardEvent) => {
-  let undoRedoNothing: 'undo' | 'redo' | undefined = undefined;
-
-  if (e.metaKey || e.ctrlKey) {
-    if (e.key === 'z') undoRedoNothing = e.shiftKey ? 'redo' : 'undo';
-    else if (e.key === 'y') undoRedoNothing = 'redo';
-  }
-
-  if (!undoRedoNothing) return;
-
-  const uiInFocus = useGlobalUIStore.getState().uiInFocus;
-  if (uiInFocus === 'applet' && undoRedoNothing === 'undo') {
-    useAppState.getState().undoAppletStateString();
-    e.preventDefault();
-  }
-  if (uiInFocus === 'applet' && undoRedoNothing === 'redo') {
-    useAppState.getState().redoAppletStateString();
-    e.preventDefault();
-  }
-  if (uiInFocus !== 'applet' && undoRedoNothing === 'undo') {
-    useAppState.getState().undoInputStateString();
-    e.preventDefault();
-  }
-  if (uiInFocus !== 'applet' && undoRedoNothing === 'redo') {
-    useAppState.getState().redoInputStateString();
-    e.preventDefault();
-  }
-};
+import { AppHeader } from './Components/layout/AppHeader';
+import { DefinitionView } from './method/DefinitionView';
+import { useDocumentStore } from './state/documentStore';
+import { startHashSync } from './state/hashSync';
+import { useKeyboardShortcuts } from './state/useKeyboardShortcuts';
+import { useUIStore } from './state/uiStore';
 
 export const App: React.FC = () => {
-  const loading = useGlobalUIStore((s) => s.loading);
-  const setLoading = useGlobalUIStore((s) => s.setLoading);
-  const { base64InputStateString, base64AppletStateString } = useParams();
-  const uiInFocus = useGlobalUIStore((s) => s.uiInFocus);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const isDesktop = window.innerWidth > MIN_DESKTOP_WIDTH;
-      useGlobalUIStore.getState().setIsDesktop(isDesktop);
-      return isDesktop;
-    };
-
-    const isDesktop = handleResize();
-
-    if (base64InputStateString) {
-      try {
-        // validating the base64 strings used for the mehod
-        const state = FromState(ModelStateDescriptor, ROOT_NODE_NAME, base64InputStateString);
-        useAppState.getState().addInputStateStringToStack(base64InputStateString);
-        if (base64AppletStateString) {
-          try {
-            // based on the current method state, we can validate the input state string
-            const methodStateData = getStateData(state.toDataEntry()) as MethodStateData;
-            const { dataEntries } = getStateDataForNumericInputs(methodStateData.inputValues);
-            useAppState
-              .getState()
-              .addAppletStateStringToStack(
-                (getStateNodeForDataString(dataEntries, base64AppletStateString) as ObjectNode).getBase64String()
-              );
-            useGlobalUIStore.getState().setUiInFocus('applet');
-          } catch (e) {
-            console.error(e);
-            // use the default state string
-            useAppState.getState().addAppletStateStringToStack(INITIAL_INPUT_VIEW_STRING);
-            useGlobalUIStore.getState().setUiInFocus(isDesktop ? null : 'method');
-          }
-        } else useGlobalUIStore.getState().setUiInFocus(isDesktop ? null : 'method');
-      } catch (e) {
-        console.error(e);
-        // use the default state string
-        useAppState.getState().addInputStateStringToStack(INITIAL_INPUT_VIEW_STRING);
-        useGlobalUIStore.getState().setUiInFocus(isDesktop ? null : 'method');
-      }
-    }
-
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('keydown', handleUndoRedo);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('keydown', handleUndoRedo);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (loading) setLoading(false);
-  }, [loading]);
-
+  useEffect(() => startHashSync(), []);
+  useKeyboardShortcuts();
+  const view = useUIStore((s) => s.view);
+  const upgrading = useDocumentStore((s) => s.status === 'upgrading');
   return (
-    <Navigation>
-      {uiInFocus === 'help' ? <Help /> : loading ? null : uiInFocus === 'applet' ? <Applet /> : <InputView />}
-    </Navigation>
+    <>
+      <AppHeader />
+      <main className={styles.main}>
+        {upgrading ? (
+          <div className={styles.loading}>
+            <Spin tip="Upgrading link…" />
+          </div>
+        ) : view === 'help' ? (
+          <Help />
+        ) : view === 'applet' ? (
+          <AppletView />
+        ) : (
+          <DefinitionView />
+        )}
+      </main>
+    </>
   );
 };

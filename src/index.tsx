@@ -1,26 +1,20 @@
+import '@ant-design/v5-patch-for-react-19';
 import React from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import './theme/fonts';
 import './theme/base.css';
-import './index.css';
 import { App } from './App';
+import { bootstrap } from './state/hashSync';
 import { applyCssVariables } from './theme/cssVariables';
 import { ThemeRoot } from './theme/ThemeRoot';
 
 applyCssVariables();
+void bootstrap();
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-root.render(
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ThemeRoot>
-      <Router>
-        <Routes>
-          <Route element={<App />} path="/:base64InputStateString/:base64AppletStateString" />
-          <Route element={<App />} path="/:base64InputStateString" />
-          <Route element={<App />} path="/" />
-        </Routes>
-      </Router>
+      <App />
     </ThemeRoot>
   </React.StrictMode>
 );
