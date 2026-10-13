@@ -1,7 +1,7 @@
 import { Button, Checkbox, Popover, Tag } from 'antd';
 import { useMemo } from 'react';
 import { IntNode, EnumArrayNode, EnumOptionsNode } from 'url-safe-bitpacking';
-import { InputDefinitionTypes } from '../../modelDefinition/newModel';
+import { InputDefinitionTypes } from '../../legacy/oldModel';
 import { HardcodedNumber } from '../../Components/inputs/HardcodedNumber';
 import { SymbolRenderer } from '../../Components/icon/SymbolRenderer';
 import { MethodFlatRenderer } from './MethodFlatRenderer';

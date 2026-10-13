@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { PDFDocumentProps } from './PDFDocument';
-import { MethodStateData } from '../../applet/methodDataType';
+import { MethodStateData } from '../../legacy/legacyTypes';
 import { getStateData, ObjectNode } from 'url-safe-bitpacking';
 
 interface UsePDFDataProps {

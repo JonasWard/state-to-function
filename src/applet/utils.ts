@@ -7,9 +7,9 @@ import {
   SpecificTypeNode,
   VersionDataEntry
 } from 'url-safe-bitpacking';
-import { InputNumber, MethodStateData } from './methodDataType';
+import { InputNumber, MethodStateData } from '../legacy/legacyTypes';
 import { ROOT_NODE_NAME } from '../state/c';
-import { ModelStateDescriptor } from '../modelDefinition/newModel';
+import { ModelStateDescriptor } from '../legacy/oldModel';
 
 const getDataEntryForNumericInputs = (input: InputNumber, index: number) => {
   switch (input.inputType.state) {

@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useRef } from 'react';
-import { ModelStateDescriptor } from '../modelDefinition/newModel';
+import { ModelStateDescriptor } from '../legacy/oldModel';
 import React from 'react';
 import { FromState, ObjectNode, SpecificTypeNode } from 'url-safe-bitpacking';
 import { ROOT_NODE_NAME, INITIAL_INPUT_VIEW_STRING } from '../state/c';

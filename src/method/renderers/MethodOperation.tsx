@@ -1,7 +1,7 @@
 import React from 'react';
 import { MethodHandlingProps, ShortSymbol } from './methodType';
 import { Button } from 'antd';
-import { IfMethodTypes } from '../../modelDefinition/newModel';
+import { IfMethodTypes } from '../../legacy/oldModel';
 
 const getIfMethodSymbol = (method: (typeof IfMethodTypes)[number], index: number) => {
   switch (index) {

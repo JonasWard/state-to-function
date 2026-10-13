@@ -4,7 +4,7 @@ import { SymbolRenderer } from '../../Components/icon/SymbolRenderer';
 import { EnumArrayNode, EnumNode } from 'url-safe-bitpacking';
 import { IconTitle } from '../../Components/icon/IconTitle';
 import { NumberOutlined, FunctionOutlined, CalculatorOutlined } from '@ant-design/icons';
-import { InputDefinitionTypes } from '../../modelDefinition/newModel';
+import { InputDefinitionTypes } from '../../legacy/oldModel';
 
 const nameKeyMapIcon: Record<(typeof InputDefinitionTypes)[number], React.ReactNode> = {
   numericInput: <NumberOutlined />,

@@ -1,5 +1,5 @@
 import { JavascriptOperation } from '../method/renderers/methodType';
-import { IfMethodTypes } from '../modelDefinition/newModel';
+import { IfMethodTypes } from '../legacy/oldModel';
 import {
   methodInputType,
   methodOutputType,

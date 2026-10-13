@@ -1,5 +1,5 @@
 import { EnumOptionsNode } from 'url-safe-bitpacking';
-import { InputDefinitionTypes, AvailableMethodsTypes } from '../../modelDefinition/newModel';
+import { InputDefinitionTypes, AvailableMethodsTypes } from '../../legacy/oldModel';
 import { TNodeUIProps } from '../../urlBitPacking/nodeProps';
 import { SymbolNameType } from '../specificInputs/NameEditor';
 

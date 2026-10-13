@@ -1,4 +1,4 @@
-import { IfMethodTypes, SimpleMethodTypes } from '../modelDefinition/newModel';
+import { IfMethodTypes, SimpleMethodTypes } from './oldModel';
 
 type descriptionType = {
   symbol: string;
