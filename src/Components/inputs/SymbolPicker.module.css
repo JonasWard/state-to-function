@@ -1,0 +1,22 @@
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  height: 2.5rem;
+  padding: 0 4px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.trigger:hover {
+  border-color: var(--stf-line);
+  background: var(--stf-accent-50);
+}
+
+.duplicate {
+  border-color: var(--stf-warning);
+  background: var(--stf-warning-bg);
+}

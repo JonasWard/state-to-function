@@ -1,0 +1,40 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(2.25rem, 1fr));
+  gap: 2px;
+  max-width: 20rem;
+}
+
+.cell {
+  min-height: 2rem;
+  padding: 0 4px;
+  border: var(--stf-hairline);
+  border-radius: 2px;
+  background: var(--stf-surface);
+  color: var(--stf-ink);
+  cursor: pointer;
+  font: inherit;
+}
+
+.cell:hover {
+  background: var(--stf-accent-100);
+}
+
+.cell[aria-pressed='true'] {
+  background: var(--stf-accent-200);
+  border-color: var(--stf-accent-500);
+}
+
+.title {
+  margin: 0 0 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--stf-ink-muted);
+}
+
+.empty {
+  font-size: 0.8rem;
+  color: var(--stf-ink-subtle);
+}
