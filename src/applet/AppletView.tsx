@@ -10,6 +10,7 @@ import { InputDef } from '../model/types';
 import { useDocumentStore, useEvaluation } from '../state/documentStore';
 import { useUIStore } from '../state/uiStore';
 import styles from './applet.module.css';
+import { ExportButtons } from './ExportButtons';
 import { ResultsTable } from './ResultsTable';
 
 const setOverride = (i: number, v: number | null, coalesceKey?: string) =>
@@ -108,6 +109,9 @@ export const AppletView: React.FC = () => {
           </h2>
         </header>
         <ResultsTable methods={definition.methods} results={results} showNames={showNames} />
+        <div className={styles.exports}>
+          <ExportButtons />
+        </div>
       </section>
     </div>
   );

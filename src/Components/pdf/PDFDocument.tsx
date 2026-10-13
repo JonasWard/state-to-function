@@ -1,211 +1,82 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet, Image, Font, Link } from '@react-pdf/renderer';
+import { Document, Font, Image, Link, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
+import mathGreek from '@fontsource/stix-two-text/files/stix-two-text-greek-400-italic.woff?url';
+import mathLatin from '@fontsource/stix-two-text/files/stix-two-text-latin-400-italic.woff?url';
+import mono from '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff?url';
+import { ExportRow } from '../../model/exportRows';
+import { formatNumber } from '../../model/numeric';
+import { palette } from '../../theme/palette';
 
-// Register a font that supports Greek characters and other Unicode symbols
-Font.register({
-  family: 'Roboto',
-  fonts: [
-    {
-      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf',
-      fontWeight: 'normal'
-    },
-    {
-      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf',
-      fontWeight: 'bold'
-    }
-  ]
-});
+// bundled fonts, so the export works offline; Greek symbols fall back to the second family
+Font.register({ family: 'MathLatin', src: mathLatin });
+Font.register({ family: 'MathGreek', src: mathGreek });
+Font.register({ family: 'Mono', src: mono });
+Font.registerHyphenationCallback((word) => [word]);
 
-// Define styles for the PDF document
+const MATH = ['MathLatin', 'MathGreek'];
+
+// the bundled latin subsets lack the narrow no-break space and ∞
+const pdfNumber = (n: number) => formatNumber(n).replace(/\u202F/g, ' ').replace('∞', 'Infinity');
+
 const styles = StyleSheet.create({
-  page: {
-    flexDirection: 'column',
-    backgroundColor: '#ffffff',
-    padding: 30,
-    fontFamily: 'Roboto'
-  },
-  title: {
-    fontSize: 12,
-    marginBottom: 5,
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
-  timestamp: {
-    fontSize: 9,
-    marginBottom: 8,
-    textAlign: 'center',
-    color: '#666'
-  },
-  table: {
-    width: '100%',
-    marginBottom: 10
-  },
-  tableHeader: {
-    flexDirection: 'row',
-    backgroundColor: '#f0f0f0',
-    padding: 5,
-    fontWeight: 'bold',
-    fontSize: 12,
-    borderBottom: '1pt solid #000'
-  },
-  tableRow: {
-    flexDirection: 'row',
-    padding: 4,
-    fontSize: 10,
-    borderBottom: '1pt solid #e0e0e0'
-  },
-  tableCol: {
-    flex: 1,
-    textAlign: 'left'
-  },
-  tableColName: {
-    flex: 2,
-    textAlign: 'left'
-  },
-  sectionTitle: {
-    fontSize: 14,
-    marginBottom: 5,
-    marginTop: 5,
-    fontWeight: 'bold'
-  },
-  qrCodeContainer: {
-    marginTop: 'auto',
-    alignItems: 'center',
-    paddingTop: 20
-  },
-  qrCodeLabel: {
-    fontSize: 10,
-    marginBottom: 5,
-    textAlign: 'center'
-  },
-  qrCode: {
-    width: 150,
-    height: 150
-  },
-  urlText: {
+  page: { padding: 36, fontFamily: 'Helvetica', fontSize: 10, color: palette.ink },
+  title: { fontFamily: 'Mono', fontSize: 12, color: palette.accent800 },
+  meta: { marginTop: 2, marginBottom: 14, fontSize: 8, color: palette.inkMuted },
+  section: {
+    marginTop: 12,
+    paddingBottom: 3,
     fontSize: 8,
-    marginTop: 5,
-    textAlign: 'center',
-    color: '#666'
+    letterSpacing: 1,
+    color: palette.inkMuted,
+    borderBottom: `1pt solid ${palette.lineStrong}`
   },
-  symbolContainer: {
-    flexDirection: 'row',
-    alignItems: 'baseline'
-  },
-  symbolText: {
-    fontSize: 10
-  },
-  subscriptText: {
-    fontSize: 7,
-    marginLeft: 1
-  },
-  resultGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: '0 10px'
-  },
-  resultCard: {
-    width: '48%',
-    padding: 4,
-    borderBottom: '1pt solid #e0e0e0',
-    flexDirection: 'row',
-    fontSize: 10
-  }
+  row: { flexDirection: 'row', alignItems: 'center', paddingVertical: 4, borderBottom: `0.5pt solid ${palette.line}` },
+  symbol: { width: 60, flexDirection: 'row', alignItems: 'flex-end' },
+  symbolText: { fontFamily: MATH, fontSize: 13 },
+  subscriptText: { fontFamily: MATH, fontSize: 8, marginLeft: 1 },
+  name: { flex: 1, color: palette.inkMuted },
+  value: { width: 140, textAlign: 'right', fontFamily: 'Mono' },
+  qr: { marginTop: 'auto', alignItems: 'center', paddingTop: 20 },
+  qrImage: { width: 120, height: 120 },
+  url: { marginTop: 4, fontSize: 6, color: palette.inkSubtle, textAlign: 'center' }
 });
+
+const Rows: React.FC<{ title: string; rows: ExportRow[] }> = ({ title, rows }) => (
+  <>
+    <Text style={styles.section}>{title.toUpperCase()}</Text>
+    {rows.map((r, i) => (
+      <View key={i} style={styles.row} wrap={false}>
+        <View style={styles.symbol}>
+          <Text style={styles.symbolText}>{r.symbol}</Text>
+          {r.subscript && <Text style={styles.subscriptText}>{r.subscript}</Text>}
+        </View>
+        <Text style={styles.name}>{r.name || '—'}</Text>
+        <Text style={styles.value}>{pdfNumber(r.value)}</Text>
+      </View>
+    ))}
+  </>
+);
 
 export interface PDFDocumentProps {
-  inputValues: Array<{
-    symbol: string;
-    subscript: string;
-    name: string;
-    value: number | string;
-  }>;
-  resultValues: Array<{
-    symbol: string;
-    subscript: string;
-    name: string;
-    value: number;
-  }>;
+  inputs: ExportRow[];
+  results: ExportRow[];
   qrCodeDataUrl: string;
-  currentUrl: string;
+  url: string;
 }
 
-export const PDFDocumentComponent: React.FC<PDFDocumentProps> = ({
-  inputValues,
-  resultValues,
-  qrCodeDataUrl,
-  currentUrl
-}) => {
-  const renderSymbol = (symbol: string, subscript: string) => {
-    if (subscript) {
-      return (
-        <View style={styles.symbolContainer}>
-          <Text style={styles.symbolText}>{symbol}</Text>
-          <Text style={styles.subscriptText}>{subscript}</Text>
-        </View>
-      );
-    }
-    return <Text style={styles.symbolText}>{symbol}</Text>;
-  };
-
-  const formatValue = (value: number | string) => {
-    if (typeof value === 'number') {
-      // Format numbers with appropriate precision
-      if (Number.isInteger(value)) {
-        return value.toString();
-      }
-      // Show up to 6 decimal places, removing trailing zeros
-      return value.toFixed(6).replace(/\.?0+$/, '');
-    }
-    return value;
-  };
-
-  const currentDate = new Date().toLocaleString();
-
-  return (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <Text style={styles.title}>
-          State to Function by <Link href="https://github.com/JonasWard">JonasWard</Link>
-        </Text>
-        <Text style={styles.timestamp}>Generated on {currentDate}</Text>
-
-        {/* Input Values Table */}
-        <Text style={styles.sectionTitle}>Input Values</Text>
-        <View style={styles.table}>
-          <View style={styles.tableHeader}>
-            <Text style={styles.tableCol}>Symbol</Text>
-            <Text style={styles.tableColName}>Name</Text>
-            <Text style={styles.tableCol}>Value</Text>
-          </View>
-          {inputValues.map((input, index) => (
-            <View key={`input-${index}`} style={styles.tableRow}>
-              <View style={styles.tableCol}>{renderSymbol(input.symbol, input.subscript)}</View>
-              <Text style={styles.tableColName}>{input.name || '—'}</Text>
-              <Text style={styles.tableCol}>{formatValue(input.value)}</Text>
-            </View>
-          ))}
-        </View>
-
-        {/* Result Values Table */}
-        <Text style={styles.sectionTitle}>Result Values</Text>
-        <View style={styles.resultGrid}>
-          {resultValues.map((result, index) => (
-            <View key={`result-${index}`} style={styles.resultCard}>
-              <View style={styles.tableCol}>{renderSymbol(result.symbol, result.subscript)}</View>
-              <Text style={styles.tableColName}>{result.name || '—'}</Text>
-              <Text style={styles.tableCol}>{formatValue(result.value)}</Text>
-            </View>
-          ))}
-        </View>
-
-        {/* QR Code */}
-        <View style={styles.qrCodeContainer}>
-          <Text style={styles.qrCodeLabel}>Scan to view this configuration:</Text>
-          <Image style={styles.qrCode} src={qrCodeDataUrl} />
-          <Text style={styles.urlText}>{currentUrl}</Text>
-        </View>
-      </Page>
-    </Document>
-  );
-};
+export const PDFDocumentComponent: React.FC<PDFDocumentProps> = ({ inputs, results, qrCodeDataUrl, url }) => (
+  <Document title="State-to-Function export">
+    <Page size="A4" style={styles.page}>
+      <Text style={styles.title}>State-to-Function</Text>
+      <Text style={styles.meta}>
+        Generated {new Date().toLocaleString()} · <Link src="https://github.com/JonasWard/state-to-function">JonasWard/state-to-function</Link>
+      </Text>
+      {inputs.length > 0 && <Rows title="Inputs" rows={inputs} />}
+      <Rows title="Results" rows={results} />
+      <View style={styles.qr} wrap={false}>
+        <Image style={styles.qrImage} src={qrCodeDataUrl} />
+        <Text style={styles.url}>{url.match(/.{1,120}/g)?.join('\n')}</Text>
+      </View>
+    </Page>
+  </Document>
+);

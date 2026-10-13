@@ -33,6 +33,7 @@ export const getTheme = (reducedMotion: boolean): ThemeConfig => ({
     Segmented: { trackBg: palette.accent100, itemSelectedBg: palette.surface, itemColor: palette.inkMuted },
     Button: { primaryShadow: 'none', defaultShadow: 'none', dangerShadow: 'none' },
     Tooltip: { colorBgSpotlight: palette.ink },
+    Slider: { railBg: palette.line, railHoverBg: palette.lineStrong, trackBg: palette.accent500, trackHoverBg: palette.accent700 },
     Table: { headerBg: palette.surfaceAlt, headerColor: palette.inkMuted, cellPaddingBlockSM: 4 }
   }
 });
