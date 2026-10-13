@@ -1,0 +1,38 @@
+import type { ThemeConfig } from 'antd';
+import { fonts, palette } from './palette';
+
+export const getTheme = (reducedMotion: boolean): ThemeConfig => ({
+  token: {
+    colorPrimary: palette.accent700,
+    colorInfo: palette.accent700,
+    colorLink: palette.accent700,
+    colorText: palette.ink,
+    colorTextSecondary: palette.inkMuted,
+    colorTextTertiary: palette.inkSubtle,
+    colorBorder: palette.lineStrong,
+    colorBorderSecondary: palette.line,
+    colorSplit: palette.line,
+    colorFillTertiary: palette.accent50,
+    colorFillSecondary: palette.accent100,
+    colorBgLayout: palette.surfaceAlt,
+    colorError: palette.danger,
+    colorWarning: palette.warning,
+    colorSuccess: palette.success,
+    borderRadius: 3,
+    borderRadiusSM: 2,
+    borderRadiusLG: 4,
+    controlHeight: 30,
+    fontFamily: fonts.ui,
+    fontFamilyCode: fonts.mono,
+    wireframe: true,
+    motion: !reducedMotion,
+    motionDurationMid: '0.15s'
+  },
+  components: {
+    InputNumber: { fontFamily: fonts.mono },
+    Segmented: { trackBg: palette.accent100, itemSelectedBg: palette.surface, itemColor: palette.inkMuted },
+    Button: { primaryShadow: 'none', defaultShadow: 'none', dangerShadow: 'none' },
+    Tooltip: { colorBgSpotlight: palette.ink },
+    Table: { headerBg: palette.surfaceAlt, headerColor: palette.inkMuted, cellPaddingBlockSM: 4 }
+  }
+});
