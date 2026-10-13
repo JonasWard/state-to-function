@@ -1,0 +1,10 @@
+{
+  "name": "State-to-Function",
+  "short_name": "State→Fn",
+  "description": "Spreadsheet-like formulas and a calculator, stored in the URL.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#dedef4",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

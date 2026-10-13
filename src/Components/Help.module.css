@@ -1,0 +1,70 @@
+.help {
+  max-width: 46rem;
+  padding: 24px 0 48px;
+  line-height: 1.6;
+}
+
+.help h1 {
+  margin: 0 0 4px;
+  font-family: var(--stf-font-mono);
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--stf-accent-800);
+}
+
+.help h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 28px 0 6px;
+  padding-bottom: 4px;
+  border-bottom: var(--stf-hairline);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stf-ink-muted);
+}
+
+.help h3 {
+  margin: 16px 0 2px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.help p {
+  margin: 6px 0;
+}
+
+.lead {
+  color: var(--stf-ink-muted);
+}
+
+.table {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 16px;
+  margin: 8px 0;
+}
+
+.glyph {
+  min-width: 1.5rem;
+  font-family: var(--stf-font-math);
+  font-size: 1.1rem;
+  text-align: center;
+  color: var(--stf-accent-800);
+}
+
+.help kbd {
+  padding: 0 4px;
+  border: 1px solid var(--stf-line-strong);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  font-family: var(--stf-font-mono);
+  font-size: 0.8em;
+}
+
+.help code {
+  font-family: var(--stf-font-mono);
+  font-size: 0.85em;
+}

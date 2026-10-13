@@ -1,158 +1,89 @@
+import { FormOutlined, FunctionOutlined, LinkOutlined, NumberOutlined, SignatureOutlined } from '@ant-design/icons';
 import React from 'react';
-import './help.css';
-import {
-  CalculatorOutlined,
-  FormOutlined,
-  FunctionOutlined,
-  NumberOutlined,
-  SignatureOutlined
-} from '@ant-design/icons';
-import { Grid } from 'antd';
-import { IconTitle } from './icon/IconTitle';
+import { OP_LABEL, OP_SYMBOL, OPS } from '../model/operators';
+import styles from './Help.module.css';
 
-const NumericInputDefinition: React.FC = () => {
-  return (
-    <div>
-      <IconTitle icon={<NumberOutlined />} title="Inputs" size="large" />
-      <p>
-        All <b>Inputs</b> have a symbol, this symbol is used to identify that input. Optionally you can add a subscript
-        and a name. In the <b>Methods</b> menu you will be able to select these inputs as input variables. There are
-        three types of inputs that you can choose from: <b>Constants</b>, <b>Integer</b> (without decimal), <b>Float</b>{' '}
-        (decimal numbers)
-      </p>
-      <IconTitle icon="𝑐" title="Constants" size="middle" />
-      <p>
-        <b>Constants</b> are defined ones. Use them to represent values you need to use multiple times or might have to
-        change in the future but are otherwise considered as constant. Typical examples would be <b>π</b> or <b>e</b>.
-      </p>
-      <IconTitle icon="ℤ | ℝ" title="Integers & Floats" size="middle" />
-      <p>
-        <b>Integers</b> & <b>Floats</b> are variables that are assumed to be able to change, though within a specific
-        range. In the applet you will be able to set the precise value. Besides the minimum and maximum you should also
-        define the default value (standard value which will be used in the applet).
-      </p>
-    </div>
-  );
-};
-
-const MethodDefinition: React.FC = () => {
-  return (
-    <div>
-      <IconTitle icon={<FunctionOutlined />} title="Methods" size="large" />
-      <p>
-        The methods are the different formulas defined. <b>Methods</b> are certain <b>Operations</b> applied onto
-        variables. Variables can be hardcoded in-line <b>Constant</b>, defined <b>Inputs</b>, results of other{' '}
-        <b>Method Output</b> or another <b>Method</b>. You can recognise (sub)methods by an outline surrounding them (vs
-        variables, which are only a symbol).
-      </p>
-      <IconTitle icon={<CalculatorOutlined />} title="Operations" size="middle" />
-      <div className="icon-list">
-        <b>+</b> addition
-        <b>x</b> multiplication
-      </div>
-      <p style={{ margin: '12px 0' }}>
-        The addition and multiplication need to have at least two variables but can have up to 8 variables. By clicking
-        the plus and minus buttons at the end of the method, you can add or remove variables.
-      </p>
-      <div className="icon-list">
-        <b>-</b> subtraction
-        <b>÷</b> division
-        <b>^</b> power
-      </div>
-      <p style={{ margin: '12px 0' }}>The subtraction, division, and power operations can only have two variables.</p>
-      <div className="icon-list">
-        <b>{'<'}</b> smaller than
-        <b>{'>'}</b> greater than
-        <b>=</b> equal
-      </div>
-      <p style={{ margin: '12px 0' }}>
-        The greater than, smaller than, an equal have four variables. The first and second variables are compared, the
-        third variable will be returned if the the comparison resolves to true, the fourth variable is returned when the
-        comparison resolves to false.
-      </p>
-    </div>
-  );
-};
-
-const AppletDefinition: React.FC = () => {
-  return (
-    <div>
-      <IconTitle icon={<SignatureOutlined />} title="Applet" size="large" />
-      <p>
-        At the top of the <b>Applet</b> the variable inputs (Integers & Floats) that you defined at the <b>Inputs</b>{' '}
-        menu are shown. Unless you are loading a previous state (using url) the values will be the default values
-        assigned in the <b>Inputs</b> menu. The minimum and maximum limits you can set here are also taken over from the{' '}
-        <b>Inputs</b> menu.
-      </p>
-      <p>
-        On the bottom of the <b>Applet</b> the outputs of all the <b>Methods</b> are shown. In case there would be any
-        invalid inputs or outpts, all the results will be shown as <b>NaN</b>.
-      </p>
-    </div>
-  );
-};
-
-const DesktopDefinition: React.FC = () => (
+const Row: React.FC<{ glyph: React.ReactNode; children: React.ReactNode }> = ({ glyph, children }) => (
   <>
-    <p>The app is composed of two pages</p>
-    <div className="icon-list">
-      <FormOutlined />
-      <p>
-        The <b>Definition</b> page
-      </p>
-      <SignatureOutlined />
-      <p>
-        The <b>Applet</b> page
-      </p>
-    </div>
-    <IconTitle icon={<FormOutlined />} title="Definition" size="large" />
-    <p>The definition page has two sub-parts</p>
-    <div className="icon-list">
-      <NumberOutlined />
-      <b>Inputs</b>
-      <FunctionOutlined />
-      <b>Methods</b>
-    </div>
-    <NumericInputDefinition />
-    <MethodDefinition />
+    <span className={styles.glyph}>{glyph}</span>
+    <span>{children}</span>
   </>
 );
 
-const MobileDefinition: React.FC = () => (
-  <>
-    <p>The app is composed of three pages</p>
-    <div className="icon-list">
-      <NumberOutlined />
-      <p>
-        The <b>Inputs</b> page
-      </p>
-      <FunctionOutlined />
-      <p>
-        The <b>Methods</b> page
-      </p>
-      <CalculatorOutlined />
-      <p>
-        The <b>Applet</b> page
-      </p>
-    </div>
-    <NumericInputDefinition />
-    <MethodDefinition />
-  </>
-);
+export const Help: React.FC = () => (
+  <article className={styles.help}>
+    <h1>State-to-Function</h1>
+    <p className={styles.lead}>
+      Build spreadsheet-like formulas, use them as a small calculator and keep everything in the link. No backend, no
+      database, no tracking, no cookies. Bookmark or share the URL to come back to it.
+    </p>
 
-export const Help: React.FC = () => {
-  const isDesktop = Grid.useBreakpoint().lg ?? true;
-  return (
-    <div className="help-container">
-      <h1>State-to-Function</h1>
-      <p>
-        This is a simple app that allows you to create excel-like formulas, visualise them as a little applet and store
-        them in the browser url. No backend, no database, no tracking, no cookies, no ads, no nonsense. Simply bookmark
-        the url to use it later again!
-      </p>
-      <h2>Quick Intro</h2>
-      {isDesktop ? <DesktopDefinition /> : <MobileDefinition />}
-      <AppletDefinition />
+    <h2>
+      <FormOutlined /> Definitions
+    </h2>
+    <p>
+      The <b>Definitions</b> page has two parts: <b>Inputs</b> and <b>Methods</b>. On small screens they are separate
+      tabs in the header. Every input and method has a symbol, plus an optional subscript and name. Click the symbol to
+      pick another one; an outlined symbol means the same symbol and subscript are used more than once.
+    </p>
+
+    <h3>
+      <NumberOutlined /> Inputs
+    </h3>
+    <div className={styles.table}>
+      <Row glyph="𝑐">
+        <b>Constant</b>: a fixed value you reuse, such as π or e.
+      </Row>
+      <Row glyph="ℤ">
+        <b>Integer</b>: a whole number between a minimum and maximum, with a default.
+      </Row>
+      <Row glyph="ℝ">
+        <b>Decimal</b>: like an integer, with two decimals of precision.
+      </Row>
     </div>
-  );
-};
+    <p>Switching type keeps the value. Removing an input that is in use replaces it with its default value.</p>
+
+    <h3>
+      <FunctionOutlined /> Methods
+    </h3>
+    <p>
+      A method is an operation on terms. A term is an input, the result of an <i>earlier</i> method, a constant or a
+      nested expression in parentheses. Click any term or operator to change it. Each method shows its current result on
+      the right.
+    </p>
+    <div className={styles.table}>
+      {OPS.map((op) => (
+        <Row key={op} glyph={OP_SYMBOL[op]}>
+          {OP_LABEL[op]}
+          {op === 'addition' || op === 'multiplication'
+            ? ' — 2 to 8 terms; use + and − after the last term to add or remove one.'
+            : op === 'smallerThan' || op === 'greaterThan' || op === 'equal'
+              ? ' — compares the first two terms, then gives the third if true and the fourth if false.'
+              : ' — two terms.'}
+        </Row>
+      ))}
+    </div>
+
+    <h2>
+      <SignatureOutlined /> Applet
+    </h2>
+    <p>
+      The applet lists the integer and decimal inputs with a slider and a field, limited to their ranges, and every
+      method's result. Results that cannot be calculated show as <code>NaN</code>, division by zero as <code>∞</code>.
+      Export the current values as CSV, or as a PDF that includes a QR code of the link.
+    </p>
+
+    <h2>
+      <LinkOutlined /> Links and undo
+    </h2>
+    <p>
+      The address holds the definitions and the applet values, so copying it (or using the link button) shares exactly
+      what you see. Undo and redo cover both pages: <kbd>Ctrl</kbd> + <kbd>Z</kbd> and <kbd>Ctrl</kbd> + <kbd>Y</kbd>{' '}
+      (or <kbd>⌘</kbd> on a Mac) when no text field is focused. The browser's back button moves between pages.
+    </p>
+    <p>
+      Links made with earlier versions of the app are upgraded automatically when you open them; the address is then
+      replaced with the new, shorter form.
+    </p>
+  </article>
+);
