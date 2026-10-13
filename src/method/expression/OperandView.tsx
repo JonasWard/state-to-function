@@ -65,7 +65,7 @@ export const OperandView: React.FC<{ value: Operand; onChange: (value: Operand) 
   );
   if (value.type !== 'method') return trigger;
   return (
-    <span className={styles.expr}>
+    <span className={styles.nested}>
       {trigger}
       <ExpressionView value={value.method} onChange={(method) => onChange({ type: 'method', method })} context={context} />
       <span className={`${styles.paren} ${styles.closing}`} aria-hidden>

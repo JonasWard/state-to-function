@@ -54,6 +54,16 @@
   color: var(--stf-danger);
 }
 
+.nested {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.nested > .expr {
+  flex-wrap: nowrap;
+}
+
 .paren {
   min-width: 0.8rem;
   padding: 0 1px;
