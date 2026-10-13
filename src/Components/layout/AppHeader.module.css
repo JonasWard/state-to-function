@@ -9,16 +9,16 @@
 .inner {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--stf-space-4);
   max-width: var(--stf-content-max);
   height: 48px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 var(--stf-space-5);
 }
 
 .wordmark {
   font-family: var(--stf-font-mono);
-  font-size: 0.85rem;
+  font-size: var(--stf-text-sm);
   font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--stf-accent-800);
@@ -28,20 +28,20 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: var(--stf-space-1);
   margin-left: auto;
 }
 
 .settings {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--stf-space-3);
 }
 
 .setting {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  font-size: 0.85rem;
+  gap: var(--stf-space-5);
+  font-size: var(--stf-text-sm);
 }

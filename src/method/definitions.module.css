@@ -1,7 +1,7 @@
 .view {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 0 32px;
+  gap: 0 var(--stf-space-7);
 }
 
 .single {
@@ -17,17 +17,17 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 8px;
-  padding: 16px 0 8px;
+  gap: var(--stf-space-3);
+  padding: var(--stf-space-5) 0 var(--stf-space-3);
   border-bottom: 1px solid var(--stf-line-strong);
 }
 
 .panelTitle {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--stf-space-2);
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--stf-text-xs);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -36,37 +36,37 @@
 
 .count {
   font-family: var(--stf-font-mono);
-  font-size: 0.75rem;
+  font-size: var(--stf-text-xs);
   color: var(--stf-ink-subtle);
 }
 
 .columns,
 .row {
   display: grid;
-  gap: 4px 6px;
+  gap: var(--stf-space-2) var(--stf-space-2);
   align-items: center;
 }
 
 .columns {
-  padding: 6px 0 4px;
+  padding: var(--stf-space-2) 0 var(--stf-space-2);
   border-bottom: var(--stf-hairline);
-  font-size: 0.68rem;
+  font-size: var(--stf-text-xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--stf-ink-subtle);
 }
 
 .row {
-  padding: 6px 0;
+  padding: var(--stf-space-2) 0;
   border-bottom: var(--stf-hairline);
 }
 
 .index {
   grid-area: idx;
   align-self: start;
-  padding-top: 0.7rem;
+  padding-top: var(--stf-space-4);
   font-family: var(--stf-font-mono);
-  font-size: 0.68rem;
+  font-size: var(--stf-text-xs);
   text-align: right;
   color: var(--stf-ink-subtle);
 }
@@ -109,7 +109,7 @@
   grid-area: result;
   justify-self: end;
   font-family: var(--stf-font-mono);
-  font-size: 0.85rem;
+  font-size: var(--stf-text-sm);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   color: var(--stf-ink-muted);
@@ -178,5 +178,5 @@
 }
 
 .add {
-  margin-top: 10px;
+  margin-top: var(--stf-space-3);
 }

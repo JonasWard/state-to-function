@@ -1,15 +1,15 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(2.25rem, 1fr));
-  gap: 2px;
+  gap: var(--stf-space-1);
   max-width: 20rem;
 }
 
 .cell {
   min-height: 2rem;
-  padding: 0 4px;
+  padding: 0 var(--stf-space-2);
   border: var(--stf-hairline);
-  border-radius: 2px;
+  border-radius: var(--stf-radius);
   background: var(--stf-surface);
   color: var(--stf-ink);
   cursor: pointer;
@@ -26,8 +26,8 @@
 }
 
 .title {
-  margin: 0 0 4px;
-  font-size: 0.75rem;
+  margin: 0 0 var(--stf-space-2);
+  font-size: var(--stf-text-xs);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -35,6 +35,6 @@
 }
 
 .empty {
-  font-size: 0.8rem;
+  font-size: var(--stf-text-sm);
   color: var(--stf-ink-subtle);
 }

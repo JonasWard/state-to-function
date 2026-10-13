@@ -15,13 +15,13 @@
 }
 
 .sm {
-  font-size: 1.05rem;
+  font-size: var(--stf-symbol-sm);
 }
 
 .md {
-  font-size: 1.3rem;
+  font-size: var(--stf-symbol-md);
 }
 
 .lg {
-  font-size: 1.75rem;
+  font-size: var(--stf-symbol-lg);
 }

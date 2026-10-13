@@ -1,7 +1,7 @@
 .view {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 0 32px;
+  gap: 0 var(--stf-space-7);
 }
 
 @media (max-width: 880px) {
@@ -18,15 +18,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: var(--stf-space-3);
   min-height: 2.5rem;
-  padding: 10px 0 6px;
+  padding: var(--stf-space-3) 0 var(--stf-space-2);
   border-bottom: 1px solid var(--stf-line-strong);
 }
 
 .sectionTitle {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--stf-text-xs);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -36,16 +36,16 @@
 .row {
   display: grid;
   grid-template-columns: 3.5rem minmax(0, 1fr) auto;
-  gap: 2px 10px;
+  gap: var(--stf-space-1) var(--stf-space-3);
   align-items: center;
-  padding: 6px 0;
+  padding: var(--stf-space-2) 0;
   border-bottom: var(--stf-hairline);
 }
 
 .control {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 6.5rem;
-  gap: 10px;
+  gap: var(--stf-space-3);
   align-items: center;
 }
 
@@ -53,8 +53,8 @@
   grid-column: 2 / -1;
   display: flex;
   justify-content: space-between;
-  gap: 8px;
-  font-size: 0.75rem;
+  gap: var(--stf-space-3);
+  font-size: var(--stf-text-xs);
   color: var(--stf-ink-subtle);
 }
 
@@ -68,7 +68,7 @@
 
 .value {
   font-family: var(--stf-font-mono);
-  font-size: 1rem;
+  font-size: var(--stf-text-lg);
   font-variant-numeric: tabular-nums;
   text-align: right;
   white-space: nowrap;
@@ -79,14 +79,14 @@
 }
 
 .empty {
-  padding: 16px 0;
-  font-size: 0.85rem;
+  padding: var(--stf-space-5) 0;
+  font-size: var(--stf-text-sm);
   color: var(--stf-ink-subtle);
 }
 
 .exports {
   display: flex;
-  gap: 8px;
+  gap: var(--stf-space-3);
   justify-content: flex-end;
-  padding-top: 14px;
+  padding-top: var(--stf-space-4);
 }

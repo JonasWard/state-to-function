@@ -4,9 +4,9 @@
   justify-content: center;
   min-width: 2.75rem;
   height: 2.5rem;
-  padding: 0 4px;
+  padding: 0 var(--stf-space-2);
   border: 1px solid transparent;
-  border-radius: 3px;
+  border-radius: var(--stf-radius);
   background: transparent;
   cursor: pointer;
 }
