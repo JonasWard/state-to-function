@@ -13,7 +13,7 @@ export const ResultsTable: React.FC<{ methods: MethodDef[]; results: number[]; s
   methods.length ? (
     <div role="list">
       {methods.map((m, i) => (
-        <div key={i} role="listitem" className={`${styles.row} ${styles.resultRow}`}>
+        <div key={i} role="listitem" className={styles.row}>
           <MathSymbol symbol={m.symbol} subscript={m.subscript} size="md" />
           <span className={styles.name}>{showNames && m.name}</span>
           <output className={styles.value} aria-label={`${symbolLabel(m.symbol, m.subscript)} result`}>

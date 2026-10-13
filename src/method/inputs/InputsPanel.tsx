@@ -1,6 +1,7 @@
 import { NumberOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import React from 'react';
+import { SectionHeader } from '../../Components/layout/Section';
 import { MAX_INPUTS } from '../../model/numeric';
 import { addInput, countReferences, isDuplicateLabel, removeInput, setInput } from '../../model/ops';
 import { useDocumentStore } from '../../state/documentStore';
@@ -15,14 +16,7 @@ export const InputsPanel: React.FC = () => {
   const compact = useUIStore((s) => s.settings.compactRows);
   return (
     <section className={styles.panel} aria-labelledby="inputs-title">
-      <header className={styles.panelHeader}>
-        <h2 id="inputs-title" className={styles.panelTitle}>
-          <NumberOutlined /> Inputs
-        </h2>
-        <span className={styles.count}>
-          {definition.inputs.length}/{MAX_INPUTS}
-        </span>
-      </header>
+      <SectionHeader id="inputs-title" icon={<NumberOutlined />} title="Inputs" aside={`${definition.inputs.length}/${MAX_INPUTS}`} />
       <div className={`${styles.columns} ${styles.inputGrid} ${compact ? styles.compact : ''}`} aria-hidden>
         <span className={styles.index}>#</span>
         <span className={styles.sym}>Sym</span>

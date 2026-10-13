@@ -1,7 +1,8 @@
-import { RollbackOutlined } from '@ant-design/icons';
+import { FunctionOutlined, NumberOutlined, RollbackOutlined } from '@ant-design/icons';
 import { Button, Slider, Tooltip } from 'antd';
 import React from 'react';
 import { NumberField } from '../Components/inputs/NumberField';
+import { SectionHeader } from '../Components/layout/Section';
 import { MathSymbol } from '../Components/math/MathSymbol';
 import { symbolLabel } from '../Components/math/symbolLabel';
 import { AppletField, getAppletFields } from '../model/appletSchema';
@@ -80,14 +81,16 @@ export const AppletView: React.FC = () => {
   return (
     <div className={styles.view}>
       <section className={styles.section} aria-labelledby="applet-inputs">
-        <header className={styles.sectionHeader}>
-          <h2 id="applet-inputs" className={styles.sectionTitle}>
-            Inputs
-          </h2>
-          <Button size="small" type="text" disabled={!overrides.some((o) => o !== null)} onClick={() => useDocumentStore.getState().resetApplet()}>
-            Reset all
-          </Button>
-        </header>
+        <SectionHeader
+          id="applet-inputs"
+          icon={<NumberOutlined />}
+          title="Inputs"
+          aside={
+            <Button size="small" type="text" disabled={!overrides.some((o) => o !== null)} onClick={() => useDocumentStore.getState().resetApplet()}>
+              Reset all
+            </Button>
+          }
+        />
         {fields.length ? (
           fields.map((f) => (
             <InputControl
@@ -103,11 +106,7 @@ export const AppletView: React.FC = () => {
         )}
       </section>
       <section className={styles.section} aria-labelledby="applet-results">
-        <header className={styles.sectionHeader}>
-          <h2 id="applet-results" className={styles.sectionTitle}>
-            Results
-          </h2>
-        </header>
+        <SectionHeader id="applet-results" icon={<FunctionOutlined />} title="Results" />
         <ResultsTable methods={definition.methods} results={results} showNames={showNames} />
         <div className={styles.exports}>
           <ExportButtons />

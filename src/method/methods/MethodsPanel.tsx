@@ -1,6 +1,7 @@
 import { FunctionOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import React from 'react';
+import { SectionHeader } from '../../Components/layout/Section';
 import { MAX_METHODS } from '../../model/numeric';
 import { addMethod, countReferences, isDuplicateLabel, removeMethod, setMethod } from '../../model/ops';
 import { useDocumentStore, useEvaluation } from '../../state/documentStore';
@@ -16,14 +17,7 @@ export const MethodsPanel: React.FC = () => {
   const { results } = useEvaluation();
   return (
     <section className={styles.panel} aria-labelledby="methods-title">
-      <header className={styles.panelHeader}>
-        <h2 id="methods-title" className={styles.panelTitle}>
-          <FunctionOutlined /> Methods
-        </h2>
-        <span className={styles.count}>
-          {definition.methods.length}/{MAX_METHODS}
-        </span>
-      </header>
+      <SectionHeader id="methods-title" icon={<FunctionOutlined />} title="Methods" aside={`${definition.methods.length}/${MAX_METHODS}`} />
       {definition.methods.map((method, i) => (
         <MethodRow
           key={i}

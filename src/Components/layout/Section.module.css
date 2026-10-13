@@ -1,0 +1,34 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--stf-space-3);
+  min-height: var(--stf-row-height);
+  padding: var(--stf-space-5) 0 var(--stf-space-2);
+  border-bottom: 1px solid var(--stf-line-strong);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: var(--stf-space-2);
+  margin: 0;
+  font-size: var(--stf-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stf-ink-muted);
+}
+
+.aside {
+  font-family: var(--stf-font-mono);
+  font-size: var(--stf-text-xs);
+  color: var(--stf-ink-subtle);
+}
+
+/* every list row: definitions, applet inputs and results */
+.row {
+  min-height: var(--stf-row-height);
+  padding: var(--stf-space-2) 0;
+  border-bottom: var(--stf-hairline);
+}

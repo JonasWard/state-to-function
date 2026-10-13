@@ -14,32 +14,12 @@
   min-width: 0;
 }
 
-.sectionHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--stf-space-3);
-  min-height: 2.5rem;
-  padding: var(--stf-space-3) 0 var(--stf-space-2);
-  border-bottom: 1px solid var(--stf-line-strong);
-}
-
-.sectionTitle {
-  margin: 0;
-  font-size: var(--stf-text-xs);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--stf-ink-muted);
-}
-
 .row {
+  composes: row from '../Components/layout/Section.module.css';
   display: grid;
-  grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+  grid-template-columns: 3rem minmax(0, 1fr) auto;
   gap: var(--stf-space-1) var(--stf-space-3);
   align-items: center;
-  padding: var(--stf-space-2) 0;
-  border-bottom: var(--stf-hairline);
 }
 
 .control {
@@ -74,9 +54,6 @@
   white-space: nowrap;
 }
 
-.resultRow {
-  grid-template-columns: 3.5rem minmax(0, 1fr) auto;
-}
 
 .empty {
   padding: var(--stf-space-5) 0;

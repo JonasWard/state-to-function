@@ -12,20 +12,6 @@
   color: var(--stf-accent-800);
 }
 
-.help h2 {
-  display: flex;
-  align-items: center;
-  gap: var(--stf-space-3);
-  margin: var(--stf-space-6) 0 var(--stf-space-2);
-  padding-bottom: var(--stf-space-2);
-  border-bottom: var(--stf-hairline);
-  font-size: var(--stf-text-sm);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--stf-ink-muted);
-}
-
 .help h3 {
   margin: var(--stf-space-5) 0 var(--stf-space-1);
   font-size: var(--stf-text-md);

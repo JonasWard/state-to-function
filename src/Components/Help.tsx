@@ -2,6 +2,7 @@ import { FormOutlined, FunctionOutlined, LinkOutlined, NumberOutlined, Signature
 import React from 'react';
 import { OP_LABEL, OP_SYMBOL, OPS } from '../model/operators';
 import styles from './Help.module.css';
+import { SectionHeader } from './layout/Section';
 
 const Row: React.FC<{ glyph: React.ReactNode; children: React.ReactNode }> = ({ glyph, children }) => (
   <>
@@ -18,9 +19,7 @@ export const Help: React.FC = () => (
       database, no tracking, no cookies. Bookmark or share the URL to come back to it.
     </p>
 
-    <h2>
-      <FormOutlined /> Definitions
-    </h2>
+    <SectionHeader icon={<FormOutlined />} title="Definitions" />
     <p>
       The <b>Definitions</b> page has two parts: <b>Inputs</b> and <b>Methods</b>. On small screens they are separate
       tabs in the header. Every input and method has a symbol, plus an optional subscript and name. Click the symbol to
@@ -64,18 +63,14 @@ export const Help: React.FC = () => (
       ))}
     </div>
 
-    <h2>
-      <SignatureOutlined /> Applet
-    </h2>
+    <SectionHeader icon={<SignatureOutlined />} title="Applet" />
     <p>
       The applet lists the integer and decimal inputs with a slider and a field, limited to their ranges, and every
       method's result. Results that cannot be calculated show as <code>NaN</code>, division by zero as <code>∞</code>.
       Export the current values as CSV, or as a PDF that includes a QR code of the link.
     </p>
 
-    <h2>
-      <LinkOutlined /> Links and undo
-    </h2>
+    <SectionHeader icon={<LinkOutlined />} title="Links and undo" />
     <p>
       The address holds the definitions and the applet values, so copying it (or using the link button) shares exactly
       what you see. Undo and redo cover both pages: <kbd>Ctrl</kbd> + <kbd>Z</kbd> and <kbd>Ctrl</kbd> + <kbd>Y</kbd>{' '}
