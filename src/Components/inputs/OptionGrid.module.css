@@ -6,35 +6,17 @@
 }
 
 .cell {
+  composes: ghost from './ghostButton.module.css';
   min-height: 2rem;
   padding: 0 var(--stf-space-2);
   border: var(--stf-hairline);
-  border-radius: var(--stf-radius);
   background: var(--stf-surface);
-  color: var(--stf-ink);
-  cursor: pointer;
-  font: inherit;
-}
-
-.cell:hover {
-  background: var(--stf-accent-100);
-}
-
-.cell[aria-pressed='true'] {
-  background: var(--stf-accent-200);
-  border-color: var(--stf-accent-500);
 }
 
 .title {
-  margin: 0 0 var(--stf-space-2);
-  font-size: var(--stf-text-xs);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--stf-ink-muted);
+  composes: label from '../layout/Section.module.css';
 }
 
 .empty {
-  font-size: var(--stf-text-sm);
-  color: var(--stf-ink-subtle);
+  composes: empty from '../layout/Section.module.css';
 }

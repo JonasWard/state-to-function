@@ -32,3 +32,19 @@
   padding: var(--stf-space-2) 0;
   border-bottom: var(--stf-hairline);
 }
+
+/* small-caps label for popover and grid titles, matching the section titles */
+.label {
+  margin: 0 0 var(--stf-space-2);
+  font-size: var(--stf-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stf-ink-muted);
+}
+
+.empty {
+  margin: 0;
+  font-size: var(--stf-text-sm);
+  color: var(--stf-ink-subtle);
+}

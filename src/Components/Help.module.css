@@ -34,8 +34,8 @@
 }
 
 .glyph {
+  composes: glyph from './math/MathSymbol.module.css';
   min-width: 1.5rem;
-  font-family: var(--stf-font-math);
   font-size: var(--stf-symbol-sm);
   text-align: center;
   color: var(--stf-accent-800);

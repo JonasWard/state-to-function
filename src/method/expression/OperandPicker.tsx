@@ -8,6 +8,7 @@ import { defaultOperand } from '../../model/defaults';
 import { changeOperator } from '../../model/ops';
 import { Label, Operand, OperandType } from '../../model/types';
 import { ReferenceContext } from './context';
+import sectionStyles from '../../Components/layout/Section.module.css';
 import styles from './expression.module.css';
 import { operatorOptions } from './operatorOptions';
 
@@ -45,6 +46,7 @@ export const OperandPicker: React.FC<{
   context: ReferenceContext;
 }> = ({ value, onChange, onDone, context }) => (
   <div className={styles.picker}>
+    <p className={sectionStyles.label}>Term</p>
     <Segmented
       size="small"
       block

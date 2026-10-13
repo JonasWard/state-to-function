@@ -25,3 +25,8 @@
 .lg {
   font-size: var(--stf-symbol-lg);
 }
+
+/* standalone math glyphs: type toggles, operator lists */
+.glyph {
+  font-family: var(--stf-font-math);
+}

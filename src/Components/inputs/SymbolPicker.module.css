@@ -1,19 +1,8 @@
 .trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  composes: ghost from './ghostButton.module.css';
   min-width: 2.75rem;
   height: 2.5rem;
   padding: 0 var(--stf-space-2);
-  border: 1px solid transparent;
-  border-radius: var(--stf-radius);
-  background: transparent;
-  cursor: pointer;
-}
-
-.trigger:hover {
-  border-color: var(--stf-line);
-  background: var(--stf-accent-50);
 }
 
 .duplicate {

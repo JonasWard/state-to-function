@@ -56,9 +56,8 @@
 
 
 .empty {
+  composes: empty from '../Components/layout/Section.module.css';
   padding: var(--stf-space-5) 0;
-  font-size: var(--stf-text-sm);
-  color: var(--stf-ink-subtle);
 }
 
 .exports {

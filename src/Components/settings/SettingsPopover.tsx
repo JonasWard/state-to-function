@@ -3,6 +3,7 @@ import { Button, Popover, Switch, Tooltip } from 'antd';
 import React from 'react';
 import { Settings, useUIStore } from '../../state/uiStore';
 import styles from '../layout/AppHeader.module.css';
+import sectionStyles from '../layout/Section.module.css';
 
 const LABELS: Record<keyof Settings, string> = {
   compactRows: 'Compact definition rows',
@@ -15,6 +16,7 @@ const SettingsList: React.FC = () => {
   const setSetting = useUIStore((s) => s.setSetting);
   return (
     <div className={styles.settings}>
+      <p className={sectionStyles.label}>Settings</p>
       {(Object.keys(LABELS) as (keyof Settings)[]).map((key) => (
         <label key={key} className={styles.setting}>
           {LABELS[key]}
@@ -26,7 +28,7 @@ const SettingsList: React.FC = () => {
 };
 
 export const SettingsPopover: React.FC = () => (
-  <Popover trigger="click" placement="bottomRight" title="Settings" content={<SettingsList />}>
+  <Popover trigger="click" placement="bottomRight" content={<SettingsList />}>
     <Tooltip title="Settings">
       <Button type="text" icon={<SettingOutlined />} aria-label="Settings" />
     </Tooltip>

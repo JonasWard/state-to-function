@@ -5,6 +5,7 @@ import { CharsetInput } from '../../Components/inputs/CharsetInput';
 import { ConstantInput } from '../../Components/inputs/ConstantInput';
 import { NumberField } from '../../Components/inputs/NumberField';
 import { SymbolPicker } from '../../Components/inputs/SymbolPicker';
+import mathStyles from '../../Components/math/MathSymbol.module.css';
 import { symbolLabel } from '../../Components/math/symbolLabel';
 import { NAME_CHARS, SUBSCRIPT_CHARS } from '../../model/charsets';
 import { FLOAT_MAX, FLOAT_MIN, INT_MAX, INT_MIN } from '../../model/numeric';
@@ -13,9 +14,9 @@ import { InputDef, InputKindType, NumericKind } from '../../model/types';
 import styles from '../definitions.module.css';
 
 const KIND_OPTIONS = [
-  { value: 'constant', label: <span aria-label="Constant">𝑐</span>, title: 'Constant' },
-  { value: 'integer', label: <span aria-label="Integer">ℤ</span>, title: 'Integer' },
-  { value: 'float', label: <span aria-label="Decimal">ℝ</span>, title: 'Decimal' }
+  { value: 'constant', label: <span className={mathStyles.glyph} aria-label="Constant">𝑐</span>, title: 'Constant' },
+  { value: 'integer', label: <span className={mathStyles.glyph} aria-label="Integer">ℤ</span>, title: 'Integer' },
+  { value: 'float', label: <span className={mathStyles.glyph} aria-label="Decimal">ℝ</span>, title: 'Decimal' }
 ];
 
 const NumericFields: React.FC<{ kind: NumericKind; label: string; onChange: (k: NumericKind) => void }> = ({
