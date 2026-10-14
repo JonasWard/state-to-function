@@ -9,7 +9,7 @@ test('an applet value of 0 is used', async ({ page }) => {
   await min.fill('0');
   await min.press('Enter');
   await openTab(page, 'Applet');
-  const w = page.getByRole('spinbutton', { name: 'w', exact: true });
+  const w = page.getByRole('textbox', { name: 'w', exact: true });
   await w.fill('0');
   await w.press('Enter');
   await expect(firstResult(page)).toHaveText('0');
@@ -22,7 +22,7 @@ test('exports use the current values and work offline', async ({ page, context }
   );
   await page.goto('./');
   await openTab(page, 'Applet');
-  const w = page.getByRole('spinbutton', { name: 'w', exact: true });
+  const w = page.getByRole('textbox', { name: 'w', exact: true });
   await w.fill('250');
   await w.press('Enter');
   await expect(firstResult(page)).toHaveText('25 000');
@@ -40,7 +40,7 @@ test('exports use the current values and work offline', async ({ page, context }
 test('back and forward move between pages and keep applet values', async ({ page }) => {
   await page.goto('./');
   await openTab(page, 'Applet');
-  const w = page.getByRole('spinbutton', { name: 'w', exact: true });
+  const w = page.getByRole('textbox', { name: 'w', exact: true });
   await w.fill('250');
   await w.press('Enter');
   await expect.poll(() => hash(page)).toMatch(/^#\/applet\/[^/]+\/[^/]+$/);

@@ -63,3 +63,14 @@ test('number fields group digits unless focused', async ({ page }) => {
   await page.locator('body').click({ position: { x: 5, y: 850 } });
   await expect(max).toHaveValue('4 000');
 });
+
+test('number fields clamp out-of-range values', async ({ page }) => {
+  const max = page.getByLabel('input l max');
+  await max.fill('99999');
+  await max.press('Enter');
+  await expect(max).toHaveValue('5242.87');
+  const value = page.getByLabel('input l default');
+  await value.fill('abc');
+  await value.press('Enter');
+  await expect(value).toHaveValue('100');
+});

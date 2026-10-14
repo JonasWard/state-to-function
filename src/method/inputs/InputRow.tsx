@@ -1,5 +1,5 @@
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Segmented } from 'antd';
+import { Popconfirm, Segmented } from 'antd';
 import React from 'react';
 import { CharsetInput } from '../../Components/inputs/CharsetInput';
 import { ConstantInput } from '../../Components/inputs/ConstantInput';
@@ -12,6 +12,7 @@ import { FLOAT_MAX, FLOAT_MIN, INT_MAX, INT_MIN } from '../../model/numeric';
 import { changeKind } from '../../model/ops';
 import { InputDef, InputKindType, NumericKind } from '../../model/types';
 import styles from '../definitions.module.css';
+import { Button } from '../../Components/ui/Button';
 
 const KIND_OPTIONS = [
   { value: 'constant', label: <span className={mathStyles.glyph} aria-label="Constant">𝑐</span>, title: 'Constant' },
@@ -26,8 +27,8 @@ const NumericFields: React.FC<{ kind: NumericKind; label: string; onChange: (k: 
 }) => {
   const bounds =
     kind.type === 'integer'
-      ? { min: INT_MIN, max: INT_MAX, precision: 0, step: 1 }
-      : { min: FLOAT_MIN, max: FLOAT_MAX, step: 1 };
+      ? { min: INT_MIN, max: INT_MAX, precision: 0 }
+      : { min: FLOAT_MIN, max: FLOAT_MAX };
   const inverted = kind.min > kind.max;
   const outside = !inverted && (kind.value < kind.min || kind.value > kind.max);
   return (
@@ -59,7 +60,7 @@ export const InputRow: React.FC<{
 }> = ({ value, index, duplicate, references, canRemove, compact, onChange, onRemove }) => {
   const label = `input ${symbolLabel(value.symbol, value.subscript)}`;
   const remove = (
-    <Button type="text" size="small" icon={<DeleteOutlined />} aria-label={`Remove ${label}`} disabled={!canRemove} onClick={references ? undefined : onRemove} />
+    <Button variant="text" size="small" icon={<DeleteOutlined />} aria-label={`Remove ${label}`} disabled={!canRemove} onClick={references ? undefined : onRemove} />
   );
   return (
     <div className={`${styles.row} ${styles.inputGrid} ${compact ? styles.compact : ''}`}>

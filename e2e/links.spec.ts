@@ -24,7 +24,7 @@ test('an old definition link is upgraded', async ({ page }) => {
 test('an old applet link keeps its values', async ({ page }) => {
   await page.goto(`./#${OLD_DEFINITION}/${OLD_APPLET_W250}`);
   await expect.poll(() => hash(page)).toMatch(/^#\/applet\/[^/]+\/[^/]+$/);
-  await expect(page.getByRole('spinbutton', { name: 'w', exact: true })).toHaveValue('250');
+  await expect(page.getByRole('textbox', { name: 'w', exact: true })).toHaveValue('250');
 });
 
 test('an unreadable link falls back to the example with a warning', async ({ page }) => {
@@ -37,7 +37,7 @@ test('a QR link opens the same state and is rewritten to the canonical link', as
   const overrides = [null, 250, null];
   // like the host's rewrite rule, vite preview serves the app for the uppercase QR path
   await page.goto(`./${formatQrPath(encodeDefinition(DEFAULT_DEFINITION, QR_BASE), encodeApplet(DEFAULT_DEFINITION, overrides, QR_BASE))}`);
-  await expect(page.getByRole('spinbutton', { name: 'w', exact: true })).toHaveValue('250');
+  await expect(page.getByRole('textbox', { name: 'w', exact: true })).toHaveValue('250');
   await expect.poll(() => page.evaluate(() => location.pathname)).toBe('/');
   await expect
     .poll(() => hash(page))

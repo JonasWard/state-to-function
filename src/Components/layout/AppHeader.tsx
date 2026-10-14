@@ -8,7 +8,7 @@ import {
   SignatureOutlined,
   UndoOutlined
 } from '@ant-design/icons';
-import { Button, Grid, Segmented, Tooltip } from 'antd';
+import { Segmented, Tooltip } from 'antd';
 import React from 'react';
 import { selectCanRedo, selectCanUndo, useDocumentStore } from '../../state/documentStore';
 import { buildShareUrl } from '../../state/hashSync';
@@ -16,6 +16,8 @@ import { notify } from '../../state/notify';
 import { useUIStore } from '../../state/uiStore';
 import { SettingsPopover } from '../settings/SettingsPopover';
 import styles from './AppHeader.module.css';
+import { Button } from '../ui/Button';
+import { useMediaQuery, WIDE } from '../ui/useMediaQuery';
 
 type Tab = 'help' | 'edit' | 'inputs' | 'methods' | 'applet';
 
@@ -42,12 +44,12 @@ const IconButton: React.FC<{ label: string; icon: React.ReactNode; onClick: () =
   ...props
 }) => (
   <Tooltip title={label}>
-    <Button type="text" aria-label={label} {...props} />
+    <Button variant="text" aria-label={label} {...props} />
   </Tooltip>
 );
 
 export const AppHeader: React.FC = () => {
-  const wide = Grid.useBreakpoint().lg ?? true;
+  const wide = useMediaQuery(WIDE);
   const view = useUIStore((s) => s.view);
   const pane = useUIStore((s) => s.mobilePane);
   const canUndo = useDocumentStore(selectCanUndo);

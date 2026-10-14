@@ -1,5 +1,5 @@
 import { FunctionOutlined, NumberOutlined, RollbackOutlined } from '@ant-design/icons';
-import { Button, Slider, Tooltip } from 'antd';
+import { Slider, Tooltip } from 'antd';
 import React from 'react';
 import { NumberField } from '../Components/inputs/NumberField';
 import { SectionHeader } from '../Components/layout/Section';
@@ -13,6 +13,7 @@ import { useUIStore } from '../state/uiStore';
 import styles from './applet.module.css';
 import { ExportButtons } from './ExportButtons';
 import { ResultsTable } from './ResultsTable';
+import { Button } from '../Components/ui/Button';
 
 const setOverride = (i: number, v: number | null, coalesceKey?: string) =>
   useDocumentStore.getState().setOverride(i, v, { coalesceKey });
@@ -50,7 +51,7 @@ const InputControl: React.FC<{ field: AppletField; input: InputDef; value: numbe
       </div>
       <Tooltip title="Reset to default">
         <Button
-          type="text"
+          variant="text"
           size="small"
           icon={<RollbackOutlined />}
           aria-label={`Reset ${label} to default`}
@@ -86,7 +87,7 @@ export const AppletView: React.FC = () => {
           icon={<NumberOutlined />}
           title="Inputs"
           aside={
-            <Button size="small" type="text" disabled={!overrides.some((o) => o !== null)} onClick={() => useDocumentStore.getState().resetApplet()}>
+            <Button size="small" variant="text" disabled={!overrides.some((o) => o !== null)} onClick={() => useDocumentStore.getState().resetApplet()}>
               Reset all
             </Button>
           }

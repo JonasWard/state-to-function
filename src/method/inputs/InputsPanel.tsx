@@ -1,5 +1,5 @@
 import { NumberOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+
 import React from 'react';
 import { SectionHeader } from '../../Components/layout/Section';
 import { MAX_INPUTS } from '../../model/numeric';
@@ -8,6 +8,7 @@ import { useDocumentStore } from '../../state/documentStore';
 import { useUIStore } from '../../state/uiStore';
 import styles from '../definitions.module.css';
 import { InputRow } from './InputRow';
+import { Button } from '../../Components/ui/Button';
 
 const doc = () => useDocumentStore.getState();
 
@@ -47,7 +48,7 @@ export const InputsPanel: React.FC = () => {
       ))}
       <Button
         className={styles.add}
-        type="dashed"
+        variant="dashed"
         block
         icon={<PlusOutlined />}
         disabled={definition.inputs.length >= MAX_INPUTS}

@@ -1,5 +1,5 @@
 import { FunctionOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+
 import React from 'react';
 import { SectionHeader } from '../../Components/layout/Section';
 import { MAX_METHODS } from '../../model/numeric';
@@ -8,6 +8,7 @@ import { useDocumentStore, useEvaluation } from '../../state/documentStore';
 import { useUIStore } from '../../state/uiStore';
 import styles from '../definitions.module.css';
 import { MethodRow } from './MethodRow';
+import { Button } from '../../Components/ui/Button';
 
 const doc = () => useDocumentStore.getState();
 
@@ -34,7 +35,7 @@ export const MethodsPanel: React.FC = () => {
       ))}
       <Button
         className={styles.add}
-        type="dashed"
+        variant="dashed"
         block
         icon={<PlusOutlined />}
         disabled={definition.methods.length >= MAX_METHODS}

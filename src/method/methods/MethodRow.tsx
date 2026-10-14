@@ -1,5 +1,5 @@
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Popconfirm } from 'antd';
+import { Popconfirm } from 'antd';
 import React from 'react';
 import { CharsetInput } from '../../Components/inputs/CharsetInput';
 import { SymbolPicker } from '../../Components/inputs/SymbolPicker';
@@ -11,6 +11,7 @@ import sectionStyles from '../../Components/layout/Section.module.css';
 import styles from '../definitions.module.css';
 import { ReferenceContext } from '../expression/context';
 import { ExpressionView } from '../expression/ExpressionView';
+import { Button } from '../../Components/ui/Button';
 
 export const MethodRow: React.FC<{
   value: MethodDef;
@@ -25,7 +26,7 @@ export const MethodRow: React.FC<{
 }> = ({ value, index, result, duplicate, references, compact, context, onChange, onRemove }) => {
   const label = `method ${symbolLabel(value.symbol, value.subscript)}`;
   const remove = (
-    <Button type="text" size="small" icon={<DeleteOutlined />} aria-label={`Remove ${label}`} onClick={references ? undefined : onRemove} />
+    <Button variant="text" size="small" icon={<DeleteOutlined />} aria-label={`Remove ${label}`} onClick={references ? undefined : onRemove} />
   );
   return (
     <div className={`${styles.row} ${styles.methodGrid} ${compact ? styles.compact : ''}`}>

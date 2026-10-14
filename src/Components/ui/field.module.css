@@ -1,0 +1,45 @@
+/* the outlined hairline text field shared by every input */
+.field {
+  box-sizing: border-box;
+  width: 100%;
+  height: 30px;
+  padding: 0 var(--stf-space-4);
+  border: 1px solid var(--stf-line-strong);
+  border-radius: var(--stf-radius);
+  background: var(--stf-surface);
+  color: var(--stf-ink);
+  font: inherit;
+  font-size: var(--stf-text-md);
+  transition: border-color 0.15s;
+}
+
+.field::placeholder {
+  color: var(--stf-ink-subtle);
+}
+
+.field:hover {
+  border-color: var(--stf-accent-500);
+}
+
+/* the border colour is the focus indicator, as before */
+.field:focus,
+.field:focus-visible {
+  outline: none;
+  border-color: var(--stf-accent-700);
+}
+
+.mono {
+  font-family: var(--stf-font-mono);
+}
+
+.error,
+.error:hover,
+.error:focus {
+  border-color: var(--stf-danger);
+}
+
+.warning,
+.warning:hover,
+.warning:focus {
+  border-color: var(--stf-warning);
+}

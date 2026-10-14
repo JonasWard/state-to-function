@@ -1,5 +1,5 @@
 import { DownloadOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+
 import { QRCodeCanvas } from 'qrcode.react';
 import React, { useRef, useState } from 'react';
 import { resolveInputValues } from '../model/appletSchema';
@@ -11,6 +11,7 @@ import { notify } from '../state/notify';
 import { generateCSV } from './csvHelpers';
 import styles from './applet.module.css';
 import { downloadBlob } from './download';
+import { Button } from '../Components/ui/Button';
 
 /** Rows from the store at the moment of export, never from a render-time snapshot. */
 const currentRows = () => {
@@ -51,7 +52,7 @@ export const ExportButtons: React.FC = () => {
       <Button icon={<DownloadOutlined />} onClick={exportCsv}>
         CSV
       </Button>
-      <Button type="primary" icon={<DownloadOutlined />} loading={busy} onClick={exportPdf}>
+      <Button variant="primary" icon={<DownloadOutlined />} loading={busy} onClick={exportPdf}>
         PDF
       </Button>
     </>
