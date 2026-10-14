@@ -2,7 +2,7 @@ import { encodeApplet } from '../src/model/appletSchema';
 import { encodeDefinition, QR_BASE } from '../src/model/codec';
 import { DEFAULT_DEFINITION } from '../src/model/defaults';
 import { formatHash, formatQrPath } from '../src/state/hash';
-import { expect, hash, OLD_APPLET_W250, OLD_DEFINITION, test, toasts } from './fixtures';
+import { expect, hash, OLD_APPLET_W250, OLD_DEFINITION, openTab, test, toasts } from './fixtures';
 
 test('the root opens the example in canonical form without 404s', async ({ page }) => {
   const failed: string[] = [];
@@ -44,4 +44,13 @@ test('a QR link opens the same state and is rewritten to the canonical link', as
     .poll(() => hash(page))
     .toBe(formatHash('applet', encodeDefinition(DEFAULT_DEFINITION), encodeApplet(DEFAULT_DEFINITION, overrides)));
   await expect(toasts(page)).toHaveText('');
+});
+
+test('help links to jonasward.ch with its logo', async ({ page }) => {
+  await page.goto('./');
+  await openTab(page, 'Help');
+  const home = page.getByRole('link', { name: 'Jonas Ward' });
+  await expect(home).toHaveAttribute('href', 'https://jonasward.ch');
+  await expect(home).toHaveAttribute('target', '_blank');
+  await expect.poll(() => home.locator('img').evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);
 });

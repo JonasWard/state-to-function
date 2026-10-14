@@ -1,5 +1,6 @@
 import { Hash, Link, Signature, SquareFunction, SquarePen } from 'lucide-react';
 import React from 'react';
+import logoUrl from '../assets/jonasward-logo.svg';
 import { OP_LABEL, OP_SYMBOL, OPS } from '../model/operators';
 import styles from './Help.module.css';
 import { SectionHeader } from './layout/Section';
@@ -88,5 +89,12 @@ export const Help: React.FC = () => (
       Links made with earlier versions of the app are upgraded automatically when you open them; the address is then
       replaced with the new, shorter form.
     </p>
+
+    <footer className={styles.footer}>
+      <span>Made by</span>
+      <a className={styles.home} href="https://jonasward.ch" target="_blank" rel="noopener noreferrer" title="jonasward.ch">
+        <img src={logoUrl} alt="Jonas Ward" className={styles.logo} />
+      </a>
+    </footer>
   </article>
 );
