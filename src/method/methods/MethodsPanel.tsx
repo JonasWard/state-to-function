@@ -1,4 +1,4 @@
-import { FunctionOutlined, PlusOutlined } from '@ant-design/icons';
+import { Plus, SquareFunction } from 'lucide-react';
 
 import React from 'react';
 import { SectionHeader } from '../../Components/layout/Section';
@@ -18,7 +18,7 @@ export const MethodsPanel: React.FC = () => {
   const { results } = useEvaluation();
   return (
     <section className={styles.panel} aria-labelledby="methods-title">
-      <SectionHeader id="methods-title" icon={<FunctionOutlined />} title="Methods" aside={`${definition.methods.length}/${MAX_METHODS}`} />
+      <SectionHeader id="methods-title" icon={<SquareFunction />} title="Methods" aside={`${definition.methods.length}/${MAX_METHODS}`} />
       {definition.methods.map((method, i) => (
         <MethodRow
           key={i}
@@ -37,7 +37,7 @@ export const MethodsPanel: React.FC = () => {
         className={styles.add}
         variant="dashed"
         block
-        icon={<PlusOutlined />}
+        icon={<Plus />}
         disabled={definition.methods.length >= MAX_METHODS}
         onClick={() => doc().commit({ definition: addMethod(doc().definition) })}
       >

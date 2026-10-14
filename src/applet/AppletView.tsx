@@ -1,4 +1,4 @@
-import { FunctionOutlined, NumberOutlined, RollbackOutlined } from '@ant-design/icons';
+import { Hash, SquareFunction, Undo2 } from 'lucide-react';
 import { Tooltip } from '../Components/ui/Tooltip';
 import React from 'react';
 import { NumberField } from '../Components/inputs/NumberField';
@@ -54,7 +54,7 @@ const InputControl: React.FC<{ field: AppletField; input: InputDef; value: numbe
         <Button
           variant="text"
           size="small"
-          icon={<RollbackOutlined />}
+          icon={<Undo2 />}
           aria-label={`Reset ${label} to default`}
           disabled={!overridden}
           onClick={() => setOverride(field.inputIndex, null)}
@@ -85,7 +85,7 @@ export const AppletView: React.FC = () => {
       <section className={styles.section} aria-labelledby="applet-inputs">
         <SectionHeader
           id="applet-inputs"
-          icon={<NumberOutlined />}
+          icon={<Hash />}
           title="Inputs"
           aside={
             <Button size="small" variant="text" disabled={!overrides.some((o) => o !== null)} onClick={() => useDocumentStore.getState().resetApplet()}>
@@ -108,7 +108,7 @@ export const AppletView: React.FC = () => {
         )}
       </section>
       <section className={styles.section} aria-labelledby="applet-results">
-        <SectionHeader id="applet-results" icon={<FunctionOutlined />} title="Results" />
+        <SectionHeader id="applet-results" icon={<SquareFunction />} title="Results" />
         <ResultsTable methods={definition.methods} results={results} showNames={showNames} />
         <div className={styles.exports}>
           <ExportButtons />

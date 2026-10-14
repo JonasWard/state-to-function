@@ -1,4 +1,4 @@
-import { DeleteOutlined } from '@ant-design/icons';
+import { Trash2 } from 'lucide-react';
 import { Confirm } from '../../Components/ui/Confirm';
 import React from 'react';
 import { CharsetInput } from '../../Components/inputs/CharsetInput';
@@ -26,7 +26,7 @@ export const MethodRow: React.FC<{
 }> = ({ value, index, result, duplicate, references, compact, context, onChange, onRemove }) => {
   const label = `method ${symbolLabel(value.symbol, value.subscript)}`;
   const remove = (
-    <Button variant="text" size="small" icon={<DeleteOutlined />} aria-label={`Remove ${label}`} onClick={references ? undefined : onRemove} />
+    <Button variant="text" size="small" icon={<Trash2 />} aria-label={`Remove ${label}`} onClick={references ? undefined : onRemove} />
   );
   return (
     <div className={`${styles.row} ${styles.methodGrid} ${compact ? styles.compact : ''}`}>

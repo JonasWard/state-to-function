@@ -1,4 +1,4 @@
-import { NumberOutlined, PlusOutlined } from '@ant-design/icons';
+import { Hash, Plus } from 'lucide-react';
 
 import React from 'react';
 import { SectionHeader } from '../../Components/layout/Section';
@@ -17,7 +17,7 @@ export const InputsPanel: React.FC = () => {
   const compact = useUIStore((s) => s.settings.compactRows);
   return (
     <section className={styles.panel} aria-labelledby="inputs-title">
-      <SectionHeader id="inputs-title" icon={<NumberOutlined />} title="Inputs" aside={`${definition.inputs.length}/${MAX_INPUTS}`} />
+      <SectionHeader id="inputs-title" icon={<Hash />} title="Inputs" aside={`${definition.inputs.length}/${MAX_INPUTS}`} />
       <div className={`${styles.columns} ${styles.inputGrid} ${compact ? styles.compact : ''}`} aria-hidden>
         <span className={styles.index}>#</span>
         <span className={styles.sym}>Sym</span>
@@ -50,7 +50,7 @@ export const InputsPanel: React.FC = () => {
         className={styles.add}
         variant="dashed"
         block
-        icon={<PlusOutlined />}
+        icon={<Plus />}
         disabled={definition.inputs.length >= MAX_INPUTS}
         onClick={() => doc().commit({ definition: addInput(doc().definition) })}
       >

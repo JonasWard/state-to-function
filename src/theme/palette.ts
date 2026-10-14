@@ -1,4 +1,4 @@
-// The single source of colours and font stacks: antd tokens, CSS variables and the PDF all read from here.
+// The single source of colours and font stacks: CSS variables and the PDF all read from here.
 export const palette = {
   accent50: '#f7f7fd',
   accent100: '#efeffa',

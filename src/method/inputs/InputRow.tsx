@@ -1,4 +1,4 @@
-import { DeleteOutlined } from '@ant-design/icons';
+import { Trash2 } from 'lucide-react';
 import { Confirm } from '../../Components/ui/Confirm';
 import React from 'react';
 import { CharsetInput } from '../../Components/inputs/CharsetInput';
@@ -61,7 +61,7 @@ export const InputRow: React.FC<{
 }> = ({ value, index, duplicate, references, canRemove, compact, onChange, onRemove }) => {
   const label = `input ${symbolLabel(value.symbol, value.subscript)}`;
   const remove = (
-    <Button variant="text" size="small" icon={<DeleteOutlined />} aria-label={`Remove ${label}`} disabled={!canRemove} onClick={references ? undefined : onRemove} />
+    <Button variant="text" size="small" icon={<Trash2 />} aria-label={`Remove ${label}`} disabled={!canRemove} onClick={references ? undefined : onRemove} />
   );
   return (
     <div className={`${styles.row} ${styles.inputGrid} ${compact ? styles.compact : ''}`}>

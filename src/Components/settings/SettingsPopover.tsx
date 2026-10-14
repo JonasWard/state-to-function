@@ -1,4 +1,4 @@
-import { SettingOutlined } from '@ant-design/icons';
+import { SettingsIcon } from 'lucide-react';
 import { Popover } from '../ui/Popover';
 import { Tooltip } from '../ui/Tooltip';
 import React from 'react';
@@ -33,7 +33,7 @@ const SettingsList: React.FC = () => {
 export const SettingsPopover: React.FC = () => (
   <Popover placement="bottom-end" label="Settings" content={<SettingsList />}>
     <Tooltip title="Settings">
-      <Button variant="text" icon={<SettingOutlined />} aria-label="Settings" />
+      <Button variant="text" icon={<SettingsIcon />} aria-label="Settings" />
     </Tooltip>
   </Popover>
 );

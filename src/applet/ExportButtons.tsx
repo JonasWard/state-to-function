@@ -1,4 +1,4 @@
-import { DownloadOutlined } from '@ant-design/icons';
+import { Download } from 'lucide-react';
 
 import { QRCodeCanvas } from 'qrcode.react';
 import React, { useRef, useState } from 'react';
@@ -49,10 +49,10 @@ export const ExportButtons: React.FC = () => {
   return (
     <>
       <QRCodeCanvas ref={qrRef} value={buildQrUrl()} size={512} level="L" className={styles.hidden} />
-      <Button icon={<DownloadOutlined />} onClick={exportCsv}>
+      <Button icon={<Download />} onClick={exportCsv}>
         CSV
       </Button>
-      <Button variant="primary" icon={<DownloadOutlined />} loading={busy} onClick={exportPdf}>
+      <Button variant="primary" icon={<Download />} loading={busy} onClick={exportPdf}>
         PDF
       </Button>
     </>
