@@ -47,7 +47,7 @@ export const ExportButtons: React.FC = () => {
 
   return (
     <>
-      <QRCodeCanvas ref={qrRef} value={buildQrUrl()} size={512} level="M" className={styles.hidden} />
+      <QRCodeCanvas ref={qrRef} value={buildQrUrl()} size={512} level="L" className={styles.hidden} />
       <Button icon={<DownloadOutlined />} onClick={exportCsv}>
         CSV
       </Button>
