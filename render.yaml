@@ -1,0 +1,24 @@
+# Render Blueprint: the app as a static site, deployed from main once GitHub checks pass.
+services:
+  - type: web
+    runtime: static
+    name: jw-s2f
+    branch: main
+    autoDeployTrigger: checksPass
+    previews:
+      generation: "off"
+    buildCommand: >-
+      curl -fsSL https://bun.sh/install | bash -s bun-v1.4.2 &&
+      ~/.bun/bin/bun install --frozen-lockfile &&
+      ~/.bun/bin/bun run build
+    staticPublishPath: ./build
+    headers:
+      # hashed file names, safe to cache forever
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    routes:
+      # QR links (/Q/…) and any other path open the app; files that exist are served as they are
+      - type: rewrite
+        source: /*
+        destination: /index.html
