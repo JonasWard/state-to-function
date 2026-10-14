@@ -54,3 +54,25 @@
   font-family: var(--stf-font-mono);
   font-size: 0.85em;
 }
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--stf-space-3);
+  margin-top: var(--stf-space-8);
+  padding-top: var(--stf-space-5);
+  border-top: var(--stf-hairline);
+  color: var(--stf-ink-muted);
+}
+
+.home {
+  height: auto;
+  padding-block: var(--stf-space-2);
+  text-decoration: none;
+}
+
+.logo {
+  display: block;
+  width: auto;
+  height: 20px;
+}

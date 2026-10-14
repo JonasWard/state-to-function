@@ -1,8 +1,10 @@
-import { Hash, Link, Signature, SquareFunction, SquarePen } from 'lucide-react';
+import { ExternalLink, Hash, Link, Signature, SquareFunction, SquarePen } from 'lucide-react';
 import React from 'react';
+import logoUrl from '../assets/jonasward-logo.svg';
 import { OP_LABEL, OP_SYMBOL, OPS } from '../model/operators';
 import styles from './Help.module.css';
 import { SectionHeader } from './layout/Section';
+import buttonStyles from './ui/Button.module.css';
 
 const Row: React.FC<{ glyph: React.ReactNode; children: React.ReactNode }> = ({ glyph, children }) => (
   <>
@@ -88,5 +90,13 @@ export const Help: React.FC = () => (
       Links made with earlier versions of the app are upgraded automatically when you open them; the address is then
       replaced with the new, shorter form.
     </p>
+
+    <footer className={styles.footer}>
+      <span>Made by</span>
+      <a className={`${buttonStyles.button} ${styles.home}`} href="https://jonasward.ch" target="_blank" rel="noopener noreferrer">
+        <img src={logoUrl} alt="Jonas Ward" className={styles.logo} />
+        jonasward.ch <ExternalLink />
+      </a>
+    </footer>
   </article>
 );
