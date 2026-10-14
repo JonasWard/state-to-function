@@ -1,6 +1,6 @@
-import { Segmented } from 'antd';
 import React from 'react';
 import { ConstantInput } from '../../Components/inputs/ConstantInput';
+import { Segmented } from '../../Components/ui/Segmented';
 import { OptionGrid } from '../../Components/inputs/OptionGrid';
 import { MathSymbol } from '../../Components/math/MathSymbol';
 import { symbolLabel } from '../../Components/math/symbolLabel';
@@ -50,12 +50,13 @@ export const OperandPicker: React.FC<{
     <Segmented
       size="small"
       block
+      ariaLabel="Term type"
       value={value.type}
       options={TYPE_OPTIONS.map((o) => ({
         ...o,
         disabled: o.value === 'methodOutput' && !context.methods.length
       }))}
-      onChange={(t) => onChange(convert(value, t as OperandType))}
+      onChange={(t) => onChange(convert(value, t))}
     />
     {value.type === 'numericInput' && (
       <OptionGrid

@@ -1,13 +1,6 @@
 import { App as AntApp, ConfigProvider } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
-import { bindNotify } from '../state/notify';
 import { getTheme } from './theme';
-
-const NotifyBridge: React.FC = () => {
-  const { message } = AntApp.useApp();
-  useEffect(() => bindNotify(message), [message]);
-  return null;
-};
 
 const reducedMotionQuery = () => window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -22,10 +15,7 @@ export const ThemeRoot: React.FC<{ children: React.ReactNode }> = ({ children })
   const theme = useMemo(() => getTheme(reducedMotion), [reducedMotion]);
   return (
     <ConfigProvider theme={theme}>
-      <AntApp>
-        <NotifyBridge />
-        {children}
-      </AntApp>
+      <AntApp>{children}</AntApp>
     </ConfigProvider>
   );
 };

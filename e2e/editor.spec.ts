@@ -74,3 +74,14 @@ test('number fields clamp out-of-range values', async ({ page }) => {
   await value.press('Enter');
   await expect(value).toHaveValue('100');
 });
+
+test('arrow keys move through a segmented control', async ({ page }) => {
+  const type = page.getByRole('radiogroup', { name: 'input l type' });
+  await type.getByRole('radio', { name: 'Decimal' }).focus();
+  await page.keyboard.press('ArrowLeft');
+  await expect(type.getByRole('radio', { name: 'Integer' })).toHaveAttribute('aria-checked', 'true');
+  await expect(type.getByRole('radio', { name: 'Integer' })).toBeFocused();
+  await page.keyboard.press('ArrowRight');
+  await expect(type.getByRole('radio', { name: 'Decimal' })).toHaveAttribute('aria-checked', 'true');
+});
+

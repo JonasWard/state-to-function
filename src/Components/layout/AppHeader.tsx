@@ -8,7 +8,7 @@ import {
   SignatureOutlined,
   UndoOutlined
 } from '@ant-design/icons';
-import { Segmented, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import React from 'react';
 import { selectCanRedo, selectCanUndo, useDocumentStore } from '../../state/documentStore';
 import { buildShareUrl } from '../../state/hashSync';
@@ -17,17 +17,20 @@ import { useUIStore } from '../../state/uiStore';
 import { SettingsPopover } from '../settings/SettingsPopover';
 import styles from './AppHeader.module.css';
 import { Button } from '../ui/Button';
+import { Segmented, SegmentedOption } from '../ui/Segmented';
 import { useMediaQuery, WIDE } from '../ui/useMediaQuery';
 
 type Tab = 'help' | 'edit' | 'inputs' | 'methods' | 'applet';
 
-const option = (value: Tab, icon: React.ReactNode, text: string, showText: boolean) => ({
+const option = (value: Tab, icon: React.ReactNode, text: string, showText: boolean): SegmentedOption<Tab> => ({
   value,
   label: (
-    <span aria-label={text} title={text}>
+    <>
       {icon} {showText && text}
-    </span>
-  )
+    </>
+  ),
+  ariaLabel: text,
+  title: text
 });
 
 const copyLink = async () => {
@@ -84,7 +87,7 @@ export const AppHeader: React.FC = () => {
           <img className={styles.mark} src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" aria-hidden />
           {wide && <span className={styles.wordmark}>state→function</span>}
         </span>
-        <Segmented value={current} options={options} onChange={(v) => select(v as Tab)} />
+        <Segmented ariaLabel="Page" value={current} options={options} onChange={select} />
         <div className={styles.actions}>
           <IconButton label="Undo" icon={<UndoOutlined />} disabled={!canUndo} onClick={() => useDocumentStore.getState().undo()} />
           <IconButton label="Redo" icon={<RedoOutlined />} disabled={!canRedo} onClick={() => useDocumentStore.getState().redo()} />

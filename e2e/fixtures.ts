@@ -21,9 +21,12 @@ export { expect };
 
 export const hash = (page: Page) => page.evaluate(() => location.hash);
 
-/** The header tabs are antd Segmented radios; their visible label is a titled span. */
+/** The header tabs are a radio group. */
 export const openTab = (page: Page, name: 'Help' | 'Definitions' | 'Applet' | 'Inputs' | 'Methods') =>
-  page.locator(`span[aria-label="${name}"]`).click();
+  page.getByRole('radiogroup', { name: 'Page' }).getByRole('radio', { name, exact: true }).click();
+
+/** The toast live region. */
+export const toasts = (page: Page) => page.getByRole('status', { name: 'Notifications' });
 
 /** url-safe-bitpacking links made before the densing switch: the default example, and its applet with w = 250. */
 export const OLD_DEFINITION =

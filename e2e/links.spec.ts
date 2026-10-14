@@ -2,7 +2,7 @@ import { encodeApplet } from '../src/model/appletSchema';
 import { encodeDefinition, QR_BASE } from '../src/model/codec';
 import { DEFAULT_DEFINITION } from '../src/model/defaults';
 import { formatHash, formatQrPath } from '../src/state/hash';
-import { expect, hash, OLD_APPLET_W250, OLD_DEFINITION, test } from './fixtures';
+import { expect, hash, OLD_APPLET_W250, OLD_DEFINITION, test, toasts } from './fixtures';
 
 test('the root opens the example in canonical form without 404s', async ({ page }) => {
   const failed: string[] = [];
@@ -17,7 +17,7 @@ test('an old definition link is upgraded', async ({ page }) => {
   await page.goto('./');
   const canonical = await hash(page);
   await page.goto(`./#${OLD_DEFINITION}`);
-  await expect(page.locator('.ant-message')).toContainText('upgraded');
+  await expect(toasts(page)).toContainText('upgraded');
   await expect.poll(() => hash(page)).toBe(canonical);
 });
 
@@ -29,7 +29,8 @@ test('an old applet link keeps its values', async ({ page }) => {
 
 test('an unreadable link falls back to the example with a warning', async ({ page }) => {
   await page.goto('./#/edit/garbage');
-  await expect(page.locator('.ant-message')).toContainText('could not be read');
+  await expect(toasts(page)).toContainText('could not be read');
+  await expect(toasts(page)).toHaveText('', { timeout: 6000 });
   await expect(page.getByLabel('method V result')).toContainText('1 000 000');
 });
 
@@ -42,5 +43,5 @@ test('a QR link opens the same state and is rewritten to the canonical link', as
   await expect
     .poll(() => hash(page))
     .toBe(formatHash('applet', encodeDefinition(DEFAULT_DEFINITION), encodeApplet(DEFAULT_DEFINITION, overrides)));
-  await expect(page.locator('.ant-message')).toHaveCount(0);
+  await expect(toasts(page)).toHaveText('');
 });

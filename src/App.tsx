@@ -9,6 +9,7 @@ import { startHashSync } from './state/hashSync';
 import { useKeyboardShortcuts } from './state/useKeyboardShortcuts';
 import { useUIStore } from './state/uiStore';
 import { Spinner } from './Components/ui/Spinner';
+import { Toaster } from './Components/ui/Toaster';
 
 export const App: React.FC = () => {
   useEffect(() => startHashSync(), []);
@@ -18,6 +19,7 @@ export const App: React.FC = () => {
   return (
     <>
       <AppHeader />
+      <Toaster />
       <main className={styles.main}>
         {upgrading ? (
           <div className={styles.loading}>

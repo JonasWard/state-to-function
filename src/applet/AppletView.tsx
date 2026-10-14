@@ -1,5 +1,5 @@
 import { FunctionOutlined, NumberOutlined, RollbackOutlined } from '@ant-design/icons';
-import { Slider, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import React from 'react';
 import { NumberField } from '../Components/inputs/NumberField';
 import { SectionHeader } from '../Components/layout/Section';
@@ -30,15 +30,16 @@ const InputControl: React.FC<{ field: AppletField; input: InputDef; value: numbe
     <div className={styles.row}>
       <MathSymbol symbol={input.symbol} subscript={input.subscript} size="md" />
       <div className={styles.control}>
-        <Slider
+        <input
+          type="range"
+          className={styles.slider}
           min={field.min}
           max={field.max}
           step={field.step}
           value={value}
           disabled={field.min === field.max}
-          tooltip={{ formatter: (v) => formatNumber(v ?? 0) }}
           aria-label={`${label} slider`}
-          onChange={(v) => setOverride(field.inputIndex, v, `slider-${field.inputIndex}`)}
+          onChange={(e) => setOverride(field.inputIndex, Number(e.target.value), `slider-${field.inputIndex}`)}
         />
         <NumberField
           value={value}

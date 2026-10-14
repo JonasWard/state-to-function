@@ -65,3 +65,16 @@ test('settings survive a reload', async ({ page }) => {
   await expect(page.getByRole('switch', { name: 'Compact definition rows' })).toBeChecked();
   await expect(page.getByLabel('input l name')).toBeHidden();
 });
+
+test('a slider drag is one undo step', async ({ page }) => {
+  await page.goto('./');
+  await openTab(page, 'Applet');
+  const slider = page.getByRole('slider', { name: 'w slider' });
+  const field = page.getByRole('textbox', { name: 'w', exact: true });
+  await slider.focus();
+  for (let i = 0; i < 5; i++) await page.keyboard.press('ArrowRight');
+  await expect(field).toHaveValue('100.05');
+  await page.getByRole('button', { name: 'Undo' }).click();
+  await expect(field).toHaveValue('100');
+});
+

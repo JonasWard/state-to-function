@@ -1,5 +1,5 @@
 import { DeleteOutlined } from '@ant-design/icons';
-import { Popconfirm, Segmented } from 'antd';
+import { Popconfirm } from 'antd';
 import React from 'react';
 import { CharsetInput } from '../../Components/inputs/CharsetInput';
 import { ConstantInput } from '../../Components/inputs/ConstantInput';
@@ -13,11 +13,12 @@ import { changeKind } from '../../model/ops';
 import { InputDef, InputKindType, NumericKind } from '../../model/types';
 import styles from '../definitions.module.css';
 import { Button } from '../../Components/ui/Button';
+import { Segmented, SegmentedOption } from '../../Components/ui/Segmented';
 
-const KIND_OPTIONS = [
-  { value: 'constant', label: <span className={mathStyles.glyph} aria-label="Constant">𝑐</span>, title: 'Constant' },
-  { value: 'integer', label: <span className={mathStyles.glyph} aria-label="Integer">ℤ</span>, title: 'Integer' },
-  { value: 'float', label: <span className={mathStyles.glyph} aria-label="Decimal">ℝ</span>, title: 'Decimal' }
+const KIND_OPTIONS: SegmentedOption<InputKindType>[] = [
+  { value: 'constant', label: <span className={mathStyles.glyph}>𝑐</span>, ariaLabel: 'Constant', title: 'Constant' },
+  { value: 'integer', label: <span className={mathStyles.glyph}>ℤ</span>, ariaLabel: 'Integer', title: 'Integer' },
+  { value: 'float', label: <span className={mathStyles.glyph}>ℝ</span>, ariaLabel: 'Decimal', title: 'Decimal' }
 ];
 
 const NumericFields: React.FC<{ kind: NumericKind; label: string; onChange: (k: NumericKind) => void }> = ({
@@ -77,9 +78,10 @@ export const InputRow: React.FC<{
       <div className={styles.type}>
         <Segmented
           size="small"
+          ariaLabel={`${label} type`}
           value={value.kind.type}
           options={KIND_OPTIONS}
-          onChange={(t) => onChange({ ...value, kind: changeKind(value.kind, t as InputKindType) })}
+          onChange={(t) => onChange({ ...value, kind: changeKind(value.kind, t) })}
         />
       </div>
       {value.kind.type === 'constant' ? (
