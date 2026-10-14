@@ -27,7 +27,14 @@ bun install
 bun run dev        # http://localhost:3022/state-to-function/
 bun run lint && bun run typecheck && bun run test
 bun run build
+bun run e2e        # Playwright against the production build
 ```
+
+## Deployment
+
+GitHub Actions (`.github/workflows/ci.yml`) runs lint, typecheck, unit tests, build and the Playwright tests on every
+push and pull request. Pushes to `main` that pass are deployed to GitHub Pages (Settings → Pages → Source:
+"GitHub Actions").
 
 # storing the algorithm
 
