@@ -28,8 +28,8 @@ describe('hash', () => {
   });
 
   it('formats QR links in uppercase', () => {
-    const url = formatQrUrl('https://jonasward.github.io', '/state-to-function/', '0ABC', '1DE');
-    expect(url).toBe('HTTPS://JONASWARD.GITHUB.IO/STATE-TO-FUNCTION/Q/0ABC/1DE');
+    const url = formatQrUrl('https://jw-s2f.onrender.com', '/', '0ABC', '1DE');
+    expect(url).toBe('HTTPS://JW-S2F.ONRENDER.COM/Q/0ABC/1DE');
     expect(url).toMatch(/^[0-9A-Z $%*+\-./:]+$/);
     expect(formatQrUrl('http://localhost:4173', '/state-to-function/', '0ABC', '')).toBe(
       'HTTP://LOCALHOST:4173/STATE-TO-FUNCTION/Q/0ABC'
@@ -37,8 +37,11 @@ describe('hash', () => {
   });
 
   it('reads QR links from the path, case-insensitively', () => {
-    const base = '/state-to-function/';
     const qr = { view: 'applet', definition: '0ABC', applet: '1DE', encoding: 'qr' };
+    expect(parseLocation('/Q/0ABC/1DE', '', '/')).toEqual(qr);
+    expect(parseLocation('/q/0ABC/1DE', '', '/')).toEqual(qr);
+    expect(parseLocation('/', '#/edit/ARJQ', '/')).toEqual(parseHash('#/edit/ARJQ'));
+    const base = '/state-to-function/'; // a site served from a sub-path
     expect(parseLocation('/STATE-TO-FUNCTION/Q/0ABC/1DE', '', base)).toEqual(qr);
     expect(parseLocation('/state-to-function/Q/0ABC/1DE', '', base)).toEqual(qr);
     expect(parseLocation('/state-to-function/Q/0ABC', '', base)).toEqual({ ...qr, applet: null });

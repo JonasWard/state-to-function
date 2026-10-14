@@ -13,7 +13,7 @@ import { NAME_CHARS, SUBSCRIPT_CHARS, SYMBOL_CHARS } from './charsets';
 // characters a QR code can store in alphanumeric mode
 const QR_ALPHANUMERIC = /^[0-9A-Z $%*+\-./:]+$/;
 const qrUrl = (def: string, applet: string) =>
-  formatQrUrl('https://jonasward.github.io', '/state-to-function/', def, applet);
+  formatQrUrl('https://jw-s2f.onrender.com', '/', def, applet);
 
 const OLD_INITIAL =
   'ABJQGhtgneloAfSCcQ-hIGACw2uxYUAPpBOIfQkCEBrYYInoaAH0gnEPoSAoAKaKaE9GnqwCECEAEVVs9FYujT1YBCFEACkl52JLRp6sAhAiAAVK1bQno09WARgwIMICRUBnprpaFSICI';

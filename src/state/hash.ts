@@ -28,7 +28,7 @@ export const formatHash = (view: View, definition: string, applet: string) =>
   `#/${view}/${definition}${applet ? `/${applet}` : ''}`;
 
 /**
- * QR links put the state in the path instead of the hash (Pages serves the app for it via 404.html), so
+ * QR links put the state in the path instead of the hash (the host rewrites unknown paths to the app), so
  * nothing in them is outside the QR alphanumeric set. The base path is matched case-insensitively
  * because the QR form is all uppercase.
  */

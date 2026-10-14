@@ -33,18 +33,12 @@ test('an unreadable link falls back to the example with a warning', async ({ pag
   await expect(page.getByLabel('method V result')).toContainText('1 000 000');
 });
 
-test('the build serves the app for unknown paths', async ({ request }) => {
-  const res = await request.get('./404.html');
-  expect(res.status()).toBe(200);
-  expect(await res.text()).toContain('<div id="root">');
-});
-
 test('a QR link opens the same state and is rewritten to the canonical link', async ({ page }) => {
   const overrides = [null, 250, null];
-  // vite preview matches the base path case-sensitively; the uppercase form is covered by unit tests
+  // like the host's rewrite rule, vite preview serves the app for the uppercase QR path
   await page.goto(`./${formatQrPath(encodeDefinition(DEFAULT_DEFINITION, QR_BASE), encodeApplet(DEFAULT_DEFINITION, overrides, QR_BASE))}`);
   await expect(page.getByRole('spinbutton', { name: 'w', exact: true })).toHaveValue('250');
-  await expect.poll(() => page.evaluate(() => location.pathname)).toBe('/state-to-function/');
+  await expect.poll(() => page.evaluate(() => location.pathname)).toBe('/');
   await expect
     .poll(() => hash(page))
     .toBe(formatHash('applet', encodeDefinition(DEFAULT_DEFINITION), encodeApplet(DEFAULT_DEFINITION, overrides)));
