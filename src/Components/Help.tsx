@@ -1,4 +1,4 @@
-import { FormOutlined, FunctionOutlined, LinkOutlined, NumberOutlined, SignatureOutlined } from '@ant-design/icons';
+import { Hash, Link, Signature, SquareFunction, SquarePen } from 'lucide-react';
 import React from 'react';
 import { OP_LABEL, OP_SYMBOL, OPS } from '../model/operators';
 import styles from './Help.module.css';
@@ -19,7 +19,7 @@ export const Help: React.FC = () => (
       database, no tracking, no cookies. Bookmark or share the URL to come back to it.
     </p>
 
-    <SectionHeader icon={<FormOutlined />} title="Definitions" />
+    <SectionHeader icon={<SquarePen />} title="Definitions" />
     <p>
       The <b>Definitions</b> page has two parts: <b>Inputs</b> and <b>Methods</b>. On small screens they are separate
       tabs in the header. Every input and method has a symbol, plus an optional subscript and name. Click the symbol to
@@ -27,7 +27,7 @@ export const Help: React.FC = () => (
     </p>
 
     <h3>
-      <NumberOutlined /> Inputs
+      <Hash /> Inputs
     </h3>
     <div className={styles.table}>
       <Row glyph="𝑐">
@@ -43,7 +43,7 @@ export const Help: React.FC = () => (
     <p>Switching type keeps the value. Removing an input that is in use replaces it with its default value.</p>
 
     <h3>
-      <FunctionOutlined /> Methods
+      <SquareFunction /> Methods
     </h3>
     <p>
       A method is an operation on terms. A term is an input, the result of an <i>earlier</i> method, a constant or a
@@ -62,15 +62,23 @@ export const Help: React.FC = () => (
         </Row>
       ))}
     </div>
+    <p>
+      To type methods instead, turn on <b>Type formulas as text</b> in the settings. Use <code>+ - * / ^</code> and
+      brackets, <code>IF(a &lt; b, then, else)</code> with <code>&lt;</code>, <code>&gt;</code> or <code>=</code>, and
+      references such as <code>A_t</code>, <code>x_{'{a+b}'}</code> or Greek by name (<code>alpha</code>,{' '}
+      <code>Delta</code>). References become tokens: click one, or press <kbd>Alt</kbd> + <kbd>↓</kbd> after it, to pick
+      another. <kbd>Enter</kbd> applies the formula and <kbd>Esc</kbd> goes back to the applied one. A subscript with an
+      unmatched <code>{'{'}</code> or <code>{'}'}</code> can only be picked, not typed.
+    </p>
 
-    <SectionHeader icon={<SignatureOutlined />} title="Applet" />
+    <SectionHeader icon={<Signature />} title="Applet" />
     <p>
       The applet lists the integer and decimal inputs with a slider and a field, limited to their ranges, and every
       method's result. Results that cannot be calculated show as <code>NaN</code>, division by zero as <code>∞</code>.
       Export the current values as CSV, or as a PDF that includes a QR code of the link.
     </p>
 
-    <SectionHeader icon={<LinkOutlined />} title="Links and undo" />
+    <SectionHeader icon={<Link />} title="Links and undo" />
     <p>
       The address holds the definitions and the applet values, so copying it (or using the link button) shares exactly
       what you see. Undo and redo cover both pages: <kbd>Ctrl</kbd> + <kbd>Z</kbd> and <kbd>Ctrl</kbd> + <kbd>Y</kbd>{' '}

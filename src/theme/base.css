@@ -17,3 +17,21 @@ body {
   outline: 2px solid var(--stf-accent-500);
   outline-offset: 1px;
 }
+
+/* lucide icons sit in the text like a glyph */
+svg.lucide {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  vertical-align: -0.125em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

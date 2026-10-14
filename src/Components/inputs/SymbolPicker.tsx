@@ -1,4 +1,4 @@
-import { Popover } from 'antd';
+import { Popover } from '../ui/Popover';
 import React, { useState } from 'react';
 import { SYMBOL_CHARS } from '../../model/charsets';
 import { MathSymbol } from '../math/MathSymbol';
@@ -19,8 +19,8 @@ export const SymbolPicker: React.FC<{
     <Popover
       open={open}
       onOpenChange={setOpen}
-      trigger="click"
-      placement="bottomLeft"
+      placement="bottom-start"
+      label="Symbol"
       content={<OptionGrid title="Symbol" options={options} selectedKey={symbol} onSelect={(c) => (onChange(c), setOpen(false))} />}
     >
       <button

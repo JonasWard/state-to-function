@@ -1,3 +1,4 @@
+import { Locator, Page } from '@playwright/test';
 import { expect, hash, test } from './fixtures';
 
 test.beforeEach(async ({ page }) => {
@@ -47,6 +48,54 @@ test('the symbol picker opens from the keyboard', async ({ page }) => {
   await expect(page.getByRole('group', { name: 'Symbol' })).toBeVisible();
 });
 
+test('the symbol grid takes keyboard focus', async ({ page }) => {
+  await page.getByRole('button', { name: /^Symbol l/ }).focus();
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('group', { name: 'Symbol' }).locator(':focus')).toHaveCount(1);
+});
+
+test('Escape closes the operand picker and returns focus', async ({ page }) => {
+  const operand = page.getByRole('button', { name: /change operand$/ }).first();
+  await operand.click();
+  const picker = page.getByRole('dialog', { name: 'Term' });
+  await expect(picker).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(picker).toHaveCount(0);
+  await expect(operand).toBeFocused();
+});
+
+test('a nested expression can be replaced from its operator', async ({ page }) => {
+  const result = page.getByLabel('method A result');
+  const before = await result.innerText();
+  const bracket = page.locator(':has(> button[aria-label="sub-expression, change operand"])');
+  await bracket.getByRole('button', { name: 'Add, change operation' }).first().click();
+  const picker = page.getByRole('dialog', { name: 'Term' });
+  await expect(picker.getByRole('radio', { name: 'Expression' })).toHaveAttribute('aria-checked', 'true');
+  await picker.getByRole('radio', { name: 'Input' }).click();
+  await expect(page.getByRole('button', { name: 'sub-expression, change operand' })).toHaveCount(0);
+  await expect(picker.getByRole('group', { name: 'Input' })).toBeVisible();
+  await picker.getByRole('button', { name: /^w/ }).click();
+  await expect(picker).toHaveCount(0);
+  await expect(result).not.toHaveText(before);
+});
+
+test('a nested operator still changes the operation', async ({ page }) => {
+  const bracket = page.locator(':has(> button[aria-label="sub-expression, change operand"])');
+  await bracket.getByRole('button', { name: 'Add, change operation' }).first().click();
+  await page.getByRole('dialog', { name: 'Term' }).getByRole('button', { name: /^Multiply/ }).click();
+  await expect(page.getByRole('button', { name: 'sub-expression, change operand' })).toHaveCount(1);
+  await expect(bracket.getByRole('button', { name: 'Multiply, change operation' }).first()).toBeVisible();
+});
+
+test('clicking outside closes the operand picker', async ({ page }) => {
+  await page.getByRole('button', { name: /change operand$/ }).first().click();
+  const picker = page.getByRole('dialog', { name: 'Term' });
+  await expect(picker).toBeVisible();
+  await page.locator('body').click({ position: { x: 5, y: 850 } });
+  await expect(picker).toHaveCount(0);
+});
+
 test('controls have accessible names', async ({ page }) => {
   for (const name of ['Undo', 'Redo', 'Settings', 'Copy link', 'Add input', 'Add method'])
     await expect(page.getByRole('button', { name })).toBeVisible();
@@ -62,4 +111,161 @@ test('number fields group digits unless focused', async ({ page }) => {
   await max.press('Enter');
   await page.locator('body').click({ position: { x: 5, y: 850 } });
   await expect(max).toHaveValue('4 000');
+});
+
+test('number fields clamp out-of-range values', async ({ page }) => {
+  const max = page.getByLabel('input l max');
+  await max.fill('99999');
+  await max.press('Enter');
+  await expect(max).toHaveValue('5242.87');
+  const value = page.getByLabel('input l default');
+  await value.fill('abc');
+  await value.press('Enter');
+  await expect(value).toHaveValue('100');
+});
+
+test('arrow keys move through a segmented control', async ({ page }) => {
+  const type = page.getByRole('radiogroup', { name: 'input l type' });
+  await type.getByRole('radio', { name: 'Decimal' }).focus();
+  await page.keyboard.press('ArrowLeft');
+  await expect(type.getByRole('radio', { name: 'Integer' })).toHaveAttribute('aria-checked', 'true');
+  await expect(type.getByRole('radio', { name: 'Integer' })).toBeFocused();
+  await page.keyboard.press('ArrowRight');
+  await expect(type.getByRole('radio', { name: 'Decimal' })).toHaveAttribute('aria-checked', 'true');
+});
+
+
+const typeFormulas = async (page: Page) => {
+  await page.getByRole('button', { name: 'Settings' }).click();
+  await page.getByRole('switch', { name: 'Type formulas as text' }).click();
+  await page.keyboard.press('Escape');
+};
+const formulaText = (field: Locator) => field.evaluate((el) => (el.textContent ?? '').replace(/[\u200B▾]/g, ''));
+
+test('formulas can be typed when the setting is on', async ({ page }) => {
+  await page.getByRole('button', { name: 'Settings' }).click();
+  await expect(page.getByRole('switch', { name: 'Type formulas as text' })).not.toBeChecked();
+  await page.keyboard.press('Escape');
+  await typeFormulas(page);
+  const field = page.getByRole('combobox', { name: 'method A formula' });
+  await expect(field.locator('[data-ref]')).toHaveCount(3);
+  expect(await formulaText(field)).toBe('(At + Af + As) * 2');
+  await page.reload();
+  await expect(field).toBeVisible();
+});
+
+test('a typed formula applies on Enter and is one undo step', async ({ page }) => {
+  await typeFormulas(page);
+  const field = page.getByRole('combobox', { name: 'method A formula' });
+  const result = page.getByLabel('method A result');
+  await field.click();
+  await page.keyboard.press('End');
+  await page.keyboard.type(' + l');
+  // the first Enter takes the suggestion for l, the second applies
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Enter');
+  await expect(result).toHaveText(/^=\s*60\D100$/);
+  await expect(field.locator('[data-ref]')).toHaveCount(4);
+  await page.keyboard.press('Backspace');
+  await expect(field.locator('[data-ref]')).toHaveCount(3);
+  await page.keyboard.press('Escape');
+  await page.locator('body').click({ position: { x: 5, y: 850 } });
+  await page.keyboard.press('Control+z');
+  await expect(result).toHaveText(/^=\s*60\D000$/);
+});
+
+test('an invalid formula shows why and Escape reverts it', async ({ page }) => {
+  await typeFormulas(page);
+  const field = page.getByRole('combobox', { name: 'method A sub t formula' });
+  await field.click();
+  await page.keyboard.press('End');
+  await page.keyboard.type(' *');
+  await expect(field).toHaveAttribute('aria-invalid', 'true');
+  await expect(page.getByText('The formula ends too early')).toBeVisible();
+  await page.keyboard.press('Enter');
+  await expect(field).toHaveAttribute('aria-invalid', 'true');
+  await page.keyboard.press('Escape');
+  await expect(field).toHaveAttribute('aria-invalid', 'false');
+  expect(await formulaText(field)).toBe('l * w');
+});
+
+test('a reference token swaps from its dropdown', async ({ page }) => {
+  await typeFormulas(page);
+  const field = page.getByRole('combobox', { name: 'method A formula' });
+  await field.getByRole('button', { name: 'A sub f, change reference' }).click();
+  const picker = page.getByRole('dialog', { name: 'Reference' });
+  await expect(picker.getByRole('button', { name: /^V/ })).toHaveCount(0);
+  await picker.getByRole('button', { name: /^A sub t/ }).click();
+  await expect(picker).toHaveCount(0);
+  await expect(field).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.getByLabel('method A result')).toHaveText(/^=\s*60\D000$/);
+  expect(await formulaText(field)).toBe('(At + At + As) * 2');
+});
+
+test('pasted text becomes a formula', async ({ page }) => {
+  await typeFormulas(page);
+  const field = page.getByRole('combobox', { name: 'method V formula' });
+  await field.click();
+  await page.keyboard.press('ControlOrMeta+a');
+  await field.evaluate((el) => {
+    const data = new DataTransfer();
+    data.setData('text/plain', 'l*w');
+    el.dispatchEvent(new ClipboardEvent('paste', { clipboardData: data, bubbles: true, cancelable: true }));
+  });
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('Enter');
+  await expect(page.getByLabel('method V result')).toHaveText(/^=\s*10\D000$/);
+  await expect(field.locator('[data-ref]')).toHaveCount(2);
+});
+
+test('typing a name suggests references and inserts a token', async ({ page }) => {
+  await typeFormulas(page);
+  const field = page.getByRole('combobox', { name: 'method V formula' });
+  await field.click();
+  await page.keyboard.press('ControlOrMeta+a');
+  await page.keyboard.press('Delete');
+  await page.keyboard.type('A');
+  const list = page.getByRole('listbox', { name: 'Suggestions' });
+  await expect(list.getByRole('option')).toHaveCount(4);
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Tab');
+  await expect(list).toHaveCount(0);
+  await expect(field.getByRole('button', { name: 'A sub f, change reference' })).toBeVisible();
+  await page.keyboard.type(' * are');
+  await expect(list.getByRole('option').first()).toContainText('Area Top');
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Enter');
+  await expect(page.getByLabel('method V result')).toHaveText(/^=\s*100\D000\D000$/);
+});
+
+test('IF lays out placeholders that typing fills in', async ({ page }) => {
+  await typeFormulas(page);
+  const field = page.getByRole('combobox', { name: 'method V formula' });
+  await field.click();
+  await page.keyboard.press('ControlOrMeta+a');
+  await page.keyboard.press('Delete');
+  await page.keyboard.type('IF(');
+  await expect(field.locator('[data-slot]')).toHaveCount(3);
+  await page.keyboard.type('l < w ');
+  await page.keyboard.press('Tab');
+  await page.keyboard.type('2');
+  await page.keyboard.press('Enter');
+  await expect(page.getByText('Fill in ‹if false›')).toBeVisible();
+  await page.keyboard.press('Tab');
+  await page.keyboard.type('3');
+  await page.keyboard.press('Enter');
+  await expect(page.getByLabel('method V result')).toHaveText(/^=\s*3$/);
+  expect(await formulaText(field)).toBe('IF(l < w, 2, 3)');
+});
+
+test('the IF suggestion inserts placeholders too', async ({ page }) => {
+  await typeFormulas(page);
+  const field = page.getByRole('combobox', { name: 'method V formula' });
+  await field.click();
+  await page.keyboard.press('ControlOrMeta+a');
+  await page.keyboard.press('Delete');
+  await page.keyboard.type('I');
+  await page.getByRole('option', { name: /IF/ }).click();
+  await expect(field.locator('[data-slot][data-selected]')).toHaveText('test');
 });

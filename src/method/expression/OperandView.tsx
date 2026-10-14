@@ -1,4 +1,4 @@
-import { Popover } from 'antd';
+import { Popover } from '../../Components/ui/Popover';
 import React, { useState } from 'react';
 import { MathSymbol } from '../../Components/math/MathSymbol';
 import { symbolLabel } from '../../Components/math/symbolLabel';
@@ -41,12 +41,13 @@ export const OperandView: React.FC<{ value: Operand; onChange: (value: Operand) 
 }) => {
   const [open, setOpen] = useState(false);
   const missing = isMissing(value, context);
+  // replacing a bracket from its operator: reopen the picker on the new term so it can be chosen right away
+  const replace = (next: Operand) => (onChange(next), next.type !== 'method' && setOpen(true));
   const trigger = (
     <Popover
       open={open}
       onOpenChange={setOpen}
-      trigger="click"
-      destroyOnHidden
+      label="Term"
       content={<OperandPicker value={value} onChange={onChange} onDone={() => setOpen(false)} context={context} />}
     >
       <button
@@ -67,7 +68,12 @@ export const OperandView: React.FC<{ value: Operand; onChange: (value: Operand) 
   return (
     <span className={styles.nested}>
       {trigger}
-      <ExpressionView value={value.method} onChange={(method) => onChange({ type: 'method', method })} context={context} />
+      <ExpressionView
+        value={value.method}
+        onChange={(method) => onChange({ type: 'method', method })}
+        context={context}
+        term={{ value, onChange: replace }}
+      />
       <span className={`${styles.paren} ${styles.closing}`} aria-hidden>
         )
       </span>

@@ -1,14 +1,18 @@
-import { SettingOutlined } from '@ant-design/icons';
-import { Button, Popover, Switch, Tooltip } from 'antd';
+import { SettingsIcon } from 'lucide-react';
+import { Popover } from '../ui/Popover';
+import { Tooltip } from '../ui/Tooltip';
 import React from 'react';
 import { Settings, useUIStore } from '../../state/uiStore';
 import styles from '../layout/AppHeader.module.css';
 import sectionStyles from '../layout/Section.module.css';
+import { Button } from '../ui/Button';
+import { Switch } from '../ui/Switch';
 
 const LABELS: Record<keyof Settings, string> = {
   compactRows: 'Compact definition rows',
   showNamesInApplet: 'Show names in the applet',
-  showRangeHints: 'Show input ranges in the applet'
+  showRangeHints: 'Show input ranges in the applet',
+  typeFormulas: 'Type formulas as text'
 };
 
 const SettingsList: React.FC = () => {
@@ -20,7 +24,7 @@ const SettingsList: React.FC = () => {
       {(Object.keys(LABELS) as (keyof Settings)[]).map((key) => (
         <label key={key} className={styles.setting}>
           {LABELS[key]}
-          <Switch size="small" checked={settings[key]} onChange={(v) => setSetting(key, v)} />
+          <Switch checked={settings[key]} onChange={(v) => setSetting(key, v)} />
         </label>
       ))}
     </div>
@@ -28,9 +32,9 @@ const SettingsList: React.FC = () => {
 };
 
 export const SettingsPopover: React.FC = () => (
-  <Popover trigger="click" placement="bottomRight" content={<SettingsList />}>
+  <Popover placement="bottom-end" label="Settings" content={<SettingsList />}>
     <Tooltip title="Settings">
-      <Button type="text" icon={<SettingOutlined />} aria-label="Settings" />
+      <Button variant="text" icon={<SettingsIcon />} aria-label="Settings" />
     </Tooltip>
   </Popover>
 );

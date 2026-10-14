@@ -1,5 +1,5 @@
-import { FunctionOutlined, NumberOutlined, RollbackOutlined } from '@ant-design/icons';
-import { Button, Slider, Tooltip } from 'antd';
+import { Hash, SquareFunction, Undo2 } from 'lucide-react';
+import { Tooltip } from '../Components/ui/Tooltip';
 import React from 'react';
 import { NumberField } from '../Components/inputs/NumberField';
 import { SectionHeader } from '../Components/layout/Section';
@@ -13,6 +13,7 @@ import { useUIStore } from '../state/uiStore';
 import styles from './applet.module.css';
 import { ExportButtons } from './ExportButtons';
 import { ResultsTable } from './ResultsTable';
+import { Button } from '../Components/ui/Button';
 
 const setOverride = (i: number, v: number | null, coalesceKey?: string) =>
   useDocumentStore.getState().setOverride(i, v, { coalesceKey });
@@ -29,15 +30,16 @@ const InputControl: React.FC<{ field: AppletField; input: InputDef; value: numbe
     <div className={styles.row}>
       <MathSymbol symbol={input.symbol} subscript={input.subscript} size="md" />
       <div className={styles.control}>
-        <Slider
+        <input
+          type="range"
+          className={styles.slider}
           min={field.min}
           max={field.max}
           step={field.step}
           value={value}
           disabled={field.min === field.max}
-          tooltip={{ formatter: (v) => formatNumber(v ?? 0) }}
           aria-label={`${label} slider`}
-          onChange={(v) => setOverride(field.inputIndex, v, `slider-${field.inputIndex}`)}
+          onChange={(e) => setOverride(field.inputIndex, Number(e.target.value), `slider-${field.inputIndex}`)}
         />
         <NumberField
           value={value}
@@ -50,9 +52,9 @@ const InputControl: React.FC<{ field: AppletField; input: InputDef; value: numbe
       </div>
       <Tooltip title="Reset to default">
         <Button
-          type="text"
+          variant="text"
           size="small"
-          icon={<RollbackOutlined />}
+          icon={<Undo2 />}
           aria-label={`Reset ${label} to default`}
           disabled={!overridden}
           onClick={() => setOverride(field.inputIndex, null)}
@@ -83,10 +85,10 @@ export const AppletView: React.FC = () => {
       <section className={styles.section} aria-labelledby="applet-inputs">
         <SectionHeader
           id="applet-inputs"
-          icon={<NumberOutlined />}
+          icon={<Hash />}
           title="Inputs"
           aside={
-            <Button size="small" type="text" disabled={!overrides.some((o) => o !== null)} onClick={() => useDocumentStore.getState().resetApplet()}>
+            <Button size="small" variant="text" disabled={!overrides.some((o) => o !== null)} onClick={() => useDocumentStore.getState().resetApplet()}>
               Reset all
             </Button>
           }
@@ -106,7 +108,7 @@ export const AppletView: React.FC = () => {
         )}
       </section>
       <section className={styles.section} aria-labelledby="applet-results">
-        <SectionHeader id="applet-results" icon={<FunctionOutlined />} title="Results" />
+        <SectionHeader id="applet-results" icon={<SquareFunction />} title="Results" />
         <ResultsTable methods={definition.methods} results={results} showNames={showNames} />
         <div className={styles.exports}>
           <ExportButtons />

@@ -1,4 +1,3 @@
-import { Spin } from 'antd';
 import React, { useEffect } from 'react';
 import styles from './App.module.css';
 import { AppletView } from './applet/AppletView';
@@ -9,6 +8,8 @@ import { useDocumentStore } from './state/documentStore';
 import { startHashSync } from './state/hashSync';
 import { useKeyboardShortcuts } from './state/useKeyboardShortcuts';
 import { useUIStore } from './state/uiStore';
+import { Spinner } from './Components/ui/Spinner';
+import { Toaster } from './Components/ui/Toaster';
 
 export const App: React.FC = () => {
   useEffect(() => startHashSync(), []);
@@ -18,10 +19,11 @@ export const App: React.FC = () => {
   return (
     <>
       <AppHeader />
+      <Toaster />
       <main className={styles.main}>
         {upgrading ? (
           <div className={styles.loading}>
-            <Spin tip="Upgrading link…" />
+            <Spinner label="Upgrading link…" />
           </div>
         ) : view === 'help' ? (
           <Help />

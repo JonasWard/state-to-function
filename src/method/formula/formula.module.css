@@ -1,0 +1,101 @@
+.wrap {
+  min-width: 0;
+}
+
+/* a text field that wraps, holding text and reference tokens */
+.editor {
+  composes: field mono from '../../Components/ui/field.module.css';
+  height: auto;
+  min-height: 30px;
+  padding: 3px var(--stf-space-4);
+  line-height: 22px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  cursor: text;
+}
+
+.invalid {
+  composes: error from '../../Components/ui/field.module.css';
+}
+
+.token,
+.slot {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  margin: 0 1px;
+  padding: 0 var(--stf-space-1) 0 var(--stf-space-2);
+  border: 1px solid var(--stf-accent-200);
+  border-radius: var(--stf-radius);
+  background: var(--stf-accent-100);
+  line-height: 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.token:hover,
+.token[data-open] {
+  border-color: var(--stf-accent-500);
+}
+
+.caret {
+  font-family: var(--stf-font-ui);
+  font-size: 0.7em;
+  color: var(--stf-ink-subtle);
+}
+
+.slot {
+  padding: 0 var(--stf-space-2);
+  border-style: dashed;
+  background: var(--stf-surface);
+  font-family: var(--stf-font-ui);
+  font-size: var(--stf-text-sm);
+  color: var(--stf-ink-muted);
+}
+
+.slot[data-selected] {
+  border-style: solid;
+  border-color: var(--stf-accent-500);
+  background: var(--stf-accent-100);
+  color: var(--stf-ink);
+}
+
+.message {
+  margin: var(--stf-space-1) 0 0;
+  font-size: var(--stf-text-sm);
+  color: var(--stf-danger);
+}
+
+.picker {
+  display: grid;
+  gap: var(--stf-space-3);
+  max-width: 18rem;
+}
+
+.suggestions {
+  min-width: 12rem;
+  max-height: 16rem;
+  margin: 0;
+  padding: var(--stf-space-1);
+  overflow: auto;
+  list-style: none;
+}
+
+.option {
+  display: flex;
+  align-items: baseline;
+  gap: var(--stf-space-3);
+  padding: var(--stf-space-1) var(--stf-space-3);
+  border-radius: var(--stf-radius);
+  cursor: pointer;
+}
+
+.option[aria-selected='true'] {
+  background: var(--stf-accent-100);
+}
+
+.optionName {
+  font-family: var(--stf-font-ui);
+  font-size: var(--stf-text-sm);
+  color: var(--stf-ink-muted);
+}

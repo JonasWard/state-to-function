@@ -1,0 +1,45 @@
+.region {
+  position: fixed;
+  top: var(--stf-space-6);
+  left: 50%;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--stf-space-3);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--stf-space-3);
+  max-width: min(32rem, calc(100vw - 2 * var(--stf-space-5)));
+  padding: var(--stf-space-3) var(--stf-space-4);
+  border: var(--stf-hairline);
+  border-radius: var(--stf-radius);
+  background: var(--stf-surface);
+  color: var(--stf-ink);
+  font-size: var(--stf-text-md);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--stf-ink) 12%, transparent);
+  pointer-events: auto;
+}
+
+.dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--stf-accent-700);
+}
+
+.success .dot {
+  background: var(--stf-success);
+}
+.warning .dot {
+  background: var(--stf-warning);
+}
+.error .dot {
+  background: var(--stf-danger);
+}

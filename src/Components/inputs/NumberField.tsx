@@ -1,41 +1,49 @@
-import { InputNumber } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { groupDigits } from '../../model/numeric';
-import styles from './NumberField.module.css';
+import { clamp, groupDigits, roundTo } from '../../model/numeric';
+import field from '../ui/field.module.css';
 
-const ungroup = (s: string | undefined) => (s ?? '').replace(/\u202F/g, '');
+const ungroup = (s: string) => s.replace(/\u202F/g, '').replace(',', '.').trim();
 
-/** Number input that keeps a draft while typing and commits on blur or Enter; digits are grouped while not editing. */
+/**
+ * Number input that keeps a draft while typing and commits on blur or Enter (Escape reverts).
+ * The committed value is clamped to min/max and rounded to `precision`; digits are grouped while not editing.
+ */
 export const NumberField: React.FC<{
   value: number;
   onCommit: (value: number) => void;
   ariaLabel: string;
   min?: number;
   max?: number;
-  step?: number;
   precision?: number;
   status?: 'error' | 'warning';
-}> = ({ value, onCommit, ariaLabel, ...props }) => {
-  const [draft, setDraft] = useState<number | null>(value);
+}> = ({ value, onCommit, ariaLabel, min = -Infinity, max = Infinity, precision, status }) => {
+  const [draft, setDraft] = useState(String(value));
   const [focused, setFocused] = useState(false);
-  useEffect(() => setDraft(value), [value]);
+  useEffect(() => setDraft(String(value)), [value]);
+
   const commit = () => {
-    if (draft === null || !Number.isFinite(draft) || draft === value) return setDraft(value);
-    onCommit(draft);
+    const parsed = Number(ungroup(draft));
+    if (ungroup(draft) === '' || !Number.isFinite(parsed)) return setDraft(String(value));
+    const fitted = clamp(parsed, min, max);
+    const next = precision === undefined ? fitted : roundTo(fitted, 10 ** -precision);
+    if (next !== value) onCommit(next);
+    setDraft(String(next));
   };
+
   return (
-    <InputNumber
-      {...props}
-      className={styles.field}
-      value={draft}
-      onChange={(v) => setDraft(typeof v === 'number' ? v : null)}
+    <input
+      className={`${field.field} ${field.mono} ${status ? field[status] : ''}`}
+      inputMode="decimal"
+      value={focused ? draft : groupDigits(draft)}
+      aria-label={ariaLabel}
+      aria-invalid={status === 'error' || undefined}
+      onChange={(e) => setDraft(e.target.value)}
       onFocus={() => setFocused(true)}
       onBlur={() => (setFocused(false), commit())}
-      onPressEnter={commit}
-      formatter={focused ? undefined : (v) => groupDigits(String(v ?? ''))}
-      parser={ungroup}
-      controls={false}
-      aria-label={ariaLabel}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') commit();
+        if (e.key === 'Escape') setDraft(String(value));
+      }}
     />
   );
 };

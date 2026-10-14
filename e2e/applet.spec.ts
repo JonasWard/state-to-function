@@ -9,7 +9,7 @@ test('an applet value of 0 is used', async ({ page }) => {
   await min.fill('0');
   await min.press('Enter');
   await openTab(page, 'Applet');
-  const w = page.getByRole('spinbutton', { name: 'w', exact: true });
+  const w = page.getByRole('textbox', { name: 'w', exact: true });
   await w.fill('0');
   await w.press('Enter');
   await expect(firstResult(page)).toHaveText('0');
@@ -22,7 +22,7 @@ test('exports use the current values and work offline', async ({ page, context }
   );
   await page.goto('./');
   await openTab(page, 'Applet');
-  const w = page.getByRole('spinbutton', { name: 'w', exact: true });
+  const w = page.getByRole('textbox', { name: 'w', exact: true });
   await w.fill('250');
   await w.press('Enter');
   await expect(firstResult(page)).toHaveText('25 000');
@@ -40,7 +40,7 @@ test('exports use the current values and work offline', async ({ page, context }
 test('back and forward move between pages and keep applet values', async ({ page }) => {
   await page.goto('./');
   await openTab(page, 'Applet');
-  const w = page.getByRole('spinbutton', { name: 'w', exact: true });
+  const w = page.getByRole('textbox', { name: 'w', exact: true });
   await w.fill('250');
   await w.press('Enter');
   await expect.poll(() => hash(page)).toMatch(/^#\/applet\/[^/]+\/[^/]+$/);
@@ -65,3 +65,16 @@ test('settings survive a reload', async ({ page }) => {
   await expect(page.getByRole('switch', { name: 'Compact definition rows' })).toBeChecked();
   await expect(page.getByLabel('input l name')).toBeHidden();
 });
+
+test('a slider drag is one undo step', async ({ page }) => {
+  await page.goto('./');
+  await openTab(page, 'Applet');
+  const slider = page.getByRole('slider', { name: 'w slider' });
+  const field = page.getByRole('textbox', { name: 'w', exact: true });
+  await slider.focus();
+  for (let i = 0; i < 5; i++) await page.keyboard.press('ArrowRight');
+  await expect(field).toHaveValue('100.05');
+  await page.getByRole('button', { name: 'Undo' }).click();
+  await expect(field).toHaveValue('100');
+});
+

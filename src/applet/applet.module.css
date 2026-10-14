@@ -67,3 +67,15 @@
 .hidden {
   display: none;
 }
+
+.slider {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--stf-accent-700);
+  cursor: pointer;
+}
+
+.slider:disabled {
+  cursor: default;
+  opacity: 0.45;
+}

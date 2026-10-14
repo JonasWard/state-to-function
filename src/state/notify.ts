@@ -1,17 +1,26 @@
-import type { MessageInstance } from 'antd/es/message/interface';
+import { create } from 'zustand';
 
-type Level = 'info' | 'success' | 'warning' | 'error';
-type Api = Pick<MessageInstance, Level>;
+export type ToastLevel = 'info' | 'success' | 'warning' | 'error';
+export interface Toast {
+  id: number;
+  level: ToastLevel;
+  text: string;
+}
 
-let api: Api | null = null;
-const pending: [Level, string][] = [];
+const DURATION_MS = 4000;
 
-/** Bound once antd's App context exists; messages raised earlier (e.g. while reading the URL) are queued. */
-export const bindNotify = (a: Api) => {
-  api = a;
-  pending.splice(0).forEach(([level, text]) => a[level](text));
+/** Messages shown by <Toaster/>; anything can raise one, including code that runs before React renders. */
+export const useToasts = create<{ toasts: Toast[] }>(() => ({ toasts: [] }));
+
+let nextId = 0;
+
+export const dismissToast = (id: number) =>
+  useToasts.setState((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) }));
+
+const send = (level: ToastLevel) => (text: string) => {
+  const id = ++nextId;
+  useToasts.setState((s) => ({ toasts: [...s.toasts, { id, level, text }] }));
+  setTimeout(() => dismissToast(id), DURATION_MS);
 };
-
-const send = (level: Level) => (text: string) => (api ? api[level](text) : pending.push([level, text]));
 
 export const notify = { info: send('info'), success: send('success'), warning: send('warning'), error: send('error') };

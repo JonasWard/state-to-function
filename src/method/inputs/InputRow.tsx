@@ -1,5 +1,5 @@
-import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Segmented } from 'antd';
+import { Trash2 } from 'lucide-react';
+import { Confirm } from '../../Components/ui/Confirm';
 import React from 'react';
 import { CharsetInput } from '../../Components/inputs/CharsetInput';
 import { ConstantInput } from '../../Components/inputs/ConstantInput';
@@ -12,11 +12,13 @@ import { FLOAT_MAX, FLOAT_MIN, INT_MAX, INT_MIN } from '../../model/numeric';
 import { changeKind } from '../../model/ops';
 import { InputDef, InputKindType, NumericKind } from '../../model/types';
 import styles from '../definitions.module.css';
+import { Button } from '../../Components/ui/Button';
+import { Segmented, SegmentedOption } from '../../Components/ui/Segmented';
 
-const KIND_OPTIONS = [
-  { value: 'constant', label: <span className={mathStyles.glyph} aria-label="Constant">𝑐</span>, title: 'Constant' },
-  { value: 'integer', label: <span className={mathStyles.glyph} aria-label="Integer">ℤ</span>, title: 'Integer' },
-  { value: 'float', label: <span className={mathStyles.glyph} aria-label="Decimal">ℝ</span>, title: 'Decimal' }
+const KIND_OPTIONS: SegmentedOption<InputKindType>[] = [
+  { value: 'constant', label: <span className={mathStyles.glyph}>𝑐</span>, ariaLabel: 'Constant', title: 'Constant' },
+  { value: 'integer', label: <span className={mathStyles.glyph}>ℤ</span>, ariaLabel: 'Integer', title: 'Integer' },
+  { value: 'float', label: <span className={mathStyles.glyph}>ℝ</span>, ariaLabel: 'Decimal', title: 'Decimal' }
 ];
 
 const NumericFields: React.FC<{ kind: NumericKind; label: string; onChange: (k: NumericKind) => void }> = ({
@@ -26,8 +28,8 @@ const NumericFields: React.FC<{ kind: NumericKind; label: string; onChange: (k: 
 }) => {
   const bounds =
     kind.type === 'integer'
-      ? { min: INT_MIN, max: INT_MAX, precision: 0, step: 1 }
-      : { min: FLOAT_MIN, max: FLOAT_MAX, step: 1 };
+      ? { min: INT_MIN, max: INT_MAX, precision: 0 }
+      : { min: FLOAT_MIN, max: FLOAT_MAX };
   const inverted = kind.min > kind.max;
   const outside = !inverted && (kind.value < kind.min || kind.value > kind.max);
   return (
@@ -59,7 +61,7 @@ export const InputRow: React.FC<{
 }> = ({ value, index, duplicate, references, canRemove, compact, onChange, onRemove }) => {
   const label = `input ${symbolLabel(value.symbol, value.subscript)}`;
   const remove = (
-    <Button type="text" size="small" icon={<DeleteOutlined />} aria-label={`Remove ${label}`} disabled={!canRemove} onClick={references ? undefined : onRemove} />
+    <Button variant="text" size="small" icon={<Trash2 />} aria-label={`Remove ${label}`} disabled={!canRemove} onClick={references ? undefined : onRemove} />
   );
   return (
     <div className={`${styles.row} ${styles.inputGrid} ${compact ? styles.compact : ''}`}>
@@ -76,9 +78,10 @@ export const InputRow: React.FC<{
       <div className={styles.type}>
         <Segmented
           size="small"
+          ariaLabel={`${label} type`}
           value={value.kind.type}
           options={KIND_OPTIONS}
-          onChange={(t) => onChange({ ...value, kind: changeKind(value.kind, t as InputKindType) })}
+          onChange={(t) => onChange({ ...value, kind: changeKind(value.kind, t) })}
         />
       </div>
       {value.kind.type === 'constant' ? (
@@ -90,14 +93,14 @@ export const InputRow: React.FC<{
       )}
       <div className={styles.del}>
         {references && canRemove ? (
-          <Popconfirm
+          <Confirm
             title={`Remove ${label}?`}
             description={`It is used ${references}× — those places get its default value.`}
-            okText="Remove"
+            confirmText="Remove"
             onConfirm={onRemove}
           >
             {remove}
-          </Popconfirm>
+          </Confirm>
         ) : (
           remove
         )}

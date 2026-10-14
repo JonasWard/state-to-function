@@ -1,5 +1,5 @@
-import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Popconfirm } from 'antd';
+import { Trash2 } from 'lucide-react';
+import { Confirm } from '../../Components/ui/Confirm';
 import React from 'react';
 import { CharsetInput } from '../../Components/inputs/CharsetInput';
 import { SymbolPicker } from '../../Components/inputs/SymbolPicker';
@@ -11,6 +11,9 @@ import sectionStyles from '../../Components/layout/Section.module.css';
 import styles from '../definitions.module.css';
 import { ReferenceContext } from '../expression/context';
 import { ExpressionView } from '../expression/ExpressionView';
+import { FormulaEditor } from '../formula/FormulaEditor';
+import { useUIStore } from '../../state/uiStore';
+import { Button } from '../../Components/ui/Button';
 
 export const MethodRow: React.FC<{
   value: MethodDef;
@@ -24,8 +27,9 @@ export const MethodRow: React.FC<{
   onRemove: () => void;
 }> = ({ value, index, result, duplicate, references, compact, context, onChange, onRemove }) => {
   const label = `method ${symbolLabel(value.symbol, value.subscript)}`;
+  const typeFormulas = useUIStore((s) => s.settings.typeFormulas);
   const remove = (
-    <Button type="text" size="small" icon={<DeleteOutlined />} aria-label={`Remove ${label}`} onClick={references ? undefined : onRemove} />
+    <Button variant="text" size="small" icon={<Trash2 />} aria-label={`Remove ${label}`} onClick={references ? undefined : onRemove} />
   );
   return (
     <div className={`${styles.row} ${styles.methodGrid} ${compact ? styles.compact : ''}`}>
@@ -40,7 +44,11 @@ export const MethodRow: React.FC<{
         <CharsetInput value={value.name} charset={NAME_CHARS} placeholder="name" ariaLabel={`${label} name`} onCommit={(name) => onChange({ ...value, name })} />
       </div>
       <div className={styles.expr}>
-        <ExpressionView value={value.method} context={context} onChange={(method) => onChange({ ...value, method })} />
+        {typeFormulas ? (
+          <FormulaEditor value={value.method} context={context} ariaLabel={`${label} formula`} onCommit={(method) => onChange({ ...value, method })} />
+        ) : (
+          <ExpressionView value={value.method} context={context} onChange={(method) => onChange({ ...value, method })} />
+        )}
       </div>
       <output className={styles.result} aria-label={`${label} result`}>
         <span className={sectionStyles.equals} aria-hidden>
@@ -50,14 +58,14 @@ export const MethodRow: React.FC<{
       </output>
       <div className={styles.del}>
         {references ? (
-          <Popconfirm
+          <Confirm
             title={`Remove ${label}?`}
             description={`It is used ${references}× — those places get its expression.`}
-            okText="Remove"
+            confirmText="Remove"
             onConfirm={onRemove}
           >
             {remove}
-          </Popconfirm>
+          </Confirm>
         ) : (
           remove
         )}

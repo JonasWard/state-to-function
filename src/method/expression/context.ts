@@ -4,4 +4,6 @@ import { Label } from '../../model/types';
 export interface ReferenceContext {
   inputs: Label[];
   methods: Label[];
+  /** the method being edited and those after it; only used to explain why they can't be referenced */
+  later?: Label[];
 }
