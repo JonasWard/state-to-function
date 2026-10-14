@@ -53,6 +53,13 @@
   color: var(--stf-ink-muted);
 }
 
+.slot[data-selected] {
+  border-style: solid;
+  border-color: var(--stf-accent-500);
+  background: var(--stf-accent-100);
+  color: var(--stf-ink);
+}
+
 .message {
   margin: var(--stf-space-1) 0 0;
   font-size: var(--stf-text-sm);

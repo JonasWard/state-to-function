@@ -83,6 +83,42 @@ export const insertAt = (range: Range, node: Node) => {
   placeCaret({ after: caretAfter });
 };
 
+/** Selects a placeholder, so typing or a suggestion replaces it. */
+export const selectSlot = (slot: HTMLElement) => {
+  slot.closest('[contenteditable="true"]')?.querySelector('[data-selected]')?.removeAttribute('data-selected');
+  slot.setAttribute('data-selected', '');
+  const range = document.createRange();
+  range.selectNode(slot);
+  const sel = window.getSelection();
+  sel?.removeAllRanges();
+  sel?.addRange(range);
+};
+
+/** Replaces a range with `IF(‹test›, ‹if true›, ‹if false›)` and selects the first placeholder. */
+export const insertIf = (range: Range) => {
+  range.deleteContents();
+  const nodes = [
+    document.createTextNode('IF('),
+    makeSlot('test'),
+    document.createTextNode(', '),
+    makeSlot('if true'),
+    document.createTextNode(', '),
+    makeSlot('if false'),
+    document.createTextNode(')')
+  ];
+  [...nodes].reverse().forEach((n) => range.insertNode(n));
+  selectSlot(nodes[1] as HTMLElement);
+};
+
+/** The next placeholder after the caret, wrapping around to the first. */
+export const nextSlot = (root: HTMLElement): HTMLElement | null => {
+  const slots = [...root.querySelectorAll<HTMLElement>('[data-slot]')];
+  const sel = window.getSelection();
+  if (!slots.length || !sel?.rangeCount) return slots[0] ?? null;
+  const caret = sel.getRangeAt(0);
+  return slots.find((s) => !s.hasAttribute('data-selected') && caret.comparePoint(s, 0) > 0) ?? slots[0];
+};
+
 export const placeCaret = (where: { after: Node } | { endOf: Node }) => {
   const range = document.createRange();
   if ('after' in where) range.setStartAfter(where.after);

@@ -18,7 +18,7 @@ import { formatPieces, parsePieces, RefOperand } from '../../model/formula';
 import { Expr } from '../../model/types';
 import { ReferenceContext } from '../expression/context';
 import { symbolOptions } from '../expression/symbolOptions';
-import { insertAt, makeToken, placeCaret, readPieces, renderPieces, tokenBeforeCaret } from './dom';
+import { insertAt, insertIf, makeToken, nextSlot, placeCaret, readPieces, renderPieces, selectSlot, tokenBeforeCaret } from './dom';
 import styles from './formula.module.css';
 import { suggest, Suggestion } from './suggest';
 
@@ -127,9 +127,22 @@ export const FormulaEditor: React.FC<{
     const range = document.createRange();
     range.setStart(hint.node, hint.from);
     range.setEnd(hint.node, hint.to);
-    insertAt(range, item.kind === 'ref' ? makeToken(item.ref, context) : document.createTextNode('IF('));
+    if (item.kind === 'ref') insertAt(range, makeToken(item.ref, context));
+    else insertIf(range);
     setHint(null);
     check();
+  };
+  // typing IF( lays out the placeholders, as accepting the suggestion does
+  const expandIf = () => {
+    const sel = window.getSelection();
+    const node = sel?.anchorNode;
+    if (!sel?.isCollapsed || !(node instanceof Text)) return;
+    const before = node.data.slice(0, sel.anchorOffset);
+    if (!/(?:^|[^A-Za-z])IF\($/i.test(before)) return;
+    const range = document.createRange();
+    range.setStart(node, sel.anchorOffset - 3);
+    range.setEnd(node, sel.anchorOffset);
+    insertIf(range);
   };
   const list = useFloating({
     open: !!hint,
@@ -158,9 +171,16 @@ export const FormulaEditor: React.FC<{
         spellCheck={false}
         autoCapitalize="off"
         autoCorrect="off"
-        onInput={() => (check(), updateHint())}
+        onInput={() => {
+          root.current!.querySelector('[data-selected]')?.removeAttribute('data-selected');
+          expandIf();
+          check();
+          updateHint();
+        }}
         onClick={(e) => {
           setHint(null);
+          const slot = (e.target as Element).closest<HTMLElement>('[data-slot]');
+          if (slot) return selectSlot(slot);
           const el = (e.target as Element).closest<HTMLElement>('[data-ref]');
           if (el) openToken(el);
         }}
@@ -182,7 +202,10 @@ export const FormulaEditor: React.FC<{
             }
             if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) setHint(null);
           }
-          if (e.key === 'Enter') {
+          if (e.key === 'Tab' && !e.shiftKey && nextSlot(root.current!)) {
+            e.preventDefault();
+            selectSlot(nextSlot(root.current!)!);
+          } else if (e.key === 'Enter') {
             e.preventDefault();
             if (commit()) placeCaret({ endOf: root.current! });
           } else if (e.key === 'Escape') {

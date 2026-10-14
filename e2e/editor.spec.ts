@@ -238,3 +238,34 @@ test('typing a name suggests references and inserts a token', async ({ page }) =
   await page.keyboard.press('Enter');
   await expect(page.getByLabel('method V result')).toHaveText(/^=\s*100\D000\D000$/);
 });
+
+test('IF lays out placeholders that typing fills in', async ({ page }) => {
+  await typeFormulas(page);
+  const field = page.getByRole('combobox', { name: 'method V formula' });
+  await field.click();
+  await page.keyboard.press('ControlOrMeta+a');
+  await page.keyboard.press('Delete');
+  await page.keyboard.type('IF(');
+  await expect(field.locator('[data-slot]')).toHaveCount(3);
+  await page.keyboard.type('l < w ');
+  await page.keyboard.press('Tab');
+  await page.keyboard.type('2');
+  await page.keyboard.press('Enter');
+  await expect(page.getByText('Fill in ‹if false›')).toBeVisible();
+  await page.keyboard.press('Tab');
+  await page.keyboard.type('3');
+  await page.keyboard.press('Enter');
+  await expect(page.getByLabel('method V result')).toHaveText(/^=\s*3$/);
+  expect(await formulaText(field)).toBe('IF(l < w, 2, 3)');
+});
+
+test('the IF suggestion inserts placeholders too', async ({ page }) => {
+  await typeFormulas(page);
+  const field = page.getByRole('combobox', { name: 'method V formula' });
+  await field.click();
+  await page.keyboard.press('ControlOrMeta+a');
+  await page.keyboard.press('Delete');
+  await page.keyboard.type('I');
+  await page.getByRole('option', { name: /IF/ }).click();
+  await expect(field.locator('[data-slot][data-selected]')).toHaveText('test');
+});
