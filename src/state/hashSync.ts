@@ -3,7 +3,7 @@ import { decodeApplet, encodeApplet } from '../model/appletSchema';
 import { decodeDefinition, encodeDefinition, QR_BASE } from '../model/codec';
 import { DEFAULT_DEFINITION } from '../model/defaults';
 import { useDocumentStore } from './documentStore';
-import { formatHash, formatQrPath, parseHash, ParsedHash } from './hash';
+import { formatHash, formatQrUrl, parseHash, parseLocation, ParsedHash } from './hash';
 import { notify } from './notify';
 import { useUIStore } from './uiStore';
 
@@ -68,14 +68,17 @@ const currentHash = () => {
   return formatHash(useUIStore.getState().view, defString, appletString);
 };
 
+const BASE = import.meta.env.BASE_URL;
+const isCanonical = (hash: string) => window.location.pathname === BASE && window.location.hash === hash;
+
 let booting = false;
 
-/** Reads the initial hash into the stores and rewrites it in canonical form. */
+/** Reads the initial location (hash, or a QR link's path) into the stores and rewrites it in canonical form. */
 export const bootstrap = async () => {
   booting = true;
-  const keep = await loadFromHash(parseHash(window.location.hash), 'reset');
+  const keep = await loadFromHash(parseLocation(window.location.pathname, window.location.hash, BASE), 'reset');
   booting = false;
-  if (keep) history.replaceState(null, '', currentHash());
+  if (keep) history.replaceState(null, '', BASE + currentHash());
 };
 
 /**
@@ -93,9 +96,9 @@ export const startHashSync = () => {
     lastView = view;
     if (hold || booting || useDocumentStore.getState().status === 'upgrading') return;
     const hash = currentHash();
-    if (hash === window.location.hash) return;
-    if (viewChanged && !replaceNext) history.pushState(null, '', hash);
-    else history.replaceState(null, '', hash);
+    if (isCanonical(hash)) return;
+    if (viewChanged && !replaceNext) history.pushState(null, '', BASE + hash);
+    else history.replaceState(null, '', BASE + hash);
     replaceNext = false;
   };
 
@@ -124,17 +127,16 @@ export const buildShareUrl = () => {
   const { defString, appletString } = useDocumentStore.getState();
   const view = useUIStore.getState().view;
   const hash = formatHash(view === 'help' ? (appletString ? 'applet' : 'edit') : view, defString, appletString);
-  return `${window.location.origin}${window.location.pathname}${hash}`;
+  return `${window.location.origin}${BASE}${hash}`;
 };
 
-/**
- * The current state as QR segments: the URL prefix (byte mode) and an all-uppercase path the QR encoder
- * packs in alphanumeric mode, which makes the code smaller than encoding the base64url link.
- */
-export const buildQrSegments = (): [string, string] => {
+/** The current state as an all-uppercase QR link, e.g. `HTTPS://JONASWARD.GITHUB.IO/STATE-TO-FUNCTION/Q/…`. */
+export const buildQrUrl = () => {
   const { definition, overrides } = useDocumentStore.getState();
-  return [
-    `${window.location.origin}${window.location.pathname}#`,
-    formatQrPath(encodeDefinition(definition, QR_BASE), encodeApplet(definition, overrides, QR_BASE))
-  ];
+  return formatQrUrl(
+    window.location.origin,
+    BASE,
+    encodeDefinition(definition, QR_BASE),
+    encodeApplet(definition, overrides, QR_BASE)
+  );
 };

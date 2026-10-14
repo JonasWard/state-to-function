@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatHash, formatQrPath, parseHash } from './hash';
+import { formatHash, formatQrUrl, parseHash, parseLocation } from './hash';
 
 describe('hash', () => {
   it('parses the current format', () => {
@@ -27,10 +27,22 @@ describe('hash', () => {
     expect(parseHash(h)).toEqual({ view: 'applet', definition: 'ARJQ', applet: 'BKO', encoding: 'base64url' });
   });
 
-  it('parses and formats QR links', () => {
-    expect(formatQrPath('0ABC', '1DE')).toBe('/Q/0ABC/1DE');
-    expect(formatQrPath('0ABC', '')).toBe('/Q/0ABC');
-    expect(parseHash('#/Q/0ABC/1DE')).toEqual({ view: 'applet', definition: '0ABC', applet: '1DE', encoding: 'qr' });
-    expect(parseHash('#/Q/0ABC')).toEqual({ view: 'applet', definition: '0ABC', applet: null, encoding: 'qr' });
+  it('formats QR links in uppercase', () => {
+    const url = formatQrUrl('https://jonasward.github.io', '/state-to-function/', '0ABC', '1DE');
+    expect(url).toBe('HTTPS://JONASWARD.GITHUB.IO/STATE-TO-FUNCTION/Q/0ABC/1DE');
+    expect(url).toMatch(/^[0-9A-Z $%*+\-./:]+$/);
+    expect(formatQrUrl('http://localhost:4173', '/state-to-function/', '0ABC', '')).toBe(
+      'HTTP://LOCALHOST:4173/STATE-TO-FUNCTION/Q/0ABC'
+    );
+  });
+
+  it('reads QR links from the path, case-insensitively', () => {
+    const base = '/state-to-function/';
+    const qr = { view: 'applet', definition: '0ABC', applet: '1DE', encoding: 'qr' };
+    expect(parseLocation('/STATE-TO-FUNCTION/Q/0ABC/1DE', '', base)).toEqual(qr);
+    expect(parseLocation('/state-to-function/Q/0ABC/1DE', '', base)).toEqual(qr);
+    expect(parseLocation('/state-to-function/Q/0ABC', '', base)).toEqual({ ...qr, applet: null });
+    expect(parseLocation(base, '#/edit/ARJQ', base)).toEqual(parseHash('#/edit/ARJQ'));
+    expect(parseLocation(base, '#/Q/0ABC', base).encoding).toBe('base64url');
   });
 });

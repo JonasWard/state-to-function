@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { densing } from 'densing';
-import { formatQrPath } from '../state/hash';
+import { formatQrUrl } from '../state/hash';
 import { encodeApplet } from './appletSchema';
 import { decodeDefinition, encodeDefinition, normalizeDefinition, peekVersion, QR_BASE } from './codec';
 import { DEFINITION_SCHEMA } from './schema';
@@ -12,6 +12,8 @@ import { NAME_CHARS, SUBSCRIPT_CHARS, SYMBOL_CHARS } from './charsets';
 
 // characters a QR code can store in alphanumeric mode
 const QR_ALPHANUMERIC = /^[0-9A-Z $%*+\-./:]+$/;
+const qrUrl = (def: string, applet: string) =>
+  formatQrUrl('https://jonasward.github.io', '/state-to-function/', def, applet);
 
 const OLD_INITIAL =
   'ABJQGhtgneloAfSCcQ-hIGACw2uxYUAPpBOIfQkCEBrYYInoaAH0gnEPoSAoAKaKaE9GnqwCECEAEVVs9FYujT1YBCFEACkl52JLRp6sAhAiAAVK1bQno09WARgwIMICRUBnprpaFSICI';
@@ -99,14 +101,14 @@ describe('codec', () => {
       const qr = encodeDefinition(def, QR_BASE);
       expect(decodeDefinition(qr, QR_BASE)).toEqual({ ok: true, definition: normalizeDefinition(def) });
       const overrides = def.inputs.map((_, j) => (j === 0 ? num() : null));
-      expect(formatQrPath(qr, encodeApplet(normalizeDefinition(def), overrides, QR_BASE))).toMatch(QR_ALPHANUMERIC);
+      expect(qrUrl(qr, encodeApplet(normalizeDefinition(def), overrides, QR_BASE))).toMatch(QR_ALPHANUMERIC);
     }
   });
 
   it('encodes QR links in the QR alphanumeric set', () => {
     const qr = encodeDefinition(DEFAULT_DEFINITION, QR_BASE);
     expect(decodeDefinition(qr, QR_BASE)).toEqual({ ok: true, definition: DEFAULT_DEFINITION });
-    expect(formatQrPath(qr, encodeApplet(DEFAULT_DEFINITION, [null, 250, null], QR_BASE))).toMatch(QR_ALPHANUMERIC);
+    expect(qrUrl(qr, encodeApplet(DEFAULT_DEFINITION, [null, 250, null], QR_BASE))).toMatch(QR_ALPHANUMERIC);
     const newer = densing(DEFINITION_SCHEMA, { ...toWire(DEFAULT_DEFINITION), version: 2 }, QR_BASE);
     expect(decodeDefinition(newer, QR_BASE)).toMatchObject({ ok: false, reason: 'newer-version' });
     expect(decodeDefinition('NOT-A-LINK', QR_BASE)).toMatchObject({ ok: false, reason: 'corrupt' });
