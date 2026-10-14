@@ -1,16 +1,20 @@
 import { upgradeLegacy } from '../legacy';
-import { decodeApplet } from '../model/appletSchema';
-import { decodeDefinition } from '../model/codec';
+import { decodeApplet, encodeApplet } from '../model/appletSchema';
+import { decodeDefinition, encodeDefinition, QR_BASE } from '../model/codec';
 import { DEFAULT_DEFINITION } from '../model/defaults';
 import { useDocumentStore } from './documentStore';
-import { formatHash, parseHash, ParsedHash } from './hash';
+import { formatHash, formatQrPath, parseHash, ParsedHash } from './hash';
 import { notify } from './notify';
 import { useUIStore } from './uiStore';
 
 const UNREADABLE = 'This link could not be read, showing the example instead.';
 
 /** Loads the state a hash describes. Resolves to false when the hash should be left untouched (legacy chunk failed). */
-const loadFromHash = async ({ view, definition, applet }: ParsedHash, mode: 'reset' | 'push'): Promise<boolean> => {
+const loadFromHash = async (
+  { view, definition, applet, encoding }: ParsedHash,
+  mode: 'reset' | 'push'
+): Promise<boolean> => {
+  const base = encoding === 'qr' ? QR_BASE : undefined;
   const doc = useDocumentStore.getState();
   const setView = () => useUIStore.getState().setView(view ?? (applet ? 'applet' : 'edit'));
   if (!definition) {
@@ -18,9 +22,9 @@ const loadFromHash = async ({ view, definition, applet }: ParsedHash, mode: 'res
     setView();
     return true;
   }
-  const decoded = decodeDefinition(definition);
+  const decoded = decodeDefinition(definition, base);
   if (decoded.ok) {
-    const { ok, overrides } = decodeApplet(decoded.definition, applet ?? '');
+    const { ok, overrides } = decodeApplet(decoded.definition, applet ?? '', base);
     if (!ok) notify.warning('The applet values in this link no longer match its definition and were reset.');
     doc.load(decoded.definition, overrides, mode);
     setView();
@@ -121,4 +125,16 @@ export const buildShareUrl = () => {
   const view = useUIStore.getState().view;
   const hash = formatHash(view === 'help' ? (appletString ? 'applet' : 'edit') : view, defString, appletString);
   return `${window.location.origin}${window.location.pathname}${hash}`;
+};
+
+/**
+ * The current state as QR segments: the URL prefix (byte mode) and an all-uppercase path the QR encoder
+ * packs in alphanumeric mode, which makes the code smaller than encoding the base64url link.
+ */
+export const buildQrSegments = (): [string, string] => {
+  const { definition, overrides } = useDocumentStore.getState();
+  return [
+    `${window.location.origin}${window.location.pathname}#`,
+    formatQrPath(encodeDefinition(definition, QR_BASE), encodeApplet(definition, overrides, QR_BASE))
+  ];
 };

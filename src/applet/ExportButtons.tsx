@@ -6,7 +6,7 @@ import { resolveInputValues } from '../model/appletSchema';
 import { evaluate } from '../model/evaluate';
 import { buildExportRows } from '../model/exportRows';
 import { useDocumentStore } from '../state/documentStore';
-import { buildShareUrl } from '../state/hashSync';
+import { buildQrSegments, buildShareUrl } from '../state/hashSync';
 import { notify } from '../state/notify';
 import { generateCSV } from './csvHelpers';
 import styles from './applet.module.css';
@@ -47,7 +47,7 @@ export const ExportButtons: React.FC = () => {
 
   return (
     <>
-      <QRCodeCanvas ref={qrRef} value={url} size={512} level="M" className={styles.hidden} />
+      <QRCodeCanvas ref={qrRef} value={buildQrSegments()} size={512} level="M" className={styles.hidden} />
       <Button icon={<DownloadOutlined />} onClick={exportCsv}>
         CSV
       </Button>

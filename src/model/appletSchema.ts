@@ -1,4 +1,5 @@
 import { densing, fixed, int, schema, undensing } from 'densing';
+import type { BaseSpec } from 'densing';
 import { clamp, FLOAT_PRECISION, normalizeRange, parseConstant, roundTo, toFloat, toInt } from './numeric';
 import { AppletOverrides, Definition } from './types';
 
@@ -80,18 +81,22 @@ export const reconcileOverrides = (def: Definition, overrides: AppletOverrides):
   });
 };
 
-export const encodeApplet = (def: Definition, overrides: AppletOverrides): string => {
+export const encodeApplet = (def: Definition, overrides: AppletOverrides, base?: BaseSpec): string => {
   const fields = getAppletFields(def);
   if (!fields.some((f) => overrides[f.inputIndex] !== null && overrides[f.inputIndex] !== undefined)) return '';
   const values = resolveInputValues(def, overrides);
-  return densing(buildAppletSchema(def), Object.fromEntries(fields.map((f) => [f.name, values[f.inputIndex]])));
+  return densing(buildAppletSchema(def), Object.fromEntries(fields.map((f) => [f.name, values[f.inputIndex]])), base);
 };
 
-export const decodeApplet = (def: Definition, s: string): { ok: boolean; overrides: AppletOverrides } => {
+export const decodeApplet = (
+  def: Definition,
+  s: string,
+  base?: BaseSpec
+): { ok: boolean; overrides: AppletOverrides } => {
   const empty: AppletOverrides = def.inputs.map(() => null);
   if (!s) return { ok: true, overrides: empty };
   try {
-    const data = undensing(buildAppletSchema(def), s) as Record<string, number>;
+    const data = undensing(buildAppletSchema(def), s, base) as Record<string, number>;
     const overrides = [...empty];
     for (const f of getAppletFields(def)) overrides[f.inputIndex] = data[f.name];
     return { ok: true, overrides: reconcileOverrides(def, overrides) };

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { decodeApplet, encodeApplet, getAppletFields, reconcileOverrides, resolveInputValues } from './appletSchema';
+import { QR_BASE } from './codec';
 import { DEFAULT_DEFINITION } from './defaults';
 import { Definition, InputKind } from './types';
 
@@ -13,6 +14,8 @@ describe('applet schema', () => {
     const s = encodeApplet(DEFAULT_DEFINITION, [null, 250, null]);
     expect(s).not.toBe('');
     expect(decodeApplet(DEFAULT_DEFINITION, s)).toEqual({ ok: true, overrides: [null, 250, null] });
+    const qr = encodeApplet(DEFAULT_DEFINITION, [null, 250, null], QR_BASE);
+    expect(decodeApplet(DEFAULT_DEFINITION, qr, QR_BASE)).toEqual({ ok: true, overrides: [null, 250, null] });
   });
 
   it('omits the segment without overrides', () => {
