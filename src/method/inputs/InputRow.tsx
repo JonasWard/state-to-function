@@ -1,5 +1,5 @@
 import { DeleteOutlined } from '@ant-design/icons';
-import { Popconfirm } from 'antd';
+import { Confirm } from '../../Components/ui/Confirm';
 import React from 'react';
 import { CharsetInput } from '../../Components/inputs/CharsetInput';
 import { ConstantInput } from '../../Components/inputs/ConstantInput';
@@ -93,14 +93,14 @@ export const InputRow: React.FC<{
       )}
       <div className={styles.del}>
         {references && canRemove ? (
-          <Popconfirm
+          <Confirm
             title={`Remove ${label}?`}
             description={`It is used ${references}× — those places get its default value.`}
-            okText="Remove"
+            confirmText="Remove"
             onConfirm={onRemove}
           >
             {remove}
-          </Popconfirm>
+          </Confirm>
         ) : (
           remove
         )}

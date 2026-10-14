@@ -1,5 +1,6 @@
 import { SettingOutlined } from '@ant-design/icons';
-import { Popover, Tooltip } from 'antd';
+import { Popover } from '../ui/Popover';
+import { Tooltip } from '../ui/Tooltip';
 import React from 'react';
 import { Settings, useUIStore } from '../../state/uiStore';
 import styles from '../layout/AppHeader.module.css';
@@ -30,7 +31,7 @@ const SettingsList: React.FC = () => {
 };
 
 export const SettingsPopover: React.FC = () => (
-  <Popover trigger="click" placement="bottomRight" content={<SettingsList />}>
+  <Popover placement="bottom-end" label="Settings" content={<SettingsList />}>
     <Tooltip title="Settings">
       <Button variant="text" icon={<SettingOutlined />} aria-label="Settings" />
     </Tooltip>

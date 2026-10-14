@@ -1,4 +1,4 @@
-import { Tooltip } from 'antd';
+import { Tooltip } from '../ui/Tooltip';
 import React, { useEffect, useState } from 'react';
 import { invalidChars, MAX_TEXT_LENGTH, sanitize } from '../../model/charsets';
 import field from '../ui/field.module.css';

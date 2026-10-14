@@ -1,4 +1,4 @@
-import { Popover } from 'antd';
+import { Popover } from '../../Components/ui/Popover';
 import React, { useState } from 'react';
 import { OptionGrid } from '../../Components/inputs/OptionGrid';
 import { Op, OP_LABEL, OP_SYMBOL } from '../../model/operators';
@@ -12,7 +12,7 @@ export const OperatorButton: React.FC<{ op: Op; onChange: (op: Op) => void }> = 
     <Popover
       open={open}
       onOpenChange={setOpen}
-      trigger="click"
+      label="Operation"
       content={<OptionGrid title="Operation" options={operatorOptions} selectedKey={op} onSelect={(o) => (onChange(o), setOpen(false))} />}
     >
       <button

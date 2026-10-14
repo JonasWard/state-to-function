@@ -1,0 +1,51 @@
+.popover {
+  z-index: 50;
+  box-sizing: border-box;
+  max-width: calc(100vw - 2 * var(--stf-space-4));
+  padding: var(--stf-space-4);
+  border: var(--stf-hairline);
+  border-radius: var(--stf-radius);
+  background: var(--stf-surface);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--stf-ink) 12%, transparent);
+}
+
+.popover:focus {
+  outline: none;
+}
+
+.tooltip {
+  z-index: 60;
+  max-width: 18rem;
+  padding: var(--stf-space-2) var(--stf-space-3);
+  border-radius: var(--stf-radius);
+  background: var(--stf-ink);
+  color: var(--stf-surface);
+  font-size: var(--stf-text-sm);
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+.confirm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stf-space-2);
+  max-width: 18rem;
+  font-size: var(--stf-text-md);
+}
+
+.confirmTitle {
+  margin: 0;
+  font-weight: 600;
+}
+
+.confirmText {
+  margin: 0;
+  color: var(--stf-ink-muted);
+}
+
+.confirmActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--stf-space-2);
+  margin-top: var(--stf-space-2);
+}

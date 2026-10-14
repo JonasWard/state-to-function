@@ -1,5 +1,5 @@
 import { FunctionOutlined, NumberOutlined, RollbackOutlined } from '@ant-design/icons';
-import { Tooltip } from 'antd';
+import { Tooltip } from '../Components/ui/Tooltip';
 import React from 'react';
 import { NumberField } from '../Components/inputs/NumberField';
 import { SectionHeader } from '../Components/layout/Section';

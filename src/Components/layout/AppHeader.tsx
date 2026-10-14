@@ -8,7 +8,7 @@ import {
   SignatureOutlined,
   UndoOutlined
 } from '@ant-design/icons';
-import { Tooltip } from 'antd';
+import { Tooltip } from '../ui/Tooltip';
 import React from 'react';
 import { selectCanRedo, selectCanUndo, useDocumentStore } from '../../state/documentStore';
 import { buildShareUrl } from '../../state/hashSync';

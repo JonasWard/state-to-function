@@ -1,4 +1,4 @@
-import { Popover } from 'antd';
+import { Popover } from '../../Components/ui/Popover';
 import React, { useState } from 'react';
 import { MathSymbol } from '../../Components/math/MathSymbol';
 import { symbolLabel } from '../../Components/math/symbolLabel';
@@ -45,8 +45,7 @@ export const OperandView: React.FC<{ value: Operand; onChange: (value: Operand) 
     <Popover
       open={open}
       onOpenChange={setOpen}
-      trigger="click"
-      destroyOnHidden
+      label="Term"
       content={<OperandPicker value={value} onChange={onChange} onDone={() => setOpen(false)} context={context} />}
     >
       <button

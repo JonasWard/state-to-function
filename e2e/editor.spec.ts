@@ -47,6 +47,31 @@ test('the symbol picker opens from the keyboard', async ({ page }) => {
   await expect(page.getByRole('group', { name: 'Symbol' })).toBeVisible();
 });
 
+test('the symbol grid takes keyboard focus', async ({ page }) => {
+  await page.getByRole('button', { name: /^Symbol l/ }).focus();
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('group', { name: 'Symbol' }).locator(':focus')).toHaveCount(1);
+});
+
+test('Escape closes the operand picker and returns focus', async ({ page }) => {
+  const operand = page.getByRole('button', { name: /change operand$/ }).first();
+  await operand.click();
+  const picker = page.getByRole('dialog', { name: 'Term' });
+  await expect(picker).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(picker).toHaveCount(0);
+  await expect(operand).toBeFocused();
+});
+
+test('clicking outside closes the operand picker', async ({ page }) => {
+  await page.getByRole('button', { name: /change operand$/ }).first().click();
+  const picker = page.getByRole('dialog', { name: 'Term' });
+  await expect(picker).toBeVisible();
+  await page.locator('body').click({ position: { x: 5, y: 850 } });
+  await expect(picker).toHaveCount(0);
+});
+
 test('controls have accessible names', async ({ page }) => {
   for (const name of ['Undo', 'Redo', 'Settings', 'Copy link', 'Add input', 'Add method'])
     await expect(page.getByRole('button', { name })).toBeVisible();

@@ -1,5 +1,5 @@
 import { DeleteOutlined } from '@ant-design/icons';
-import { Popconfirm } from 'antd';
+import { Confirm } from '../../Components/ui/Confirm';
 import React from 'react';
 import { CharsetInput } from '../../Components/inputs/CharsetInput';
 import { SymbolPicker } from '../../Components/inputs/SymbolPicker';
@@ -51,14 +51,14 @@ export const MethodRow: React.FC<{
       </output>
       <div className={styles.del}>
         {references ? (
-          <Popconfirm
+          <Confirm
             title={`Remove ${label}?`}
             description={`It is used ${references}× — those places get its expression.`}
-            okText="Remove"
+            confirmText="Remove"
             onConfirm={onRemove}
           >
             {remove}
-          </Popconfirm>
+          </Confirm>
         ) : (
           remove
         )}
