@@ -49,7 +49,7 @@ test('a QR link opens the same state and is rewritten to the canonical link', as
 test('help links to jonasward.ch with its logo', async ({ page }) => {
   await page.goto('./');
   await openTab(page, 'Help');
-  const home = page.getByRole('link', { name: /Jonas Ward.*jonasward\.ch/ });
+  const home = page.getByRole('link', { name: 'Jonas Ward' });
   await expect(home).toHaveAttribute('href', 'https://jonasward.ch');
   await expect(home).toHaveAttribute('target', '_blank');
   await expect.poll(() => home.locator('img').evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);

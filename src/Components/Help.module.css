@@ -66,9 +66,11 @@
 }
 
 .home {
-  height: auto;
-  padding-block: var(--stf-space-2);
-  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.home:hover {
+  opacity: 0.7;
 }
 
 .logo {
