@@ -1,4 +1,5 @@
 import { densing, undensing } from 'densing';
+import type { BaseSpec } from 'densing';
 import { NAME_CHARS, NUMBER_CHARS, SUBSCRIPT_CHARS, SYMBOL_CHARS, sanitize } from './charsets';
 import { defaultOperand } from './defaults';
 import { MAX_INPUTS, MAX_METHODS, toFloat, toInt } from './numeric';
@@ -66,10 +67,23 @@ export const normalizeDefinition = (def: Definition): Definition => {
   };
 };
 
-export const encodeDefinition = (def: Definition): string =>
-  densing(DEFINITION_SCHEMA, toWire(normalizeDefinition(def)));
+/** Uppercase digits, letters, `-` and `.`: all in the QR alphanumeric set (5.5 bits per character vs 8 in byte mode). */
+export const QR_BASE: BaseSpec = 'baseQRCode45UrlSafe';
 
-export const decodeDefinition = (s: string): DecodeResult => {
+export const encodeDefinition = (def: Definition, base?: BaseSpec): string =>
+  densing(DEFINITION_SCHEMA, toWire(normalizeDefinition(def)), base);
+
+export const decodeDefinition = (s: string, base?: BaseSpec): DecodeResult => {
+  if (base && base !== 'base64url') {
+    // base45 digits don't map to whole bits, so the version is checked after decoding
+    try {
+      const wire = undensing(DEFINITION_SCHEMA, s, base) as WireDefinition;
+      if (wire.version > DEFINITION_VERSION) return { ok: false, reason: 'newer-version' };
+      return { ok: true, definition: fromWire(wire) };
+    } catch (error) {
+      return { ok: false, reason: 'corrupt', error };
+    }
+  }
   const version = peekVersion(s);
   if (version === null) return { ok: false, reason: 'corrupt' };
   if (version === 0) return { ok: false, reason: 'legacy' };

@@ -24,7 +24,7 @@ loaded only when such a link is opened, and rewritten in the new format.
 
 ```sh
 bun install
-bun run dev        # http://localhost:3022/state-to-function/
+bun run dev        # http://localhost:3022/
 bun run lint && bun run typecheck && bun run test
 bun run build
 bun run e2e        # Playwright against the production build
@@ -33,8 +33,10 @@ bun run e2e        # Playwright against the production build
 ## Deployment
 
 GitHub Actions (`.github/workflows/ci.yml`) runs lint, typecheck, unit tests, build and the Playwright tests on every
-push and pull request. Pushes to `main` that pass are deployed to GitHub Pages (Settings → Pages → Source:
-"GitHub Actions").
+push and pull request. Render (`render.yaml`) deploys `main` to https://jw-s2f.onrender.com once those checks pass.
+
+GitHub Pages (https://jonasward.github.io/state-to-function/) keeps serving the previous, pre-densing version from the
+`gh-pages` branch.
 
 # storing the algorithm
 

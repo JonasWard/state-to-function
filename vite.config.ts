@@ -18,7 +18,7 @@ export default defineConfig({
   build: {
     outDir: './build',
   },
-  base: '/state-to-function/',
+  base: '/',
   resolve: {
     alias: {
       src: '/src',

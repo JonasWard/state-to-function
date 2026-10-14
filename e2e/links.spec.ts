@@ -1,3 +1,7 @@
+import { encodeApplet } from '../src/model/appletSchema';
+import { encodeDefinition, QR_BASE } from '../src/model/codec';
+import { DEFAULT_DEFINITION } from '../src/model/defaults';
+import { formatHash, formatQrPath } from '../src/state/hash';
 import { expect, hash, OLD_APPLET_W250, OLD_DEFINITION, test } from './fixtures';
 
 test('the root opens the example in canonical form without 404s', async ({ page }) => {
@@ -27,4 +31,16 @@ test('an unreadable link falls back to the example with a warning', async ({ pag
   await page.goto('./#/edit/garbage');
   await expect(page.locator('.ant-message')).toContainText('could not be read');
   await expect(page.getByLabel('method V result')).toContainText('1 000 000');
+});
+
+test('a QR link opens the same state and is rewritten to the canonical link', async ({ page }) => {
+  const overrides = [null, 250, null];
+  // like the host's rewrite rule, vite preview serves the app for the uppercase QR path
+  await page.goto(`./${formatQrPath(encodeDefinition(DEFAULT_DEFINITION, QR_BASE), encodeApplet(DEFAULT_DEFINITION, overrides, QR_BASE))}`);
+  await expect(page.getByRole('spinbutton', { name: 'w', exact: true })).toHaveValue('250');
+  await expect.poll(() => page.evaluate(() => location.pathname)).toBe('/');
+  await expect
+    .poll(() => hash(page))
+    .toBe(formatHash('applet', encodeDefinition(DEFAULT_DEFINITION), encodeApplet(DEFAULT_DEFINITION, overrides)));
+  await expect(page.locator('.ant-message')).toHaveCount(0);
 });

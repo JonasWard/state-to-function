@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const PORT = 4173;
-const baseURL = `http://localhost:${PORT}/state-to-function/`;
+const baseURL = `http://localhost:${PORT}/`;
 
 // runs against the production build, as deployed
 export default defineConfig({
