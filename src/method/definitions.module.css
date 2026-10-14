@@ -37,8 +37,9 @@
   composes: hint from '../Components/layout/Section.module.css';
   grid-area: idx;
   align-self: start;
-  padding-top: var(--stf-space-4);
-  text-align: right;
+  /* the delete button's height, so the number lines up with it on one-line rows */
+  line-height: 1.5rem;
+  text-align: center;
 }
 
 .sym {
@@ -66,6 +67,7 @@
 .del {
   grid-area: del;
   align-self: start;
+  justify-self: center;
 }
 .constant {
   grid-row: min;
@@ -81,18 +83,19 @@
   justify-self: end;
 }
 
-/* inputs: one line when there is room, otherwise labels above values */
+/* inputs: one line when there is room, otherwise labels above values. The row number sits left of the
+   delete button on one-line rows and under it on wrapped rows. */
 .inputGrid {
-  grid-template-columns: 1.25rem 3rem 4.5rem minmax(4rem, 1fr) auto 5rem 5rem 5rem 2rem;
-  grid-template-areas: 'idx sym sub name type min val max del';
+  grid-template-columns: 3rem 4.5rem minmax(4rem, 1fr) auto 5rem 5rem 5rem 1.5rem 2rem;
+  grid-template-areas: 'sym sub name type min val max idx del';
 }
 
 @container (max-width: 640px) {
   .inputGrid {
-    grid-template-columns: 1.25rem 3rem 5.25rem minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 2rem;
+    grid-template-columns: 3rem 5.25rem minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 2rem;
     grid-template-areas:
-      'idx sym sub name name name del'
-      'idx sym type min val max .';
+      'sym sub name name name del'
+      'sym type min val max idx';
   }
   .columns.inputGrid {
     display: none;
@@ -101,23 +104,24 @@
 
 @container (max-width: 420px) {
   .inputGrid {
-    grid-template-columns: 1.25rem 2.75rem minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 2rem;
+    grid-template-columns: 2.75rem minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 2rem;
     grid-template-areas:
-      'idx sym sub name name del'
-      'idx sym type type type .'
-      'idx sym min val max .';
+      'sym sub name name del'
+      'sym type type type idx'
+      'sym min val max .';
   }
 }
 
 .methodGrid {
-  grid-template-columns: 1.25rem 3rem 5.25rem minmax(0, 1fr) auto 2rem;
+  grid-template-columns: 3rem 5.25rem minmax(0, 1fr) auto 2rem;
   grid-template-areas:
-    'idx sym sub name name del'
-    'idx sym expr expr result del';
+    'sym sub name name del'
+    'sym expr expr result idx';
 }
 
 .compact.methodGrid {
-  grid-template-areas: 'idx sym expr expr result del';
+  grid-template-columns: 3rem minmax(0, 1fr) auto 1.5rem 2rem;
+  grid-template-areas: 'sym expr result idx del';
 }
 
 .compact .sub,
@@ -126,20 +130,22 @@
 }
 
 .compact.inputGrid {
-  grid-template-areas: 'idx sym . . type min val max del';
+  grid-template-areas: 'sym . . type min val max idx del';
 }
 
 @container (max-width: 640px) {
   .compact.inputGrid {
-    grid-template-areas: 'idx sym type min val max del';
+    grid-template-columns: 3rem auto minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 1.5rem 2rem;
+    grid-template-areas: 'sym type min val max idx del';
   }
 }
 
 @container (max-width: 420px) {
   .compact.inputGrid {
+    grid-template-columns: 2.75rem minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 2rem;
     grid-template-areas:
-      'idx sym type type type del'
-      'idx sym min val max .';
+      'sym type type type del'
+      'sym min val max idx';
   }
 }
 
