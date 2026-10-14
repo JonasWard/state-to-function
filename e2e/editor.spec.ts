@@ -64,6 +64,29 @@ test('Escape closes the operand picker and returns focus', async ({ page }) => {
   await expect(operand).toBeFocused();
 });
 
+test('a nested expression can be replaced from its operator', async ({ page }) => {
+  const result = page.getByLabel('method A result');
+  const before = await result.innerText();
+  const bracket = page.locator(':has(> button[aria-label="sub-expression, change operand"])');
+  await bracket.getByRole('button', { name: 'Add, change operation' }).first().click();
+  const picker = page.getByRole('dialog', { name: 'Term' });
+  await expect(picker.getByRole('radio', { name: 'Expression' })).toHaveAttribute('aria-checked', 'true');
+  await picker.getByRole('radio', { name: 'Input' }).click();
+  await expect(page.getByRole('button', { name: 'sub-expression, change operand' })).toHaveCount(0);
+  await expect(picker.getByRole('group', { name: 'Input' })).toBeVisible();
+  await picker.getByRole('button', { name: /^w/ }).click();
+  await expect(picker).toHaveCount(0);
+  await expect(result).not.toHaveText(before);
+});
+
+test('a nested operator still changes the operation', async ({ page }) => {
+  const bracket = page.locator(':has(> button[aria-label="sub-expression, change operand"])');
+  await bracket.getByRole('button', { name: 'Add, change operation' }).first().click();
+  await page.getByRole('dialog', { name: 'Term' }).getByRole('button', { name: /^Multiply/ }).click();
+  await expect(page.getByRole('button', { name: 'sub-expression, change operand' })).toHaveCount(1);
+  await expect(bracket.getByRole('button', { name: 'Multiply, change operation' }).first()).toBeVisible();
+});
+
 test('clicking outside closes the operand picker', async ({ page }) => {
   await page.getByRole('button', { name: /change operand$/ }).first().click();
   const picker = page.getByRole('dialog', { name: 'Term' });

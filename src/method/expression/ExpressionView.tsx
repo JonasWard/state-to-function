@@ -8,12 +8,19 @@ import styles from './expression.module.css';
 import { OperandView } from './OperandView';
 import { OperatorButton } from './OperatorButton';
 
+/** The operand a nested expression sits in; its operator can then replace the whole bracket. */
+export interface EnclosingTerm {
+  value: Operand;
+  onChange: (value: Operand) => void;
+}
+
 /** Renders `a op b op c`, `a < b ? c : d` or a fraction for division; every part is editable in place. */
-export const ExpressionView: React.FC<{ value: Expr; onChange: (value: Expr) => void; context: ReferenceContext }> = ({
-  value,
-  onChange,
-  context
-}) => {
+export const ExpressionView: React.FC<{
+  value: Expr;
+  onChange: (value: Expr) => void;
+  context: ReferenceContext;
+  term?: EnclosingTerm;
+}> = ({ value, onChange, context, term }) => {
   const { op, values } = value;
   const operand = (i: number) => (
     <OperandView
@@ -22,7 +29,9 @@ export const ExpressionView: React.FC<{ value: Expr; onChange: (value: Expr) => 
       onChange={(o: Operand) => onChange({ op, values: updateAt(values, i, o) })}
     />
   );
-  const operator = <OperatorButton op={op} onChange={(next) => onChange(changeOperator(value, next))} />;
+  const operator = (
+    <OperatorButton op={op} onChange={(next) => onChange(changeOperator(value, next))} term={term} context={context} />
+  );
 
   if (op === 'division')
     return (
