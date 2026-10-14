@@ -1,0 +1,11 @@
+.main {
+  max-width: var(--stf-content-max);
+  margin: 0 auto;
+  padding: 0 var(--stf-space-5) var(--stf-space-8);
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--stf-space-8) 0;
+}

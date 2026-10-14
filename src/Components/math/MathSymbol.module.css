@@ -1,0 +1,32 @@
+.symbol {
+  font-family: var(--stf-font-math);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--stf-ink);
+}
+
+.symbol sub {
+  font-size: 0.6em;
+  margin-left: 0.04em;
+  vertical-align: -0.28em;
+  line-height: 0;
+}
+
+.sm {
+  font-size: var(--stf-symbol-sm);
+}
+
+.md {
+  font-size: var(--stf-symbol-md);
+}
+
+.lg {
+  font-size: var(--stf-symbol-lg);
+}
+
+/* standalone math glyphs: type toggles, operator lists */
+.glyph {
+  font-family: var(--stf-font-math);
+}

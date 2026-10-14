@@ -1,0 +1,22 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(2.25rem, 1fr));
+  gap: var(--stf-space-1);
+  max-width: 20rem;
+}
+
+.cell {
+  composes: ghost from './ghostButton.module.css';
+  min-height: 2rem;
+  padding: 0 var(--stf-space-2);
+  border: var(--stf-hairline);
+  background: var(--stf-surface);
+}
+
+.title {
+  composes: label from '../layout/Section.module.css';
+}
+
+.empty {
+  composes: empty from '../layout/Section.module.css';
+}

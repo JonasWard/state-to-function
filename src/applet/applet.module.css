@@ -1,0 +1,69 @@
+.view {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0 var(--stf-space-7);
+}
+
+@media (max-width: 880px) {
+  .view {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.section {
+  min-width: 0;
+}
+
+.row {
+  composes: row from '../Components/layout/Section.module.css';
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr) auto;
+  gap: var(--stf-space-1) var(--stf-space-3);
+  align-items: center;
+}
+
+.control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 6.5rem;
+  gap: var(--stf-space-3);
+  align-items: center;
+}
+
+.meta {
+  grid-column: 2 / -1;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--stf-space-3);
+  font-size: var(--stf-text-xs);
+  color: var(--stf-ink-subtle);
+}
+
+.range {
+  composes: hint from '../Components/layout/Section.module.css';
+}
+
+.name {
+  color: var(--stf-ink-muted);
+}
+
+.value {
+  composes: number from '../Components/layout/Section.module.css';
+  text-align: right;
+}
+
+
+.empty {
+  composes: empty from '../Components/layout/Section.module.css';
+  padding: var(--stf-space-5) 0;
+}
+
+.exports {
+  display: flex;
+  gap: var(--stf-space-3);
+  justify-content: flex-end;
+  padding-top: var(--stf-space-4);
+}
+
+.hidden {
+  display: none;
+}

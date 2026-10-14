@@ -1,18 +1,40 @@
 # State-to-Function
 
-Little applet that allows to compose a method and set state, both using URL bit packing :)
+Compose spreadsheet-like formulas, use them as a small calculator and keep everything in the URL — no backend.
 
 ## Usage
 
-first: compose - Navigate to the root and compose a method and define localisation for each of the strings
-second: when done - Navigate to the input view and store the state
+1. **Definitions** — define inputs (constant, integer or decimal) and methods built from operations on inputs,
+   earlier results, constants and nested expressions.
+2. **Applet** — set the variable inputs and read the results; export them as CSV or as a PDF with a QR code.
 
 ## Logic
 
-this app has two states that need to be stored
+The URL hash is `#/<view>/<definition>[/<applet values>]`:
 
-1. the algorithm and its localisation
-2. the exact value of the state for a specific calculation
+1. the definition (inputs, methods and their labels), encoded with [densing](https://www.npmjs.com/package/densing)
+   against the schema in `src/model/schema.ts`. Its first byte is a schema version.
+2. the applet values, encoded against a schema derived from the definition (`src/model/appletSchema.ts`); omitted
+   while every input is at its default.
+
+Links from before the densing switch (url-safe-bitpacking, version byte 0) are decoded by `src/legacy`, which is
+loaded only when such a link is opened, and rewritten in the new format.
+
+## Development
+
+```sh
+bun install
+bun run dev        # http://localhost:3022/state-to-function/
+bun run lint && bun run typecheck && bun run test
+bun run build
+bun run e2e        # Playwright against the production build
+```
+
+## Deployment
+
+GitHub Actions (`.github/workflows/ci.yml`) runs lint, typecheck, unit tests, build and the Playwright tests on every
+push and pull request. Pushes to `main` that pass are deployed to GitHub Pages (Settings → Pages → Source:
+"GitHub Actions").
 
 # storing the algorithm
 

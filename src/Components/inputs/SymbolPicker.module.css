@@ -1,0 +1,11 @@
+.trigger {
+  composes: ghost from './ghostButton.module.css';
+  min-width: 2.75rem;
+  height: 2.5rem;
+  padding: 0 var(--stf-space-2);
+}
+
+.duplicate {
+  border-color: var(--stf-warning);
+  background: var(--stf-warning-bg);
+}

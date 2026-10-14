@@ -1,0 +1,56 @@
+.help {
+  max-width: 46rem;
+  padding: var(--stf-space-6) 0 var(--stf-space-8);
+  line-height: 1.6;
+}
+
+.help h1 {
+  margin: 0 0 var(--stf-space-2);
+  font-family: var(--stf-font-mono);
+  font-size: var(--stf-text-xl);
+  font-weight: 500;
+  color: var(--stf-accent-800);
+}
+
+.help h3 {
+  margin: var(--stf-space-5) 0 var(--stf-space-1);
+  font-size: var(--stf-text-md);
+  font-weight: 600;
+}
+
+.help p {
+  margin: var(--stf-space-2) 0;
+}
+
+.lead {
+  color: var(--stf-ink-muted);
+}
+
+.table {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--stf-space-2) var(--stf-space-5);
+  margin: var(--stf-space-3) 0;
+}
+
+.glyph {
+  composes: glyph from './math/MathSymbol.module.css';
+  min-width: 1.5rem;
+  font-size: var(--stf-symbol-sm);
+  text-align: center;
+  color: var(--stf-accent-800);
+}
+
+.help kbd {
+  padding: 0 var(--stf-space-2);
+  border: 1px solid var(--stf-line-strong);
+  border-bottom-width: 2px;
+  border-radius: var(--stf-radius);
+  font-family: var(--stf-font-mono);
+  font-size: 0.8em;
+}
+
+.help code {
+  font-family: var(--stf-font-mono);
+  font-size: 0.85em;
+}

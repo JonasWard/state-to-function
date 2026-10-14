@@ -1,0 +1,28 @@
+/* the one interaction style for custom buttons: operators, terms, symbols, option cells.
+   The base has zero specificity so composing rules can override it regardless of stylesheet order. */
+:where(.ghost) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--stf-radius);
+  background: transparent;
+  color: var(--stf-ink);
+  cursor: pointer;
+  font: inherit;
+}
+
+.ghost:hover:not(:disabled) {
+  border-color: var(--stf-line);
+  background: var(--stf-accent-100);
+}
+
+.ghost[aria-pressed='true'] {
+  border-color: var(--stf-accent-500);
+  background: var(--stf-accent-200);
+}
+
+.ghost:disabled {
+  cursor: default;
+  opacity: 0.35;
+}

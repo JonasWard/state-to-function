@@ -1,0 +1,59 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--stf-accent-200);
+  border-bottom: 1px solid var(--stf-accent-300);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: var(--stf-space-4);
+  max-width: var(--stf-content-max);
+  height: 48px;
+  margin: 0 auto;
+  padding: 0 var(--stf-space-5);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--stf-space-2);
+}
+
+.mark {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
+.wordmark {
+  font-family: var(--stf-font-mono);
+  font-size: var(--stf-text-sm);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--stf-accent-800);
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--stf-space-1);
+  margin-left: auto;
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stf-space-3);
+}
+
+.setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--stf-space-5);
+  font-size: var(--stf-text-sm);
+}
