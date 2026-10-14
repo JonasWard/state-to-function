@@ -28,7 +28,7 @@ export const MethodsPanel: React.FC = () => {
           compact={compact}
           duplicate={isDuplicateLabel(definition, method)}
           references={countReferences(definition, 'methodOutput', i)}
-          context={{ inputs: definition.inputs, methods: definition.methods.slice(0, i) }}
+          context={{ inputs: definition.inputs, methods: definition.methods.slice(0, i), later: definition.methods.slice(i) }}
           onChange={(next) => doc().commit({ definition: setMethod(doc().definition, i, next) })}
           onRemove={() => doc().commit({ definition: removeMethod(doc().definition, i) })}
         />

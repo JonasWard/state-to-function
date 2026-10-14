@@ -11,7 +11,8 @@ import { Switch } from '../ui/Switch';
 const LABELS: Record<keyof Settings, string> = {
   compactRows: 'Compact definition rows',
   showNamesInApplet: 'Show names in the applet',
-  showRangeHints: 'Show input ranges in the applet'
+  showRangeHints: 'Show input ranges in the applet',
+  typeFormulas: 'Type formulas as text'
 };
 
 const SettingsList: React.FC = () => {

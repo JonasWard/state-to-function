@@ -11,6 +11,8 @@ import sectionStyles from '../../Components/layout/Section.module.css';
 import styles from '../definitions.module.css';
 import { ReferenceContext } from '../expression/context';
 import { ExpressionView } from '../expression/ExpressionView';
+import { FormulaEditor } from '../formula/FormulaEditor';
+import { useUIStore } from '../../state/uiStore';
 import { Button } from '../../Components/ui/Button';
 
 export const MethodRow: React.FC<{
@@ -25,6 +27,7 @@ export const MethodRow: React.FC<{
   onRemove: () => void;
 }> = ({ value, index, result, duplicate, references, compact, context, onChange, onRemove }) => {
   const label = `method ${symbolLabel(value.symbol, value.subscript)}`;
+  const typeFormulas = useUIStore((s) => s.settings.typeFormulas);
   const remove = (
     <Button variant="text" size="small" icon={<Trash2 />} aria-label={`Remove ${label}`} onClick={references ? undefined : onRemove} />
   );
@@ -41,7 +44,11 @@ export const MethodRow: React.FC<{
         <CharsetInput value={value.name} charset={NAME_CHARS} placeholder="name" ariaLabel={`${label} name`} onCommit={(name) => onChange({ ...value, name })} />
       </div>
       <div className={styles.expr}>
-        <ExpressionView value={value.method} context={context} onChange={(method) => onChange({ ...value, method })} />
+        {typeFormulas ? (
+          <FormulaEditor value={value.method} context={context} ariaLabel={`${label} formula`} onCommit={(method) => onChange({ ...value, method })} />
+        ) : (
+          <ExpressionView value={value.method} context={context} onChange={(method) => onChange({ ...value, method })} />
+        )}
       </div>
       <output className={styles.result} aria-label={`${label} result`}>
         <span className={sectionStyles.equals} aria-hidden>

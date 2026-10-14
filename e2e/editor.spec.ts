@@ -1,3 +1,4 @@
+import { Locator, Page } from '@playwright/test';
 import { expect, hash, test } from './fixtures';
 
 test.beforeEach(async ({ page }) => {
@@ -133,3 +134,84 @@ test('arrow keys move through a segmented control', async ({ page }) => {
   await expect(type.getByRole('radio', { name: 'Decimal' })).toHaveAttribute('aria-checked', 'true');
 });
 
+
+const typeFormulas = async (page: Page) => {
+  await page.getByRole('button', { name: 'Settings' }).click();
+  await page.getByRole('switch', { name: 'Type formulas as text' }).click();
+  await page.keyboard.press('Escape');
+};
+const formulaText = (field: Locator) => field.evaluate((el) => (el.textContent ?? '').replace(/[\u200B▾]/g, ''));
+
+test('formulas can be typed when the setting is on', async ({ page }) => {
+  await page.getByRole('button', { name: 'Settings' }).click();
+  await expect(page.getByRole('switch', { name: 'Type formulas as text' })).not.toBeChecked();
+  await page.keyboard.press('Escape');
+  await typeFormulas(page);
+  const field = page.getByRole('textbox', { name: 'method A formula' });
+  await expect(field.locator('[data-ref]')).toHaveCount(3);
+  expect(await formulaText(field)).toBe('(At + Af + As) * 2');
+  await page.reload();
+  await expect(field).toBeVisible();
+});
+
+test('a typed formula applies on Enter and is one undo step', async ({ page }) => {
+  await typeFormulas(page);
+  const field = page.getByRole('textbox', { name: 'method A formula' });
+  const result = page.getByLabel('method A result');
+  await field.click();
+  await page.keyboard.press('End');
+  await page.keyboard.type(' + l');
+  await page.keyboard.press('Enter');
+  await expect(result).toHaveText(/^=\s*60\D100$/);
+  await expect(field.locator('[data-ref]')).toHaveCount(4);
+  await page.keyboard.press('Backspace');
+  await expect(field.locator('[data-ref]')).toHaveCount(3);
+  await page.keyboard.press('Escape');
+  await page.locator('body').click({ position: { x: 5, y: 850 } });
+  await page.keyboard.press('Control+z');
+  await expect(result).toHaveText(/^=\s*60\D000$/);
+});
+
+test('an invalid formula shows why and Escape reverts it', async ({ page }) => {
+  await typeFormulas(page);
+  const field = page.getByRole('textbox', { name: 'method A sub t formula' });
+  await field.click();
+  await page.keyboard.press('End');
+  await page.keyboard.type(' *');
+  await expect(field).toHaveAttribute('aria-invalid', 'true');
+  await expect(page.getByText('The formula ends too early')).toBeVisible();
+  await page.keyboard.press('Enter');
+  await expect(field).toHaveAttribute('aria-invalid', 'true');
+  await page.keyboard.press('Escape');
+  await expect(field).toHaveAttribute('aria-invalid', 'false');
+  expect(await formulaText(field)).toBe('l * w');
+});
+
+test('a reference token swaps from its dropdown', async ({ page }) => {
+  await typeFormulas(page);
+  const field = page.getByRole('textbox', { name: 'method A formula' });
+  await field.getByRole('button', { name: 'A sub f, change reference' }).click();
+  const picker = page.getByRole('dialog', { name: 'Reference' });
+  await expect(picker.getByRole('button', { name: /^V/ })).toHaveCount(0);
+  await picker.getByRole('button', { name: /^A sub t/ }).click();
+  await expect(picker).toHaveCount(0);
+  await expect(field).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.getByLabel('method A result')).toHaveText(/^=\s*60\D000$/);
+  expect(await formulaText(field)).toBe('(At + At + As) * 2');
+});
+
+test('pasted text becomes a formula', async ({ page }) => {
+  await typeFormulas(page);
+  const field = page.getByRole('textbox', { name: 'method V formula' });
+  await field.click();
+  await page.keyboard.press('ControlOrMeta+a');
+  await field.evaluate((el) => {
+    const data = new DataTransfer();
+    data.setData('text/plain', 'l*w');
+    el.dispatchEvent(new ClipboardEvent('paste', { clipboardData: data, bubbles: true, cancelable: true }));
+  });
+  await page.keyboard.press('Enter');
+  await expect(page.getByLabel('method V result')).toHaveText(/^=\s*10\D000$/);
+  await expect(field.locator('[data-ref]')).toHaveCount(2);
+});

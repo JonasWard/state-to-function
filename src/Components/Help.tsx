@@ -62,6 +62,14 @@ export const Help: React.FC = () => (
         </Row>
       ))}
     </div>
+    <p>
+      To type methods instead, turn on <b>Type formulas as text</b> in the settings. Use <code>+ - * / ^</code> and
+      brackets, <code>IF(a &lt; b, then, else)</code> with <code>&lt;</code>, <code>&gt;</code> or <code>=</code>, and
+      references such as <code>A_t</code>, <code>x_{'{a+b}'}</code> or Greek by name (<code>alpha</code>,{' '}
+      <code>Delta</code>). References become tokens: click one, or press <kbd>Alt</kbd> + <kbd>↓</kbd> after it, to pick
+      another. <kbd>Enter</kbd> applies the formula and <kbd>Esc</kbd> goes back to the applied one. A subscript with an
+      unmatched <code>{'{'}</code> or <code>{'}'}</code> can only be picked, not typed.
+    </p>
 
     <SectionHeader icon={<Signature />} title="Applet" />
     <p>

@@ -2,15 +2,14 @@ import React from 'react';
 import { ConstantInput } from '../../Components/inputs/ConstantInput';
 import { Segmented } from '../../Components/ui/Segmented';
 import { OptionGrid } from '../../Components/inputs/OptionGrid';
-import { MathSymbol } from '../../Components/math/MathSymbol';
-import { symbolLabel } from '../../Components/math/symbolLabel';
 import { defaultOperand } from '../../model/defaults';
 import { changeOperator } from '../../model/ops';
-import { Label, Operand, OperandType } from '../../model/types';
+import { Operand, OperandType } from '../../model/types';
 import { ReferenceContext } from './context';
 import sectionStyles from '../../Components/layout/Section.module.css';
 import styles from './expression.module.css';
 import { operatorOptions } from './operatorOptions';
+import { symbolOptions } from './symbolOptions';
 
 const TYPE_OPTIONS: { value: OperandType; label: string }[] = [
   { value: 'numericInput', label: 'Input' },
@@ -18,13 +17,6 @@ const TYPE_OPTIONS: { value: OperandType; label: string }[] = [
   { value: 'hardcoded', label: 'Constant' },
   { value: 'method', label: 'Expression' }
 ];
-
-const symbolOptions = (labels: Label[]) =>
-  labels.map((l, i) => ({
-    key: i,
-    label: <MathSymbol symbol={l.symbol} subscript={l.subscript} size="sm" />,
-    ariaLabel: `${symbolLabel(l.symbol, l.subscript)}${l.name ? `, ${l.name}` : ''}`
-  }));
 
 /** Switching type keeps what it can: a sub-expression starts with the current operand as its first term. */
 const convert = (value: Operand, type: OperandType): Operand => {
