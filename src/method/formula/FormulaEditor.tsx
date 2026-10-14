@@ -12,13 +12,15 @@ import {
 } from '@floating-ui/react';
 import React, { useId, useLayoutEffect, useRef, useState } from 'react';
 import { OptionGrid } from '../../Components/inputs/OptionGrid';
+import { MathSymbol } from '../../Components/math/MathSymbol';
 import overlay from '../../Components/ui/overlay.module.css';
 import { formatPieces, parsePieces, RefOperand } from '../../model/formula';
 import { Expr } from '../../model/types';
 import { ReferenceContext } from '../expression/context';
 import { symbolOptions } from '../expression/symbolOptions';
-import { makeToken, placeCaret, readPieces, renderPieces, tokenBeforeCaret } from './dom';
+import { insertAt, makeToken, placeCaret, readPieces, renderPieces, tokenBeforeCaret } from './dom';
 import styles from './formula.module.css';
+import { suggest, Suggestion } from './suggest';
 
 const readRef = (el: HTMLElement): RefOperand => {
   const [type, index] = el.dataset.ref!.split(':');
@@ -40,6 +42,9 @@ export const FormulaEditor: React.FC<{
   const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState<HTMLElement | null>(null);
   const messageId = useId();
+  const listId = useId();
+  const [hint, setHint] = useState<{ node: Text; from: number; to: number; items: Suggestion[] } | null>(null);
+  const [active, setActive] = useState(0);
 
   // only what is shown: the expression and the labels of what it can reference
   const labels = [...context.inputs, ...context.methods].map((l) => [l.symbol, l.subscript]);
@@ -108,6 +113,32 @@ export const FormulaEditor: React.FC<{
     check();
   };
 
+  // suggestions for the word before the caret
+  const updateHint = () => {
+    const sel = window.getSelection();
+    const node = sel?.anchorNode;
+    if (!sel?.isCollapsed || !(node instanceof Text) || !root.current!.contains(node)) return setHint(null);
+    const found = suggest(node.data.slice(0, sel.anchorOffset), context);
+    setHint(found && { node, from: found.from, to: sel.anchorOffset, items: found.items });
+    setActive(0);
+  };
+  const accept = (item: Suggestion) => {
+    if (!hint) return;
+    const range = document.createRange();
+    range.setStart(hint.node, hint.from);
+    range.setEnd(hint.node, hint.to);
+    insertAt(range, item.kind === 'ref' ? makeToken(item.ref, context) : document.createTextNode('IF('));
+    setHint(null);
+    check();
+  };
+  const list = useFloating({
+    open: !!hint,
+    elements: { reference: root.current },
+    placement: 'bottom-start',
+    middleware: [offset(4), flip(), shift({ padding: 8 })],
+    whileElementsMounted: autoUpdate
+  });
+
   const current = token ? readRef(token) : null;
   return (
     <div className={styles.wrap}>
@@ -116,19 +147,41 @@ export const FormulaEditor: React.FC<{
         className={`${styles.editor} ${error ? styles.invalid : ''}`}
         contentEditable
         suppressContentEditableWarning
-        role="textbox"
+        role="combobox"
         aria-label={ariaLabel}
+        aria-autocomplete="list"
+        aria-expanded={!!hint}
+        aria-controls={hint ? listId : undefined}
+        aria-activedescendant={hint ? `${listId}-${active}` : undefined}
         aria-invalid={!!error}
-        aria-describedby={error ? messageId : undefined}
+        aria-describedby={error && !hint ? messageId : undefined}
         spellCheck={false}
         autoCapitalize="off"
         autoCorrect="off"
-        onInput={check}
+        onInput={() => (check(), updateHint())}
         onClick={(e) => {
+          setHint(null);
           const el = (e.target as Element).closest<HTMLElement>('[data-ref]');
           if (el) openToken(el);
         }}
         onKeyDown={(e) => {
+          if (hint) {
+            const n = hint.items.length;
+            const move = { ArrowDown: 1, ArrowUp: n - 1 }[e.key];
+            if (move && !e.altKey) {
+              e.preventDefault();
+              return setActive((active + move) % n);
+            }
+            if (e.key === 'Tab' || e.key === 'Enter') {
+              e.preventDefault();
+              return accept(hint.items[active]);
+            }
+            if (e.key === 'Escape') {
+              e.preventDefault();
+              return setHint(null);
+            }
+            if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) setHint(null);
+          }
           if (e.key === 'Enter') {
             e.preventDefault();
             if (commit()) placeCaret({ endOf: root.current! });
@@ -158,14 +211,48 @@ export const FormulaEditor: React.FC<{
           document.execCommand('insertText', false, e.clipboardData.getData('text/plain').replace(/\s+/g, ' '));
         }}
         onBlur={() => {
+          setHint(null);
           // focus moving into a token's dropdown is still editing
           if (!token) commit();
         }}
       />
-      {error && (
+      {error && !hint && (
         <p id={messageId} className={styles.message}>
           {error}
         </p>
+      )}
+      {hint && (
+        <FloatingPortal>
+          <ul
+            ref={list.refs.setFloating}
+            id={listId}
+            role="listbox"
+            aria-label="Suggestions"
+            className={`${overlay.popover} ${styles.suggestions}`}
+            style={list.floatingStyles}
+          >
+            {hint.items.map((item, i) => (
+              <li
+                key={item.kind === 'ref' ? `${item.ref.type}:${item.ref.index}` : 'if'}
+                id={`${listId}-${i}`}
+                role="option"
+                aria-selected={i === active}
+                className={styles.option}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => accept(item)}
+              >
+                {item.kind === 'ref' ? (
+                  <>
+                    <MathSymbol symbol={item.label.symbol} subscript={item.label.subscript} size="sm" />
+                    <span className={styles.optionName}>{item.label.name}</span>
+                  </>
+                ) : (
+                  <span className={styles.optionName}>IF(test, then, else)</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </FloatingPortal>
       )}
       {token && current && (
         <FloatingPortal>

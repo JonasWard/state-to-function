@@ -70,6 +70,19 @@ export const readPieces = (root: HTMLElement): Piece[] => {
   return out.filter((p) => p.kind !== 'text' || p.text);
 };
 
+/** Inserts a token or text in place of a range, and puts the caret after it. */
+export const insertAt = (range: Range, node: Node) => {
+  range.deleteContents();
+  range.insertNode(node);
+  // a token needs text after it, or the caret has nowhere to go
+  let caretAfter: Node = node;
+  if (isAtom(node) && node.nextSibling?.nodeType !== Node.TEXT_NODE) {
+    caretAfter = document.createTextNode(ZWSP);
+    node.parentNode!.insertBefore(caretAfter, node.nextSibling);
+  }
+  placeCaret({ after: caretAfter });
+};
+
 export const placeCaret = (where: { after: Node } | { endOf: Node }) => {
   const range = document.createRange();
   if ('after' in where) range.setStartAfter(where.after);
